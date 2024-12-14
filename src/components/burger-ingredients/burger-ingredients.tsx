@@ -7,13 +7,13 @@ const bunsData = [
     id: '1a',
     title: 'Краторная булка N-200i',
     price: 20,
-    image: 'bun-1',
+    image: 'firstBun',
   },
   {
     id: '2b',
     title: 'Флюоресцентная булка R2-D3',
     price: 20,
-    image: 'bun-2',
+    image: 'secondBun',
   },
 ];
 
@@ -22,32 +22,32 @@ const sauceData = [
     id: '3b',
     title: 'Соус Spicy-X',
     price: 20,
-    image: 'sauce-1',
+    image: 'firstSauce',
   },
   {
     id: '4a',
     title: 'Соус фирменный Space Sauce',
     price: 30,
-    image: 'sauce-2',
+    image: 'secondSauce',
   },
   {
     id: '5a',
     title: 'Соус традиционный галактический',
     price: 40,
-    image: 'sauce-3',
+    image: 'thirdSauce',
   },
 
   {
     id: '5b',
     title: 'Соус традиционный галактический 2',
     price: 40,
-    image: 'sauce-4',
+    image: 'fourthSauce',
   },
 ];
 
-const BurgerIngredients = () => {
+const BurgerIngredients = ({ extraClass }: { extraClass?: string }) => {
   return (
-    <div className={styles.contentContainer}>
+    <div className={`${styles.contentContainer} ${extraClass}`}>
       <h2 className="text text_type_main-large mb-5">Соберите бургер</h2>
       <div style={{ display: 'flex' }}>
         <Tab value="buns>" active={true} onClick={() => {}}>

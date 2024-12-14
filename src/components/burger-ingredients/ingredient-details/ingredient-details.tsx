@@ -1,9 +1,23 @@
-const IngredientDetails = ({price, title}: {price: number, title: string}) => {
-    return(
-        <div >
-            <p>{title}</p>
-            <p>{price}</p>
-        </div>);
-}
+import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import styles from './ingredient-details.module.css';
 
-export {IngredientDetails}
+const IngredientDetails = ({
+  price,
+  title,
+}: {
+  price: number;
+  title: string;
+}) => {
+  return (
+    <>
+      <p className={`${styles.description} text text_type_digits-default`}>
+        {price} <CurrencyIcon type="primary" />
+      </p>
+      <p className={`${styles.description} text text_type_main-default`}>
+        {title}
+      </p>
+    </>
+  );
+};
+
+export { IngredientDetails };
