@@ -6,9 +6,8 @@
 
 .contentContainer {
   margin: 0 auto;
-  max-width: 1240px;
-  width: 100%;
 
   display: grid;
-  grid-template-columns: 50% 50%;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
 }
