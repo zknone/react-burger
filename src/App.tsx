@@ -7,7 +7,8 @@ function App() {
   return (
     <>
       <Menu/>
-      <div className='contentContainer'>
+      <div className='contentContainer pt-10'>
+        <BurgerIngredients/>
         <BurgerIngredients/>
       </div>
     </>
