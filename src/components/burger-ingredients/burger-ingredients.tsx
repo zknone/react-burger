@@ -8,6 +8,7 @@ const bunsData = [
     title: 'Краторная булка N-200i',
     price: 20,
     image: 'firstBun',
+    quantity: 1,
   },
   {
     id: '2b',
@@ -23,6 +24,7 @@ const sauceData = [
     title: 'Соус Spicy-X',
     price: 20,
     image: 'firstSauce',
+    quantity: 1,
   },
   {
     id: '4a',
