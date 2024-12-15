@@ -12,6 +12,8 @@ import sauce from '../../assets/sauce-03-mini.png';
 import meat from '../../assets/meat-02-mini.png';
 import topping from '../../assets/topping-01-mini.png';
 import rings from '../../assets/rings-01-mini.png';
+import { useState } from 'react';
+import { BurgerPopup } from './burger-popup/burger-popup';
 
 const mockBurger: IngredientType[] = [
   {
@@ -70,6 +72,8 @@ const images: Record<string, string> = {
 };
 
 const BurgerConstructor = () => {
+  const [isPopupOpen, setOpen] = useState<boolean>(false);
+
   const resultingBurger = [
     ...mockBun.slice(0, 1),
     ...mockBurger,
@@ -85,6 +89,11 @@ const BurgerConstructor = () => {
   const lastElement = resultingBurger.length - 1;
   return (
     <div className={`${styles.burger_container} mt-10`}>
+      <BurgerPopup
+        orderNumber={123232}
+        isOpen={isPopupOpen}
+        onClose={() => setOpen(false)}
+      />
       <div className={`${styles.burger_content_wrapper} mb-6`}>
         <ul className={`${styles.burger_constructor_list} mt-0 ml-0 mb-6 mr-4`}>
           {resultingBurger.map((item, index) => (
@@ -117,7 +126,9 @@ const BurgerConstructor = () => {
           {totalCost}
           <CurrencyIcon type="primary" />
         </p>
-        <Button htmlType="button">Оформить заказ</Button>
+        <Button htmlType="button" onClick={() => setOpen(!isPopupOpen)}>
+          Оформить заказ
+        </Button>
       </div>
     </div>
   );
