@@ -35,13 +35,13 @@ const mockBurger: IngredientType[] = [
     image: 'topping',
   },
   {
-    id: '2c',
+    id: '2d',
     title: 'Хрустящие минеральные кольца',
     price: 20,
     image: 'rings',
   },
   {
-    id: '2c',
+    id: '2z',
     title: 'Хрустящие минеральные кольца',
     price: 20,
     image: 'rings',
@@ -97,7 +97,7 @@ const BurgerConstructor = () => {
       <div className={`${styles.burger_content_wrapper} mb-6`}>
         <ul className={`${styles.burger_constructor_list} mt-0 ml-0 mb-6 mr-4`}>
           {resultingBurger.map((item, index) => (
-            <li className={styles.burger_constructor_item}>
+            <li className={styles.burger_constructor_item} key={item.id}>
               {!mockBun.some((bun) => item.id === bun.id) && (
                 <DragIcon type="primary" />
               )}

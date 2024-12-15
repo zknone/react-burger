@@ -57,8 +57,12 @@ const IngredientPopup = ({
           Биокотлета из марсианской Магнолии
         </p>
         <ul className={styles.popup_details}>
-          {ingredientDetails.map((item) => (
-            <IngredientPopupDetails value={item.value} title={item.title} />
+          {ingredientDetails.map((item, index) => (
+            <IngredientPopupDetails
+              key={index}
+              value={item.value}
+              title={item.title}
+            />
           ))}
         </ul>
       </div>
