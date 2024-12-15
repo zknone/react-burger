@@ -19,9 +19,9 @@ const images: Record<string, string> = {
 
 const IngredientItem = ({ title, price, image }: IngredientType) => {
   return (
-    <li className={styles.itemContainer}>
+    <li className={styles.ingredient_item_container}>
       <img
-        className={`${styles.image} pl-4 pr-4 pb-1`}
+        className={`${styles.ingredient_item_image} pl-4 pr-4 pb-1`}
         alt={title}
         src={images[image]}
       />

@@ -10,10 +10,14 @@ const IngredientDetails = ({
 }) => {
   return (
     <>
-      <p className={`${styles.description} text text_type_digits-default`}>
+      <p
+        className={`${styles.ingredient_details_description} text text_type_digits-default`}
+      >
         {price} <CurrencyIcon type="primary" />
       </p>
-      <p className={`${styles.description} text text_type_main-default`}>
+      <p
+        className={`${styles.ingredient_details_description} text text_type_main-default`}
+      >
         {title}
       </p>
     </>

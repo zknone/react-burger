@@ -1,11 +1,4 @@
-.detailsContainer {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    align-content: center;
-}
-
-.description {
+.ingredient_details_description {
     display: inline-flex;
     gap: 4px;
     margin: 0;

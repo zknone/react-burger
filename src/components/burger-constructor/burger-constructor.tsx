@@ -84,14 +84,16 @@ const BurgerConstructor = () => {
   const firsElement = 0;
   const lastElement = resultingBurger.length - 1;
   return (
-    <div className={`${styles.container} mt-10`}>
-      <div className={`${styles.contentWrapper} mb-6`}>
-        <ul className={`${styles.constructorList} mt-0 ml-0 mb-6 mr-4`}>
+    <div className={`${styles.burger_container} mt-10`}>
+      <div className={`${styles.burger_content_wrapper} mb-6`}>
+        <ul className={`${styles.burger_constructor_list} mt-0 ml-0 mb-6 mr-4`}>
           {resultingBurger.map((item, index) => (
-            <li className={styles.constructorItem}>
-              <DragIcon type="primary" />
+            <li className={styles.burger_constructor_item}>
+              {!mockBun.some((bun) => item.id === bun.id) && (
+                <DragIcon type="primary" />
+              )}
               <ConstructorElement
-                extraClass={styles.constructorElement}
+                extraClass={styles.burger_constructor_element}
                 type={
                   index === firsElement
                     ? 'top'
@@ -108,8 +110,10 @@ const BurgerConstructor = () => {
           ))}
         </ul>
       </div>
-      <div className={`${styles.buttonWrapper} mr-5`}>
-        <p className={`${styles.description} text text_type_digits-medium`}>
+      <div className={`${styles.burger_button_wrapper} mr-5`}>
+        <p
+          className={`${styles.burger_description} text text_type_digits-medium`}
+        >
           {totalCost}
           <CurrencyIcon type="primary" />
         </p>

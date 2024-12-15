@@ -1,11 +1,11 @@
-.contentContainer {
+.ingredients_content_container {
     display: flex;
     height: calc(100vh - 150px);
     box-sizing: border-box;
     flex-direction: column;
 }
 
-.ingredientsContainer {
+.ingredients_container {
     flex: 1;
     overflow-y: auto;
     box-sizing: border-box;

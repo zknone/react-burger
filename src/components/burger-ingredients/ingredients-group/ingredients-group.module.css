@@ -1,4 +1,4 @@
-.ingredientsContainer {
+.ingredients_group_container {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     column-gap: 24px;

@@ -47,7 +47,7 @@ const sauceData = [
 
 const BurgerIngredients = ({ extraClass }: { extraClass?: string }) => {
   return (
-    <div className={`${styles.contentContainer} ${extraClass}`}>
+    <div className={`${styles.ingredients_content_container} ${extraClass}`}>
       <h2 className="text text_type_main-large mb-5">Соберите бургер</h2>
       <div style={{ display: 'flex' }}>
         <Tab value="buns>" active={true} onClick={() => {}}>
@@ -60,7 +60,7 @@ const BurgerIngredients = ({ extraClass }: { extraClass?: string }) => {
           Начинки
         </Tab>
       </div>
-      <div className={`${styles.ingredientsContainer} pt-6 pb-6`}>
+      <div className={`${styles.ingredients_container} pt-6 pb-6`}>
         <IngredientsGroup title="Булки" ingredients={bunsData} />
         <IngredientsGroup title="Соусы" ingredients={sauceData} />
         <IngredientsGroup title="Начинки" ingredients={sauceData} />

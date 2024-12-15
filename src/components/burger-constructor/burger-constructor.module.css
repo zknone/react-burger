@@ -1,4 +1,4 @@
-.container {
+.burger_container {
     display: flex;
     flex-direction: column;
     min-width: 600px;
@@ -6,13 +6,13 @@
     box-sizing: border-box;
 }
 
-.contentWrapper {
+.burger_content_wrapper {
     flex: 1;
     overflow-y: auto;
     box-sizing: border-box;
 }
 
-.constructorList {
+.burger_constructor_list {
     padding: 0;
     display: flex;
     flex-direction: column;
@@ -20,8 +20,8 @@
 
     align-items: flex-end;
 }
-
-.constructorItem {
+ 
+.burger_constructor_item {
     display: inline-flex;
     align-items: center;
     gap: 12px;
@@ -29,17 +29,17 @@
     padding: 0;
 }
 
-.constructorElement {
+.burger_constructor_element {
     width: 100%;
 }
 
-.buttonWrapper {
+.burger_button_wrapper {
     display: flex;
     gap: 40px;
     justify-content: flex-end;
 }
 
-.description {
+.burger_description {
     align-items: center;
     display: inline-flex;
     gap: 4px;
