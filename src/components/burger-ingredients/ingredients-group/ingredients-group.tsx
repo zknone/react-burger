@@ -5,11 +5,9 @@ import styles from './ingredients-group.module.css';
 const IngredientsGroup = ({
   title,
   ingredients,
-  isActive = true,
 }: {
   title: string;
   ingredients: IngredientType[];
-  isActive?: boolean;
 }) => {
   return (
     <>
