@@ -22,7 +22,9 @@ const BurgerIngredients = ({ extraClass }: { extraClass?: string }) => {
           Начинки
         </Tab>
       </div>
-      <div className={`${styles.ingredients_container} pt-6 pb-6 pr-6`}>
+      <div
+        className={`${styles.ingredients_container} pt-6 pb-6 pr-10 custom-scroll`}
+      >
         <IngredientsGroup title="Булки" ingredients={bunsData} />
         <IngredientsGroup title="Соусы" ingredients={sauceData} />
         <IngredientsGroup title="Начинки" ingredients={mainCourseData} />
