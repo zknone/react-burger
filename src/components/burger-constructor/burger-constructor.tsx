@@ -5,7 +5,6 @@ import {
   DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-constructor.module.css';
-import { bottom } from '@popperjs/core';
 import { useState } from 'react';
 import { BurgerPopup } from './burger-popup/burger-popup';
 import ingredients from '../../utils/data';
@@ -48,7 +47,7 @@ const BurgerConstructor = () => {
         onClose={() => setOpen(false)}
       />
       <div
-        className={`${styles.burger_content_wrapper} mb-6 mr-10 custom-scroll`}
+        className={`${styles.burger_content_wrapper} mb-6 mr-6 custom-scroll`}
       >
         <ul
           className={`${styles.burger_constructor_list} mt-0 ml-0 mb-6 mr-4 `}
@@ -58,8 +57,10 @@ const BurgerConstructor = () => {
               className={styles.burger_constructor_item}
               key={`${item?._id} - ${index}`}
             >
-              {!buns.some((bun) => item?._id === bun?._id) && (
+              {!buns.some((bun) => item?._id === bun?._id) ? (
                 <DragIcon type="primary" />
+              ) : (
+                <div className="mr-6" />
               )}
               <ConstructorElement
                 extraClass={styles.burger_constructor_element}
@@ -67,7 +68,7 @@ const BurgerConstructor = () => {
                   index === firsElement
                     ? 'top'
                     : index === lastElement
-                      ? bottom
+                      ? 'bottom'
                       : undefined
                 }
                 isLocked={buns.some((bun) => item?._id === bun?._id)}
