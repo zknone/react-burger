@@ -7,7 +7,12 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
 
 body {
