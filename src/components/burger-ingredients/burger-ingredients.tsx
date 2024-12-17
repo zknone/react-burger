@@ -1,51 +1,11 @@
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingredients.module.css';
 import { IngredientsGroup } from './ingredients-group/ingredients-group';
+import ingredients from '../../utils/data';
 
-const bunsData = [
-  {
-    id: '1a',
-    title: 'Краторная булка N-200i',
-    price: 20,
-    image: 'firstBun',
-    quantity: 1,
-  },
-  {
-    id: '2b',
-    title: 'Флюоресцентная булка R2-D3',
-    price: 20,
-    image: 'secondBun',
-  },
-];
-
-const sauceData = [
-  {
-    id: '3b',
-    title: 'Соус Spicy-X',
-    price: 20,
-    image: 'firstSauce',
-    quantity: 1,
-  },
-  {
-    id: '4a',
-    title: 'Соус фирменный Space Sauce',
-    price: 30,
-    image: 'secondSauce',
-  },
-  {
-    id: '5a',
-    title: 'Соус традиционный галактический',
-    price: 40,
-    image: 'thirdSauce',
-  },
-
-  {
-    id: '5b',
-    title: 'Соус традиционный галактический 2',
-    price: 40,
-    image: 'fourthSauce',
-  },
-];
+const bunsData = ingredients.filter((item) => item.type === 'bun');
+const sauceData = ingredients.filter((item) => item.type === 'sauce');
+const mainCourseData = ingredients.filter((item) => item.type === 'main');
 
 const BurgerIngredients = ({ extraClass }: { extraClass?: string }) => {
   return (
@@ -62,10 +22,10 @@ const BurgerIngredients = ({ extraClass }: { extraClass?: string }) => {
           Начинки
         </Tab>
       </div>
-      <div className={`${styles.ingredients_container} pt-6 pb-6`}>
+      <div className={`${styles.ingredients_container} pt-6 pb-6 pr-6`}>
         <IngredientsGroup title="Булки" ingredients={bunsData} />
         <IngredientsGroup title="Соусы" ingredients={sauceData} />
-        <IngredientsGroup title="Начинки" ingredients={sauceData} />
+        <IngredientsGroup title="Начинки" ingredients={mainCourseData} />
       </div>
     </div>
   );

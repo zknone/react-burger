@@ -4,89 +4,42 @@ import {
   CurrencyIcon,
   DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { IngredientType } from '../../types/types';
 import styles from './burger-constructor.module.css';
 import { bottom } from '@popperjs/core';
-import bun from '../../assets/bun-02-mini.png';
-import sauce from '../../assets/sauce-03-mini.png';
-import meat from '../../assets/meat-02-mini.png';
-import topping from '../../assets/topping-01-mini.png';
-import rings from '../../assets/rings-01-mini.png';
 import { useState } from 'react';
 import { BurgerPopup } from './burger-popup/burger-popup';
+import ingredients from '../../utils/data';
 
-const mockBurger: IngredientType[] = [
-  {
-    id: '2a',
-    title: 'Соус традиционный галактический',
-    price: 20,
-    image: 'sauce',
-  },
-  {
-    id: '2b',
-    title: 'Мясо бессмертных моллюсков Protostomia',
-    price: 200,
-    image: 'meat',
-  },
-  {
-    id: '2c',
-    title: 'Плоды Фалленианского дерева',
-    price: 20,
-    image: 'topping',
-  },
-  {
-    id: '2d',
-    title: 'Хрустящие минеральные кольца',
-    price: 20,
-    image: 'rings',
-  },
-  {
-    id: '2z',
-    title: 'Хрустящие минеральные кольца',
-    price: 20,
-    image: 'rings',
-  },
+const stuffingIds = [
+  '60666c42cc7b410027a1a9b9',
+  '60666c42cc7b410027a1a9b4',
+  '60666c42cc7b410027a1a9bc',
+  '60666c42cc7b410027a1a9bb',
+  '60666c42cc7b410027a1a9bb',
 ];
 
-const mockBun: IngredientType[] = [
-  {
-    id: '1a',
-    title: 'Краторная булка N-200i (верх)',
-    price: 20,
-    image: 'bun',
-  },
-  {
-    id: '1b',
-    title: 'Краторная булка N-200i (низ)',
-    price: 20,
-    image: 'bun',
-  },
-];
+const bunIds = ['60666c42cc7b410027a1a9b1', '60666c42cc7b410027a1a9b1'];
 
-const images: Record<string, string> = {
-  bun: bun,
-  meat: meat,
-  sauce: sauce,
-  topping: topping,
-  rings: rings,
-};
+const buns = bunIds.map((id) => ingredients.find((item) => item._id === id));
+
+const stuffing = stuffingIds.map((id) =>
+  ingredients.find((item) => item._id === id)
+);
 
 const BurgerConstructor = () => {
   const [isPopupOpen, setOpen] = useState<boolean>(false);
 
-  const resultingBurger = [
-    ...mockBun.slice(0, 1),
-    ...mockBurger,
-    ...mockBun.slice(1),
-  ];
+  const resultingBurger = [...buns.slice(0, 1), ...stuffing, ...buns.slice(1)];
 
   const totalCost = resultingBurger.reduce((acc, item) => {
+    if (item === undefined) return 0;
     acc += item.price;
     return acc;
   }, 0);
 
   const firsElement = 0;
   const lastElement = resultingBurger.length - 1;
+
   return (
     <div className={`${styles.burger_container} mt-10`}>
       <BurgerPopup
@@ -97,8 +50,11 @@ const BurgerConstructor = () => {
       <div className={`${styles.burger_content_wrapper} mb-6`}>
         <ul className={`${styles.burger_constructor_list} mt-0 ml-0 mb-6 mr-4`}>
           {resultingBurger.map((item, index) => (
-            <li className={styles.burger_constructor_item} key={item.id}>
-              {!mockBun.some((bun) => item.id === bun.id) && (
+            <li
+              className={styles.burger_constructor_item}
+              key={`${item?._id} - ${index}`}
+            >
+              {!buns.some((bun) => item?._id === bun?._id) && (
                 <DragIcon type="primary" />
               )}
               <ConstructorElement
@@ -110,10 +66,10 @@ const BurgerConstructor = () => {
                       ? bottom
                       : undefined
                 }
-                isLocked={mockBun.some((bun) => item.id === bun.id)}
-                text={item.title}
-                thumbnail={images[item.image]}
-                price={item.price}
+                isLocked={buns.some((bun) => item?._id === bun?._id)}
+                text={item?.name as string}
+                thumbnail={item?.image_mobile as string}
+                price={item?.price as number}
               />
             </li>
           ))}
