@@ -47,7 +47,9 @@ const BurgerConstructor = () => {
         isOpen={isPopupOpen}
         onClose={() => setOpen(false)}
       />
-      <div className={`${styles.burger_content_wrapper} mb-6 custom-scroll`}>
+      <div
+        className={`${styles.burger_content_wrapper} mb-6 mr-10 custom-scroll`}
+      >
         <ul
           className={`${styles.burger_constructor_list} mt-0 ml-0 mb-6 mr-4 `}
         >
