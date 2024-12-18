@@ -1,17 +1,14 @@
-.popup_container {
+.modal_container {
     background: #1C1C21;
     border-radius: 40px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    max-width: 480px;
-    width: 100%;
-    position: absolute;
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
-    text-align: center;
 }
 
-.popup_overlay {
+.modal_overlay {
     position: fixed;
     z-index: 5;
     top: 0;
@@ -24,14 +21,10 @@
     align-items: center;
 }
 
-.popup_header_wrapper {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.popup_close_button {
+.modal_close_button {
+    position: absolute;
+    top: 40px;
+    right: 40px;
     background: none;
     border: none;
     font-size: 20px;
@@ -39,8 +32,9 @@
     color: #F2F2F3;
 }
 
-.popup_details {
+.modal_header_wrapper {
+    width: 100%;
     display: flex;
-    gap: 20px;
     justify-content: space-between;
+    align-items: center;
 }

@@ -6,8 +6,9 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-constructor.module.css';
 import { useState } from 'react';
-import { BurgerPopup } from './burger-popup/burger-popup';
 import ingredients from '../../utils/data';
+import { Modal } from '../modal/modal';
+import BurgerOrderDetails from './burger-order-details/burger-order-details';
 
 const stuffingIds = [
   '60666c42cc7b410027a1a9b9',
@@ -41,14 +42,10 @@ const BurgerConstructor = () => {
 
   return (
     <div className={`${styles.burger_container} mt-10`}>
-      <BurgerPopup
-        orderNumber={123232}
-        isOpen={isPopupOpen}
-        onClose={() => setOpen(false)}
-      />
-      <div
-        className={`${styles.burger_content_wrapper} mb-6 mr-6 custom-scroll`}
-      >
+      <Modal size="L" isOpen={isPopupOpen} onClose={() => setOpen(false)}>
+        <BurgerOrderDetails orderNumber="12343" />
+      </Modal>
+      <div className={`${styles.burger_content_wrapper} mb-6 custom-scroll`}>
         <ul
           className={`${styles.burger_constructor_list} mt-0 ml-0 mb-6 mr-4 `}
         >

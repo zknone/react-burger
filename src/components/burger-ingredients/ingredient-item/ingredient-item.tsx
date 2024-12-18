@@ -1,10 +1,11 @@
 import { IngredientType } from '../../../types/types';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import styles from './ingredient-item.module.css';
-import { IngredientPopup } from '../ingredient-popup/ingredient-popup';
 import { useState } from 'react';
+import { Modal } from '../../modal/modal';
+import { IngredientPopupDetails } from '../ingredient-popup-details/ingredient-popup-details';
 
-const IngredientItem = ({ name, price, image }: IngredientType) => {
+const IngredientItem = ({ ingredient }: { ingredient: IngredientType }) => {
   const quantity = 1;
   const [isPopupOpen, setPopupOpen] = useState<boolean>(false);
   return (
@@ -12,10 +13,19 @@ const IngredientItem = ({ name, price, image }: IngredientType) => {
       className={styles.ingredient_item_container}
       onClick={() => setPopupOpen(!isPopupOpen)}
     >
-      <IngredientPopup
+      <Modal
         isOpen={isPopupOpen}
         onClose={() => setPopupOpen(false)}
-      />
+        title="Детали ингредиента"
+      >
+        <IngredientPopupDetails
+          img={ingredient.image}
+          protein={ingredient.proteins}
+          calories={ingredient.calories}
+          fat={ingredient.fat}
+          carbs={ingredient.carbohydrates}
+        />
+      </Modal>
       <div
         className={`${styles.ingredient_quantity_number} text text_type_digits-default`}
       >
@@ -23,10 +33,10 @@ const IngredientItem = ({ name, price, image }: IngredientType) => {
       </div>
       <img
         className={`${styles.ingredient_item_image} pl-4 pr-4 pb-1`}
-        alt={name}
-        src={image}
+        alt={ingredient.name}
+        src={ingredient.image}
       />
-      <IngredientDetails title={name} price={price} />
+      <IngredientDetails title={ingredient.name} price={ingredient.price} />
     </li>
   );
 };

@@ -1,17 +1,67 @@
+import styles from './ingredient-popup-details.module.css';
+
 const IngredientPopupDetails = ({
-  title,
-  value,
+  img,
+  calories,
+  protein,
+  carbs,
+  fat,
 }: {
-  title: string;
-  value: string;
+  img: string;
+  protein: number;
+  carbs: number;
+  calories: number;
+  fat: number;
 }) => {
   return (
-    <li style={{ listStyle: 'none' }}>
-      <p className="text text_type_main-default text_color_inactive mb-2">
-        {title}
+    <div className={styles.burger_popup_container}>
+      <img
+        className="mb-4"
+        width={480}
+        height={240}
+        src={img}
+        alt="Заказ исполнен"
+      />
+      <p
+        className={`${styles.burger_popup_text} text text_type_main-medium mb-15`}
+      >
+        Биокотлета из марсианской Магнолии
       </p>
-      <p className="text text_type_main-default text_color_inactive">{value}</p>
-    </li>
+      <dl className={styles.burger_popup_details}>
+        <div className={styles.burger_popup_detail_item}>
+          <dt className="text text_type_main-default text_color_inactive mb-2">
+            Калории,ккал
+          </dt>
+          <dd className="text text_type_main-default text_color_inactive">
+            {calories}
+          </dd>
+        </div>
+        <div className={styles.burger_popup_detail_item}>
+          <dt className="text text_type_main-default text_color_inactive mb-2">
+            Белки, г
+          </dt>
+          <dd className="text text_type_main-default text_color_inactive">
+            {protein}
+          </dd>
+        </div>
+        <div className={styles.burger_popup_detail_item}>
+          <dt className="text text_type_main-default text_color_inactive mb-2">
+            Жиры, г
+          </dt>
+          <dd className="text text_type_main-default text_color_inactive">
+            {fat}
+          </dd>
+        </div>
+        <div className={styles.burger_popup_detail_item}>
+          <dt className="text text_type_main-default text_color_inactive mb-2">
+            Углеводы, г
+          </dt>
+          <dd className="text text_type_main-default text_color_inactive">
+            {carbs}
+          </dd>
+        </div>
+      </dl>
+    </div>
   );
 };
 
