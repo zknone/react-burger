@@ -23,7 +23,7 @@ const IngredientPopupDetails = ({
         alt="Заказ исполнен"
       />
       <p
-        className={`${styles.burger_popup_text} text text_type_main-medium mb-15`}
+        className={`${styles.burger_popup_text} text text_type_main-medium mb-6`}
       >
         Биокотлета из марсианской Магнолии
       </p>
