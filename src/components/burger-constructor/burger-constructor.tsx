@@ -47,7 +47,7 @@ const BurgerConstructor = () => {
           type="top"
           extraClass={`${styles.burger_constructor_element} mr-4`}
           isLocked={true}
-          text={buns[0]?.name || ''}
+          text={`${buns[0]?.name} (верх)` || ''}
           thumbnail={buns[0]?.image_mobile || ''}
           price={buns[0]?.price || 0}
         />
@@ -76,7 +76,7 @@ const BurgerConstructor = () => {
           type="bottom"
           extraClass={`${styles.burger_constructor_element} mr-4`}
           isLocked={true}
-          text={buns[0]?.name || ''}
+          text={`${buns[0]?.name} (низ)` || ''}
           thumbnail={buns[0]?.image_mobile || ''}
           price={buns[0]?.price || 0}
         />
