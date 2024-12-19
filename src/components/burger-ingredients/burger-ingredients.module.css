@@ -10,3 +10,7 @@
     overflow-y: auto;
     box-sizing: border-box;
 }
+
+.ingredients_tabs {
+    display: flex;
+}

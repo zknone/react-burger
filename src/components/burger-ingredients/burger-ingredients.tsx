@@ -11,7 +11,7 @@ const BurgerIngredients = ({ extraClass }: { extraClass?: string }) => {
   return (
     <div className={`${styles.ingredients_content_container} ${extraClass}`}>
       <h2 className="text text_type_main-large mb-5">Соберите бургер</h2>
-      <div style={{ display: 'flex' }}>
+      <div className={styles.ingredients_tabs}>
         <Tab value="buns>" active={true} onClick={() => {}}>
           Булки
         </Tab>

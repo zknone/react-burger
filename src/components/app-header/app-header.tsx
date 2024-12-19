@@ -7,6 +7,7 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './app-header.module.css';
 const AppHeader = () => {
+  const isActive = true;
   return (
     <header className={`${styles.menuWrapper} pt-4 pb-4`}>
       <div className={styles.menuBackground}></div>
@@ -15,7 +16,7 @@ const AppHeader = () => {
           <li className={styles.menuItem}>
             <Button
               extraClass={`${styles.menuButton} pl-5 pr-5 pt-4 pb-4`}
-              style={{ color: 'white' }}
+              style={isActive && { color: 'white' }}
               type="secondary"
               htmlType="button"
             >
