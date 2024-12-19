@@ -1,21 +1,18 @@
 import { IngredientType } from '../../../types/types';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import styles from './ingredient-item.module.css';
-import { useState } from 'react';
 import { Modal } from '../../modal/modal';
 import { IngredientPopupDetails } from '../ingredient-popup-details/ingredient-popup-details';
+import { useModal } from '../../../hooks/use-modal';
 
 const IngredientItem = ({ ingredient }: { ingredient: IngredientType }) => {
   const quantity = 1;
-  const [isPopupOpen, setPopupOpen] = useState<boolean>(false);
+  const { isModalOpen, openModal, closeModal } = useModal();
   return (
-    <li
-      className={styles.ingredient_item_container}
-      onClick={() => setPopupOpen(!isPopupOpen)}
-    >
+    <li className={styles.ingredient_item_container} onClick={openModal}>
       <Modal
-        isOpen={isPopupOpen}
-        onClose={() => setPopupOpen(false)}
+        isOpen={isModalOpen}
+        onClose={closeModal}
         title="Детали ингредиента"
       >
         <IngredientPopupDetails

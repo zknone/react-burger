@@ -5,10 +5,10 @@ import {
   DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-constructor.module.css';
-import { useState } from 'react';
 import ingredients from '../../utils/data';
 import { Modal } from '../modal/modal';
 import BurgerOrderDetails from './burger-order-details/burger-order-details';
+import { useModal } from '../../hooks/use-modal';
 
 const stuffingIds = [
   '60666c42cc7b410027a1a9b9',
@@ -27,7 +27,7 @@ const stuffing = stuffingIds.map((id) =>
 );
 
 const BurgerConstructor = () => {
-  const [isPopupOpen, setOpen] = useState<boolean>(false);
+  const { isModalOpen, openModal, closeModal } = useModal();
 
   const resultingBurger = [...buns.slice(0, 1), ...stuffing, ...buns.slice(1)];
 
@@ -39,7 +39,7 @@ const BurgerConstructor = () => {
 
   return (
     <div className={`${styles.burger_container} pt-15`}>
-      <Modal size="L" isOpen={isPopupOpen} onClose={() => setOpen(false)}>
+      <Modal size="L" isOpen={isModalOpen} onClose={closeModal}>
         <BurgerOrderDetails orderNumber="12343" />
       </Modal>
       <div className={styles.burger_constructor_wrapper}>
@@ -87,7 +87,7 @@ const BurgerConstructor = () => {
             {totalCost}
             <CurrencyIcon type="primary" />
           </p>
-          <Button htmlType="button" onClick={() => setOpen(!isPopupOpen)}>
+          <Button htmlType="button" onClick={openModal}>
             Оформить заказ
           </Button>
         </div>
