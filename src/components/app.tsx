@@ -7,10 +7,10 @@ function App() {
   return (
     <>
       <AppHeader />
-      <div className={`${styles.content_container} pt-10`}>
+      <main className={`${styles.content_container} pt-10`}>
         <BurgerIngredients extraClass="ml-5" />
         <BurgerConstructor />
-      </div>
+      </main>
     </>
   );
 }
