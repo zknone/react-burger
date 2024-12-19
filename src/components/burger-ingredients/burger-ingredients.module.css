@@ -1,0 +1,16 @@
+.ingredients_content_container {
+    display: flex;
+    height: calc(100vh - 150px);
+    box-sizing: border-box;
+    flex-direction: column;
+}
+
+.ingredients_container {
+    flex: 1;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+.ingredients_tabs {
+    display: flex;
+}

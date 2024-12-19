@@ -1,0 +1,28 @@
+.ingredient_item_container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    align-items: center;
+}
+
+.ingredient_item_image {
+    padding: 0;
+    width: 100%;
+    height: auto;
+    max-width: 240px;
+    max-height: 120px;
+}
+
+.ingredient_quantity_number {
+    position: absolute;
+    right: 0;
+
+    background-color: #4C4CFF;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 16px;
+}
