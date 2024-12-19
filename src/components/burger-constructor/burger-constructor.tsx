@@ -37,19 +37,22 @@ const BurgerConstructor = () => {
     return acc;
   }, 0);
 
-  const firsElement = 0;
-  const lastElement = resultingBurger.length - 1;
-
   return (
-    <div className={`${styles.burger_container} mt-10`}>
+    <div className={`${styles.burger_container} pt-15`}>
       <Modal size="L" isOpen={isPopupOpen} onClose={() => setOpen(false)}>
         <BurgerOrderDetails orderNumber="12343" />
       </Modal>
-      <div className={`${styles.burger_content_wrapper} mb-6 custom-scroll`}>
-        <ul
-          className={`${styles.burger_constructor_list} mt-0 ml-0 mb-6 mr-4 `}
-        >
-          {resultingBurger.map((item, index) => (
+      <div className={styles.burger_constructor_wrapper}>
+        <ConstructorElement
+          type="top"
+          extraClass={`${styles.burger_constructor_element} mr-4`}
+          isLocked={true}
+          text={buns[0]?.name || ''}
+          thumbnail={buns[0]?.image_mobile || ''}
+          price={buns[0]?.price || 0}
+        />
+        <ul className={`${styles.burger_constructor_list} custom-scroll`}>
+          {stuffing.map((item, index) => (
             <li
               className={styles.burger_constructor_item}
               key={`${item?._id} - ${index}`}
@@ -60,14 +63,7 @@ const BurgerConstructor = () => {
                 <div className="mr-6" />
               )}
               <ConstructorElement
-                extraClass={styles.burger_constructor_element}
-                type={
-                  index === firsElement
-                    ? 'top'
-                    : index === lastElement
-                      ? 'bottom'
-                      : undefined
-                }
+                extraClass="mr-4"
                 isLocked={buns.some((bun) => item?._id === bun?._id)}
                 text={item?.name as string}
                 thumbnail={item?.image_mobile as string}
@@ -76,17 +72,25 @@ const BurgerConstructor = () => {
             </li>
           ))}
         </ul>
-      </div>
-      <div className={`${styles.burger_button_wrapper} mr-5`}>
-        <p
-          className={`${styles.burger_description} text text_type_digits-medium`}
-        >
-          {totalCost}
-          <CurrencyIcon type="primary" />
-        </p>
-        <Button htmlType="button" onClick={() => setOpen(!isPopupOpen)}>
-          Оформить заказ
-        </Button>
+        <ConstructorElement
+          type="bottom"
+          extraClass={`${styles.burger_constructor_element} mr-4`}
+          isLocked={true}
+          text={buns[0]?.name || ''}
+          thumbnail={buns[0]?.image_mobile || ''}
+          price={buns[0]?.price || 0}
+        />
+        <div className={`${styles.burger_button_wrapper} mt-5 mr-5`}>
+          <p
+            className={`${styles.burger_description} text text_type_digits-medium`}
+          >
+            {totalCost}
+            <CurrencyIcon type="primary" />
+          </p>
+          <Button htmlType="button" onClick={() => setOpen(!isPopupOpen)}>
+            Оформить заказ
+          </Button>
+        </div>
       </div>
     </div>
   );
