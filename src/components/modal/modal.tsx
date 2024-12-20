@@ -1,6 +1,7 @@
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './modal.module.css';
 import { ReactNode, useEffect, useRef } from 'react';
+import ModalOverlay from './modal-overlay/modal-overlay';
 
 const Modal = ({
   title,
@@ -45,7 +46,7 @@ const Modal = ({
   if (!isOpen) return null;
 
   return (
-    <div className={styles.modal_overlay}>
+    <ModalOverlay>
       <div
         ref={modalRef}
         style={{ width: size === 'M' ? '640px' : '480px' }}
@@ -64,7 +65,7 @@ const Modal = ({
         </button>
         {children}
       </div>
-    </div>
+    </ModalOverlay>
   );
 };
 
