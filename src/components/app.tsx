@@ -6,18 +6,18 @@ import { FetchedIngredients, IngredientType } from '../types/types';
 import { useEffect, useState } from 'react';
 import fetchData from '../utils/fetch-data';
 
+const API_URL = 'https://norma.nomoreparties.space/api/ingredients';
+
 function App() {
   const [data, setData] = useState<IngredientType[]>([]);
   const [isLoading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  const apiUrl = 'https://norma.nomoreparties.space/api/ingredients';
-
   useEffect(() => {
     const fetchIngredients = async () => {
       setLoading(true);
       try {
-        const { data } = await fetchData<FetchedIngredients>(apiUrl);
+        const { data } = await fetchData<FetchedIngredients>(API_URL);
 
         setData(data);
       } catch (error) {
