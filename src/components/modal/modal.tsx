@@ -2,6 +2,9 @@ import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './modal.module.css';
 import { ReactNode, useEffect, useRef } from 'react';
 import ModalOverlay from './modal-overlay/modal-overlay';
+import ReactDOM from 'react-dom';
+
+const modalRoot = document.getElementById('modal-root');
 
 const Modal = ({
   title,
@@ -45,7 +48,7 @@ const Modal = ({
 
   if (!isOpen) return null;
 
-  return (
+  const modalContent = (
     <ModalOverlay>
       <div
         ref={modalRef}
@@ -67,6 +70,8 @@ const Modal = ({
       </div>
     </ModalOverlay>
   );
+
+  return modalRoot ? ReactDOM.createPortal(modalContent, modalRoot) : null;
 };
 
 export { Modal };
