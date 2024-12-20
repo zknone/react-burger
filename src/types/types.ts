@@ -12,3 +12,8 @@ export type IngredientType = {
   image_large: string;
   __v: number;
 };
+
+export type FetchedIngredients = {
+  success: boolean;
+  data: IngredientType[];
+};

@@ -1,13 +1,19 @@
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingredients.module.css';
 import { IngredientsGroup } from './ingredients-group/ingredients-group';
-import ingredients from '../../utils/data';
+import { IngredientType } from '../../types/types';
 
-const bunsData = ingredients.filter((item) => item.type === 'bun');
-const sauceData = ingredients.filter((item) => item.type === 'sauce');
-const mainCourseData = ingredients.filter((item) => item.type === 'main');
+const BurgerIngredients = ({
+  extraClass,
+  ingredients,
+}: {
+  ingredients: IngredientType[];
+  extraClass?: string;
+}) => {
+  const bunsData = ingredients.filter((item) => item.type === 'bun');
+  const sauceData = ingredients.filter((item) => item.type === 'sauce');
+  const mainCourseData = ingredients.filter((item) => item.type === 'main');
 
-const BurgerIngredients = ({ extraClass }: { extraClass?: string }) => {
   return (
     <div className={`${styles.ingredients_content_container} ${extraClass}`}>
       <h2 className="text text_type_main-large mb-5">Соберите бургер</h2>

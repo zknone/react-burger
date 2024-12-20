@@ -5,29 +5,35 @@ import {
   DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-constructor.module.css';
-import ingredients from '../../utils/data';
 import { Modal } from '../modal/modal';
 import BurgerOrderDetails from './burger-order-details/burger-order-details';
 import { useModal } from '../../hooks/use-modal';
+import { IngredientType } from '../../types/types';
 
-const stuffingIds = [
-  '60666c42cc7b410027a1a9b9',
-  '60666c42cc7b410027a1a9b4',
-  '60666c42cc7b410027a1a9bc',
-  '60666c42cc7b410027a1a9bb',
-  '60666c42cc7b410027a1a9bb',
-];
-
-const bunIds = ['60666c42cc7b410027a1a9b1', '60666c42cc7b410027a1a9b1'];
-
-const buns = bunIds.map((id) => ingredients.find((item) => item._id === id));
-
-const stuffing = stuffingIds.map((id) =>
-  ingredients.find((item) => item._id === id)
-);
-
-const BurgerConstructor = () => {
+const BurgerConstructor = ({
+  ingredients,
+}: {
+  ingredients: IngredientType[];
+}) => {
   const { isModalOpen, openModal, closeModal } = useModal();
+
+  console.log('constructor', ingredients);
+
+  const stuffingIds = [
+    ingredients[3]?._id,
+    ingredients[5]?._id,
+    ingredients[3]?._id,
+    ingredients[4]?._id,
+    ingredients[2]?._id,
+  ];
+
+  const bunIds = [ingredients[0]?._id, ingredients[0]?._id];
+
+  const buns = bunIds.map((id) => ingredients.find((item) => item._id === id));
+
+  const stuffing = stuffingIds.map((id) =>
+    ingredients.find((item) => item._id === id)
+  );
 
   const resultingBurger = [...buns.slice(0, 1), ...stuffing, ...buns.slice(1)];
 
