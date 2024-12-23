@@ -23,8 +23,9 @@ function App() {
         setError('Error fetching data');
       }
     };
-    setLoading(false);
+
     fetchIngredients();
+    setLoading(false);
   }, []);
 
   if (isLoading) {

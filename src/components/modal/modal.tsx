@@ -10,13 +10,11 @@ const Modal = ({
   title,
   size = 'M',
   children,
-  isOpen,
   onClose,
 }: {
   title?: string;
   size?: 'M' | 'L';
   children: ReactNode;
-  isOpen: boolean;
   onClose: () => void;
 }) => {
   const paddingSize = size === 'M' ? 10 : 30;
@@ -25,28 +23,26 @@ const Modal = ({
   useEffect(() => {
     const handleKeydown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
+        console.log('esc');
         onClose();
       }
     };
 
     const handleClickOutside = (e: MouseEvent) => {
+      console.log('click outside');
       if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
         onClose();
       }
     };
 
-    if (isOpen) {
-      document.addEventListener('keydown', handleKeydown);
-      document.addEventListener('mousedown', handleClickOutside);
-    }
+    document.addEventListener('keydown', handleKeydown);
+    document.addEventListener('mousedown', handleClickOutside);
 
     return () => {
       document.removeEventListener('keydown', handleKeydown);
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isOpen, onClose]);
-
-  if (!isOpen) return null;
+  }, [onClose]);
 
   const modalContent = (
     <ModalOverlay>

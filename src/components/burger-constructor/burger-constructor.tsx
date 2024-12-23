@@ -45,9 +45,11 @@ const BurgerConstructor = ({
 
   return (
     <div className={`${styles.burger_container} pt-15`}>
-      <Modal size="L" isOpen={isModalOpen} onClose={closeModal}>
-        <BurgerOrderDetails orderNumber="12343" />
-      </Modal>
+      {isModalOpen && (
+        <Modal size="L" onClose={closeModal}>
+          <BurgerOrderDetails orderNumber="12343" />
+        </Modal>
+      )}
       <div className={styles.burger_constructor_wrapper}>
         <ConstructorElement
           type="top"
