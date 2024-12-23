@@ -21,11 +21,12 @@ function App() {
         setData(data);
       } catch (error) {
         setError('Error fetching data');
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchIngredients();
-    setLoading(false);
   }, []);
 
   if (isLoading) {

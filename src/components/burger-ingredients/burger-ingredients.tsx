@@ -35,6 +35,10 @@ const BurgerIngredients = ({
     [ingredients]
   );
 
+  if (!ingredients || ingredients.length === 0) {
+    return <div>Загружаю ингредиенты...</div>;
+  }
+
   return (
     <div className={`${styles.ingredients_content_container} ${extraClass}`}>
       {isModalOpen && selectedIngredient && (
