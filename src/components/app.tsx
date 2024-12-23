@@ -18,16 +18,12 @@ function App() {
       setLoading(true);
       try {
         const { data } = await fetchData<FetchedIngredients>(API_URL);
-
         setData(data);
       } catch (error) {
         setError('Error fetching data');
-        console.error(error);
-      } finally {
-        setLoading(false);
       }
     };
-
+    setLoading(false);
     fetchIngredients();
   }, []);
 
