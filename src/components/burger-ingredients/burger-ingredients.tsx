@@ -5,7 +5,7 @@ import { IngredientType } from '../../types/types';
 import { useModal } from '../../hooks/use-modal';
 import { IngredientPopupDetails } from './ingredient-popup-details/ingredient-popup-details';
 import { Modal } from '../modal/modal';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 const BurgerIngredients = ({
   extraClass,
@@ -23,9 +23,17 @@ const BurgerIngredients = ({
     openModal();
   };
 
-  const bunsData = ingredients.filter((item) => item.type === 'bun');
-  const sauceData = ingredients.filter((item) => item.type === 'sauce');
-  const mainCourseData = ingredients.filter((item) => item.type === 'main');
+  const bunsData = useMemo(() => {
+    return ingredients.filter((item) => item.type === 'bun');
+  }, [ingredients]);
+  const sauceData = useMemo(
+    () => ingredients.filter((item) => item.type === 'sauce'),
+    [ingredients]
+  );
+  const mainCourseData = useMemo(
+    () => ingredients.filter((item) => item.type === 'main'),
+    [ingredients]
+  );
 
   return (
     <div className={`${styles.ingredients_content_container} ${extraClass}`}>
