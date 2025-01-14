@@ -1,0 +1,9 @@
+.ingredient_details_description {
+    display: inline-flex;
+    gap: 4px;
+    margin: 0;
+    padding: 0;
+    max-width: 80%;
+    text-align: center;
+    min-height: 50px;
+}
