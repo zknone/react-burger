@@ -5,7 +5,13 @@ import { IngredientType } from '../../types/types';
 import { useModal } from '../../hooks/use-modal';
 import { IngredientPopupDetails } from './ingredient-popup-details/ingredient-popup-details';
 import { Modal } from '../modal/modal';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  chooseIngredient,
+  closeIngredient,
+} from '../../services/slices/chose-ingredient/actions';
+import { RootState } from '../../store';
 
 const BurgerIngredients = ({
   extraClass,
@@ -14,12 +20,20 @@ const BurgerIngredients = ({
   ingredients: IngredientType[];
   extraClass?: string;
 }) => {
-  const [selectedIngredient, setSelectedIngredient] =
-    useState<IngredientType | null>(null);
+  const dispatch = useDispatch();
+  const selectedIngredient = useSelector(
+    (store: RootState) => store.chosenIngredient.selectedIngredient
+  );
+
   const { isModalOpen, openModal, closeModal } = useModal();
 
+  const handleCloseModal = () => {
+    dispatch(closeIngredient());
+    closeModal();
+  };
+
   const handleIngredientSelected = (ingredient: IngredientType) => {
-    setSelectedIngredient(ingredient);
+    dispatch(chooseIngredient(ingredient));
     openModal();
   };
 
@@ -42,7 +56,7 @@ const BurgerIngredients = ({
   return (
     <div className={`${styles.ingredients_content_container} ${extraClass}`}>
       {isModalOpen && selectedIngredient && (
-        <Modal onClose={closeModal} title="Детали ингредиента">
+        <Modal onClose={handleCloseModal} title="Детали ингредиента">
           <IngredientPopupDetails
             img={selectedIngredient.image}
             protein={selectedIngredient.proteins}

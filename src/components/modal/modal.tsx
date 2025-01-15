@@ -23,13 +23,11 @@ const Modal = ({
   useEffect(() => {
     const handleKeydown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        console.log('esc');
         onClose();
       }
     };
 
     const handleClickOutside = (e: MouseEvent) => {
-      console.log('click outside');
       if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
         onClose();
       }

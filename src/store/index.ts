@@ -1,7 +1,11 @@
-import { combineSlices, configureStore } from '@reduxjs/toolkit';
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { ingredientsApi } from '../services/api/api';
+import chosenIngredientReducer from '../services/slices/chose-ingredient/reducers';
 
-const rootReducer = combineSlices(ingredientsApi);
+const rootReducer = combineReducers({
+  [ingredientsApi.reducerPath]: ingredientsApi.reducer,
+  chosenIngredient: chosenIngredientReducer,
+});
 
 export type RootState = ReturnType<typeof rootReducer>;
 
