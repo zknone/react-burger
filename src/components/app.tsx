@@ -31,7 +31,7 @@ function App() {
       <AppHeader />
       <main className={`${styles.content_container} pt-10`}>
         <BurgerIngredients extraClass="ml-5" ingredients={ingredients} />
-        <BurgerConstructor ingredients={ingredients} />
+        <BurgerConstructor />
       </main>
     </DndProvider>
   );

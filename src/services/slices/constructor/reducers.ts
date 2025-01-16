@@ -10,7 +10,7 @@ const initialState: {
 };
 
 const burgerConstructorSlice = createSlice({
-  name: 'chosenIngredient',
+  name: 'burgerConstructor',
   initialState,
   reducers: {
     addIngredient: (state, action: PayloadAction<IngredientType>) => {
