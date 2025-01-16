@@ -3,7 +3,9 @@ import { AppHeader } from './app-header/app-header';
 import { BurgerConstructor } from './burger-constructor/burger-constructor';
 import styles from './app.module.css';
 
-import { useGetIngredientsQuery } from '../services/api/api';
+import { useGetIngredientsQuery } from '../services/api/ingredients-api/ingredients-api';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { DndProvider } from 'react-dnd';
 
 function App() {
   const { isLoading, error, data } = useGetIngredientsQuery(undefined);
@@ -25,13 +27,13 @@ function App() {
   }
 
   return (
-    <>
+    <DndProvider backend={HTML5Backend}>
       <AppHeader />
       <main className={`${styles.content_container} pt-10`}>
         <BurgerIngredients extraClass="ml-5" ingredients={ingredients} />
         <BurgerConstructor ingredients={ingredients} />
       </main>
-    </>
+    </DndProvider>
   );
 }
 
