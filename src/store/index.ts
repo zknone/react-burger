@@ -1,5 +1,5 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import { ingredientsApi } from '../services/api/api';
+import { ingredientsApi } from '../services/api/ingredients-api/ingredients-api';
 import chosenIngredientReducer from '../services/slices/chose-ingredient/reducers';
 
 const rootReducer = combineReducers({
