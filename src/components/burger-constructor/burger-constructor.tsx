@@ -10,7 +10,7 @@ import BurgerOrderDetails from './burger-order-details/burger-order-details';
 import { useModal } from '../../hooks/use-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import { useDrag, useDrop } from 'react-dnd';
+import { useDrop } from 'react-dnd';
 import { IngredientType } from '../../types/types';
 import {
   addBun,
