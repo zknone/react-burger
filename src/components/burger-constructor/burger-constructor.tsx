@@ -2,6 +2,7 @@ import {
   Button,
   ConstructorElement,
   CurrencyIcon,
+  DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-constructor.module.css';
 import { Modal } from '../modal/modal';
@@ -9,13 +10,29 @@ import BurgerOrderDetails from './burger-order-details/burger-order-details';
 import { useModal } from '../../hooks/use-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import { useDrop } from 'react-dnd';
+import { useDrag, useDrop } from 'react-dnd';
 import { IngredientType } from '../../types/types';
-import { addBun } from '../../services/slices/constructor/actions';
+import {
+  addBun,
+  removeIngredient,
+} from '../../services/slices/constructor/actions';
 import { addIngredient } from '../../services/slices/constructor/reducers';
 
 const BurgerConstructor = () => {
   const dispatch = useDispatch();
+
+  // const [{ isDragging }, dragRef] = useDrag({
+  //   type: 'ingredient',
+  //   item: ingredient,
+  //   collect: (monitor) => ({
+  //     isDragging: monitor.isDragging(),
+  //   }),
+  // });
+
+  const handleRemove = (ingredient: IngredientType) => {
+    dispatch(removeIngredient(ingredient));
+  };
+
   const [, dropTarget] = useDrop({
     accept: 'ingredient',
     drop: (item: IngredientType) => {
@@ -58,12 +75,13 @@ const BurgerConstructor = () => {
               className={styles.burger_constructor_item}
               key={`${item?._id} - ${index}`}
             >
-              <div className="mr-6" />
+              <DragIcon type="primary" />
               <ConstructorElement
                 extraClass="mr-4"
                 text={item?.name as string}
                 thumbnail={item?.image_mobile as string}
                 price={item?.price as number}
+                handleClose={() => handleRemove(item)}
               />
             </li>
           ))}
