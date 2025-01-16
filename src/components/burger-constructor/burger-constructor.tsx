@@ -17,18 +17,14 @@ import {
   removeIngredient,
 } from '../../services/slices/constructor/actions';
 import { addIngredient } from '../../services/slices/constructor/reducers';
+import { useMemo } from 'react';
 
 const BurgerConstructor = () => {
   const dispatch = useDispatch();
-
-  // const [{ isDragging }, dragRef] = useDrag({
-  //   type: 'ingredient',
-  //   item: ingredient,
-  //   collect: (monitor) => ({
-  //     isDragging: monitor.isDragging(),
-  //   }),
-  // });
-
+  const { isModalOpen, openModal, closeModal } = useModal();
+  const { bun, selectedIngredients } = useSelector(
+    (state: RootState) => state.burgerConstructor
+  );
   const handleRemove = (ingredient: IngredientType) => {
     dispatch(removeIngredient(ingredient));
   };
@@ -46,12 +42,18 @@ const BurgerConstructor = () => {
       isHover: monitor.isOver(),
     }),
   });
-  const { isModalOpen, openModal, closeModal } = useModal();
-  const { bun, selectedIngredients } = useSelector(
-    (state: RootState) => state.burgerConstructor
-  );
 
-  console.log(bun, selectedIngredients);
+  const totalPrice = useMemo(() => {
+    return [bun, ...selectedIngredients].reduce(
+      (acc: number, item: IngredientType | null) => {
+        if (item) {
+          acc += item.price;
+        }
+        return acc;
+      },
+      0
+    );
+  }, [bun, selectedIngredients]);
 
   return (
     <div ref={dropTarget} className={`${styles.burger_container} pt-15`}>
@@ -98,7 +100,7 @@ const BurgerConstructor = () => {
           <p
             className={`${styles.burger_description} text text_type_digits-medium`}
           >
-            '111'
+            {totalPrice}
             <CurrencyIcon type="primary" />
           </p>
           <Button htmlType="button" onClick={openModal}>

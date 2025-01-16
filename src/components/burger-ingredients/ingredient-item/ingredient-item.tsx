@@ -4,8 +4,11 @@ import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import styles from './ingredient-item.module.css';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
+import { useMemo } from 'react';
 
-type QuantityType = Record<string, number>;
+type QuantityType = {
+  [x: string]: number;
+};
 
 const IngredientItem = ({
   ingredient,
@@ -18,21 +21,22 @@ const IngredientItem = ({
     (state: RootState) => state.burgerConstructor
   );
 
-  const ingredients = [bun, ...selectedIngredients];
-
-  type QuantityType = {
-    [x: string]: number;
-  };
-
-  const quantity: QuantityType = ingredients.reduce(
-    (acc: QuantityType, item: IngredientType | null) => {
-      if (item) {
-        acc[item._id] = (acc[item._id] || 0) + 1;
-      }
-      return acc;
-    },
-    {}
+  const ingredients = useMemo(
+    () => [bun, ...selectedIngredients],
+    [bun, selectedIngredients]
   );
+
+  const quantity = useMemo(() => {
+    return ingredients.reduce(
+      (acc: QuantityType, item: IngredientType | null) => {
+        if (item) {
+          acc[item._id] = (acc[item._id] || 0) + 1;
+        }
+        return acc;
+      },
+      {}
+    );
+  }, [ingredients]);
 
   const [{ isDragging }, dragRef] = useDrag({
     type: 'ingredient',
