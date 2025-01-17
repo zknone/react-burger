@@ -49,7 +49,7 @@ const BurgerConstructor = () => {
   });
 
   const totalPrice = useMemo(() => {
-    return [bun, ...selectedIngredients].reduce(
+    return [bun, ...selectedIngredients, bun].reduce(
       (acc: number, item: IngredientType | null) => {
         if (item) {
           acc += item.price;
