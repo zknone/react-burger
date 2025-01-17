@@ -19,6 +19,7 @@ import {
 import { addIngredient } from '../../services/slices/constructor/reducers';
 import { useMemo } from 'react';
 import BurgerConstructorItem from './burger-constructor-item/burger-constructor-item';
+import BurgerEmptyItem from './burger-empty-item/burger-empty-item';
 
 const BurgerConstructor = () => {
   const dispatch = useDispatch();
@@ -68,33 +69,45 @@ const BurgerConstructor = () => {
         </Modal>
       )}
       <div className={styles.burger_constructor_wrapper}>
-        <ConstructorElement
-          type="top"
-          extraClass={`${styles.burger_constructor_element} mr-4`}
-          isLocked={true}
-          text={bun?.name ? `${bun?.name} (верх)` : ''}
-          thumbnail={bun?.image_mobile || ''}
-          price={bun?.price || 0}
-        />
-        <ul className={`${styles.burger_constructor_list} custom-scroll`}>
-          {selectedIngredients.map((item, index) => (
-            <BurgerConstructorItem
-              index={index}
-              moveIngredient={handleMoveIngredient}
-              ingredient={item}
-              key={`${item?._id} - ${index}`}
-              handleClose={handleRemove}
-            />
-          ))}
-        </ul>
-        <ConstructorElement
-          type="bottom"
-          extraClass={`${styles.burger_constructor_element} mr-4`}
-          isLocked={true}
-          text={bun?.name ? `${bun?.name} (низ)` : ''}
-          thumbnail={bun?.image_mobile || ''}
-          price={bun?.price || 0}
-        />
+        {!bun ? (
+          <BurgerEmptyItem type="top" title="Добавьте булочку" />
+        ) : (
+          <ConstructorElement
+            type="top"
+            extraClass={`${styles.burger_constructor_element} mr-4`}
+            isLocked={true}
+            text={bun?.name ? `${bun?.name} (верх)` : ''}
+            thumbnail={bun?.image_mobile || ''}
+            price={bun?.price || 0}
+          />
+        )}
+        {selectedIngredients.length === 0 ? (
+          <BurgerEmptyItem title="Добавьте ингредиенты" />
+        ) : (
+          <ul className={`${styles.burger_constructor_list} custom-scroll`}>
+            {selectedIngredients.map((item, index) => (
+              <BurgerConstructorItem
+                index={index}
+                moveIngredient={handleMoveIngredient}
+                ingredient={item}
+                key={`${item?._id} - ${index}`}
+                handleClose={handleRemove}
+              />
+            ))}
+          </ul>
+        )}
+        {!bun ? (
+          <BurgerEmptyItem type="bottom" title="Добавьте булочку" />
+        ) : (
+          <ConstructorElement
+            type="bottom"
+            extraClass={`${styles.burger_constructor_element} mr-4`}
+            isLocked={true}
+            text={bun?.name ? `${bun?.name} (низ)` : ''}
+            thumbnail={bun?.image_mobile || ''}
+            price={bun?.price || 0}
+          />
+        )}
         <div className={`${styles.burger_button_wrapper} mt-5 mr-5`}>
           <p
             className={`${styles.burger_description} text text_type_digits-medium`}
