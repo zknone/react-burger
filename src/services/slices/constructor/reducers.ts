@@ -16,10 +16,14 @@ const burgerConstructorSlice = createSlice({
     addIngredient: (state, action: PayloadAction<IngredientType>) => {
       state.selectedIngredients.push(action.payload);
     },
-    removeIngredient: (state, action: PayloadAction<IngredientType>) => {
-      state.selectedIngredients = state.selectedIngredients.filter(
-        (item) => item._id !== action.payload._id
-      );
+    removeIngredient: (state, action: PayloadAction<number>) => {
+      const index = action.payload;
+      const newIngredients = [...state.selectedIngredients];
+      newIngredients.splice(index, 1);
+      return {
+        ...state,
+        selectedIngredients: newIngredients,
+      };
     },
     addBun: (state, action: PayloadAction<IngredientType>) => {
       state.bun = action.payload;

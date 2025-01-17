@@ -7,7 +7,7 @@ export const addIngredient = createAction<IngredientType>(
 
 export const addBun = createAction<IngredientType>('burgerConstructor/addBun');
 
-export const removeIngredient = createAction<IngredientType>(
+export const removeIngredient = createAction<number>(
   'burgerConstructor/removeIngredient'
 );
 

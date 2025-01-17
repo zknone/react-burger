@@ -29,8 +29,8 @@ const BurgerConstructor = () => {
   const { bun, selectedIngredients } = useSelector(
     (state: RootState) => state.burgerConstructor
   );
-  const handleRemove = (ingredient: IngredientType) => {
-    dispatch(removeIngredient(ingredient));
+  const handleRemove = (index: number) => {
+    dispatch(removeIngredient(index));
   };
 
   const handleMoveIngredient = (dragIndex: number, hoverIndex: number) => {

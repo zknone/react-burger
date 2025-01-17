@@ -14,7 +14,7 @@ export default function BurgerConstructorItem({
 }: {
   ingredient: IngredientType;
   index: number;
-  handleClose: (ingredient: IngredientType) => void;
+  handleClose: (index: number) => void;
   moveIngredient: (dragIndex: number, hoverIndex: number) => void;
 }) {
   const [{ isDragging }, dragRef] = useDrag({
@@ -47,7 +47,7 @@ export default function BurgerConstructorItem({
         text={ingredient?.name as string}
         thumbnail={ingredient?.image_mobile as string}
         price={ingredient?.price as number}
-        handleClose={() => handleClose(ingredient)}
+        handleClose={() => handleClose(index)}
       />
     </li>
   );
