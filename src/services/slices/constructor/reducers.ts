@@ -24,6 +24,19 @@ const burgerConstructorSlice = createSlice({
     addBun: (state, action: PayloadAction<IngredientType>) => {
       state.bun = action.payload;
     },
+    moveIngredient: (
+      state,
+      action: PayloadAction<{ dragIndex: number; hoverIndex: number }>
+    ) => {
+      const { dragIndex, hoverIndex } = action.payload;
+      const newIngredients = [...state.selectedIngredients];
+      const [movedItem] = newIngredients.splice(dragIndex, 1);
+      newIngredients.splice(hoverIndex, 0, movedItem);
+      return {
+        ...state,
+        selectedIngredients: newIngredients,
+      };
+    },
   },
 });
 

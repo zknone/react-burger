@@ -2,7 +2,6 @@ import {
   Button,
   ConstructorElement,
   CurrencyIcon,
-  DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-constructor.module.css';
 import { Modal } from '../modal/modal';
@@ -14,10 +13,12 @@ import { useDrop } from 'react-dnd';
 import { IngredientType } from '../../types/types';
 import {
   addBun,
+  moveIngredient,
   removeIngredient,
 } from '../../services/slices/constructor/actions';
 import { addIngredient } from '../../services/slices/constructor/reducers';
 import { useMemo } from 'react';
+import BurgerConstructorItem from './burger-constructor-item/burger-constructor-item';
 
 const BurgerConstructor = () => {
   const dispatch = useDispatch();
@@ -27,6 +28,10 @@ const BurgerConstructor = () => {
   );
   const handleRemove = (ingredient: IngredientType) => {
     dispatch(removeIngredient(ingredient));
+  };
+
+  const handleMoveIngredient = (dragIndex: number, hoverIndex: number) => {
+    dispatch(moveIngredient({ dragIndex, hoverIndex }));
   };
 
   const [, dropTarget] = useDrop({
@@ -73,19 +78,13 @@ const BurgerConstructor = () => {
         />
         <ul className={`${styles.burger_constructor_list} custom-scroll`}>
           {selectedIngredients.map((item, index) => (
-            <li
-              className={styles.burger_constructor_item}
+            <BurgerConstructorItem
+              index={index}
+              moveIngredient={handleMoveIngredient}
+              ingredient={item}
               key={`${item?._id} - ${index}`}
-            >
-              <DragIcon type="primary" />
-              <ConstructorElement
-                extraClass="mr-4"
-                text={item?.name as string}
-                thumbnail={item?.image_mobile as string}
-                price={item?.price as number}
-                handleClose={() => handleRemove(item)}
-              />
-            </li>
+              handleClose={handleRemove}
+            />
           ))}
         </ul>
         <ConstructorElement

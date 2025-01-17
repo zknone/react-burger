@@ -1,0 +1,9 @@
+.burger_constructor_item {
+    width: 100%;
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    list-style-type: none;
+    padding: 0;
+}
