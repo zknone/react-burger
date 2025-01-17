@@ -16,9 +16,9 @@ export const orderApi = createApi({
   endpoints: (builder) => ({
     sendOrder: builder.mutation({
       query: (order: string[]) => ({
-        url: '/constructor',
+        url: '/orders',
         method: 'POST',
-        body: JSON.stringify({ content: order }),
+        body: JSON.stringify({ ingredients: order }),
       }),
     }),
   }),
