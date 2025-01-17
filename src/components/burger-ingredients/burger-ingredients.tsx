@@ -5,13 +5,16 @@ import { IngredientType } from '../../types/types';
 import { useModal } from '../../hooks/use-modal';
 import { IngredientPopupDetails } from './ingredient-popup-details/ingredient-popup-details';
 import { Modal } from '../modal/modal';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   chooseIngredient,
   closeIngredient,
 } from '../../services/slices/chose-ingredient/actions';
 import { RootState } from '../../store';
+
+const GAP = 50;
+type IngredientVariantsType = 'bun' | 'sauce' | 'stuffing';
 
 const BurgerIngredients = ({
   extraClass,
@@ -26,6 +29,13 @@ const BurgerIngredients = ({
   );
 
   const { isModalOpen, openModal, closeModal } = useModal();
+  const [activeTitle, setTitleActive] = useState<IngredientVariantsType>('bun');
+  const [positions, setPositions] = useState({
+    startingPosition: 0,
+    bun: 0,
+    sauce: 0,
+    stuffing: 0,
+  });
 
   const handleCloseModal = () => {
     dispatch(closeIngredient());
@@ -35,6 +45,26 @@ const BurgerIngredients = ({
   const handleIngredientSelected = (ingredient: IngredientType) => {
     dispatch(chooseIngredient(ingredient));
     openModal();
+  };
+
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+  const bunRef = useRef<HTMLDivElement | null>(null);
+  const sauceRef = useRef<HTMLDivElement | null>(null);
+  const stuffingRef = useRef<HTMLDivElement | null>(null);
+
+  const handleTabClick = (type: IngredientVariantsType) => {
+    setTitleActive(type);
+    switch (type) {
+      case 'bun':
+        bunRef.current?.scrollIntoView({ behavior: 'smooth' });
+        break;
+      case 'sauce':
+        sauceRef.current?.scrollIntoView({ behavior: 'smooth' });
+        break;
+      case 'stuffing':
+        stuffingRef.current?.scrollIntoView({ behavior: 'smooth' });
+        break;
+    }
   };
 
   const bunsData = useMemo(() => {
@@ -48,6 +78,38 @@ const BurgerIngredients = ({
     () => ingredients.filter((item) => item.type === 'main'),
     [ingredients]
   );
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      setPositions((prevPositions) => ({
+        ...prevPositions,
+        startingPosition: scrollRef.current!.getBoundingClientRect().top,
+      }));
+    }
+    const handleScroll = () => {
+      setPositions((prevPositions) => ({
+        ...prevPositions,
+        bun: bunRef.current?.getBoundingClientRect().top || 0,
+        sauce: sauceRef.current?.getBoundingClientRect().top || 0,
+        stuffing: stuffingRef.current?.getBoundingClientRect().top || 0,
+      }));
+    };
+
+    scrollRef.current?.addEventListener('scroll', handleScroll);
+    return () => {
+      scrollRef.current?.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (positions.startingPosition + GAP <= positions.sauce) {
+      setTitleActive('bun');
+    } else if (positions.startingPosition + GAP <= positions.stuffing) {
+      setTitleActive('sauce');
+    } else {
+      setTitleActive('stuffing');
+    }
+  }, [positions]);
 
   if (!ingredients || ingredients.length === 0) {
     return <div>Загружаю ингредиенты...</div>;
@@ -68,30 +130,52 @@ const BurgerIngredients = ({
       )}
       <h2 className="text text_type_main-large mb-5">Соберите бургер</h2>
       <div className={styles.ingredients_tabs}>
-        <Tab value="buns>" active={true} onClick={() => {}}>
+        <Tab
+          value="buns>"
+          active={activeTitle === 'bun'}
+          onClick={() => {
+            handleTabClick('bun');
+          }}
+        >
           Булки
         </Tab>
-        <Tab value="sauce" active={false} onClick={() => {}}>
+        <Tab
+          value="sauce"
+          active={activeTitle === 'sauce'}
+          onClick={() => {
+            handleTabClick('sauce');
+          }}
+        >
           Соусы
         </Tab>
-        <Tab value="topping" active={false} onClick={() => {}}>
+        <Tab
+          value="topping"
+          active={activeTitle === 'stuffing'}
+          onClick={() => {
+            handleTabClick('stuffing');
+          }}
+        >
           Начинки
         </Tab>
       </div>
       <div
         className={`${styles.ingredients_container} pt-6 pb-6 pr-10 custom-scroll`}
+        ref={scrollRef}
       >
         <IngredientsGroup
+          ref={bunRef}
           title="Булки"
           ingredients={bunsData}
           handleIngredientSelected={handleIngredientSelected}
         />
         <IngredientsGroup
+          ref={sauceRef}
           title="Соусы"
           ingredients={sauceData}
           handleIngredientSelected={handleIngredientSelected}
         />
         <IngredientsGroup
+          ref={stuffingRef}
           title="Начинки"
           ingredients={mainCourseData}
           handleIngredientSelected={handleIngredientSelected}
