@@ -1,8 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { ingredientsApiConfig } from '../../../utils/fetch-data';
 
-export const ingredientsApi = createApi({
-  reducerPath: 'ingredientsApi',
+export const orderApi = createApi({
+  reducerPath: 'orderApi',
   baseQuery: fetchBaseQuery({
     baseUrl: ingredientsApiConfig.baseUrl,
     prepareHeaders: (headers) => {
@@ -14,10 +14,14 @@ export const ingredientsApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    getIngredients: builder.query({
-      query: () => '/ingredients',
+    sendOrder: builder.mutation({
+      query: (order: string[]) => ({
+        url: '/constructor',
+        method: 'POST',
+        body: JSON.stringify({ content: order }),
+      }),
     }),
   }),
 });
 
-export const { useGetIngredientsQuery } = ingredientsApi;
+export const { useSendOrderMutation } = orderApi;

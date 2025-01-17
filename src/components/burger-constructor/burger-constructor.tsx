@@ -20,7 +20,7 @@ import { addIngredient } from '../../services/slices/constructor/reducers';
 import { useMemo } from 'react';
 import BurgerConstructorItem from './burger-constructor-item/burger-constructor-item';
 import BurgerEmptyItem from './burger-empty-item/burger-empty-item';
-import { useSendOrderMutation } from '../../services/api/ingredients-api/ingredients-api';
+import { useSendOrderMutation } from '../../services/api/order-api/order-api';
 
 const BurgerConstructor = () => {
   const dispatch = useDispatch();
