@@ -20,9 +20,11 @@ import { addIngredient } from '../../services/slices/constructor/reducers';
 import { useMemo } from 'react';
 import BurgerConstructorItem from './burger-constructor-item/burger-constructor-item';
 import BurgerEmptyItem from './burger-empty-item/burger-empty-item';
+import { useSendOrderMutation } from '../../services/api/ingredients-api/ingredients-api';
 
 const BurgerConstructor = () => {
   const dispatch = useDispatch();
+  const [sendOrder] = useSendOrderMutation();
   const { isModalOpen, openModal, closeModal } = useModal();
   const { bun, selectedIngredients } = useSelector(
     (state: RootState) => state.burgerConstructor
@@ -33,6 +35,13 @@ const BurgerConstructor = () => {
 
   const handleMoveIngredient = (dragIndex: number, hoverIndex: number) => {
     dispatch(moveIngredient({ dragIndex, hoverIndex }));
+  };
+
+  const handleSendOrder = (order: string[]) => {
+    if (order.length >= 3) {
+      sendOrder(order);
+      openModal();
+    }
   };
 
   const [, dropTarget] = useDrop({
@@ -48,6 +57,12 @@ const BurgerConstructor = () => {
       isHover: monitor.isOver(),
     }),
   });
+
+  const order = useMemo(() => {
+    return [bun, ...selectedIngredients, bun]
+      .map((item) => item?._id)
+      .filter((id) => id !== undefined);
+  }, [bun, selectedIngredients]);
 
   const totalPrice = useMemo(() => {
     return [bun, ...selectedIngredients, bun].reduce(
@@ -115,7 +130,7 @@ const BurgerConstructor = () => {
             {totalPrice}
             <CurrencyIcon type="primary" />
           </p>
-          <Button htmlType="button" onClick={openModal}>
+          <Button htmlType="button" onClick={() => handleSendOrder(order)}>
             Оформить заказ
           </Button>
         </div>
