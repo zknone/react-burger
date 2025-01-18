@@ -8,8 +8,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DndProvider } from 'react-dnd';
 
 function App() {
-  const { isLoading, error, data } = useGetIngredientsQuery(undefined);
-  const ingredients = data?.data;
+  const { isLoading, error } = useGetIngredientsQuery(undefined);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -30,7 +29,7 @@ function App() {
     <DndProvider backend={HTML5Backend}>
       <AppHeader />
       <main className={`${styles.content_container} pt-10`}>
-        <BurgerIngredients extraClass="ml-5" ingredients={ingredients} />
+        <BurgerIngredients extraClass="ml-5" />
         <BurgerConstructor />
       </main>
     </DndProvider>

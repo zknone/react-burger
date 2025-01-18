@@ -21,6 +21,7 @@ import { useMemo } from 'react';
 import BurgerConstructorItem from './burger-constructor-item/burger-constructor-item';
 import BurgerEmptyItem from './burger-empty-item/burger-empty-item';
 import { useSendOrderMutation } from '../../services/api/order-api/order-api';
+import { v4 as uuidv4 } from 'uuid';
 
 const BurgerConstructor = () => {
   const dispatch = useDispatch();
@@ -105,7 +106,7 @@ const BurgerConstructor = () => {
                 index={index}
                 moveIngredient={handleMoveIngredient}
                 ingredient={item}
-                key={`${item?._id} - ${index}`}
+                key={uuidv4()}
                 handleClose={handleRemove}
               />
             ))}

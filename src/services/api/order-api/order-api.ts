@@ -1,10 +1,10 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { ingredientsApiConfig } from '../../../utils/fetch-data';
+import { BASE_API_URL, ingredientsApiConfig } from '../../../utils/fetch-data';
 
 export const orderApi = createApi({
   reducerPath: 'orderApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: ingredientsApiConfig.baseUrl,
+    baseUrl: BASE_API_URL,
     prepareHeaders: (headers) => {
       for (const [key, value] of Object.entries(ingredientsApiConfig.headers)) {
         headers.set(key, value);

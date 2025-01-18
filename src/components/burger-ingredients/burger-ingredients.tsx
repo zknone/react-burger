@@ -12,21 +12,18 @@ import {
   closeIngredient,
 } from '../../services/slices/chose-ingredient/actions';
 import { RootState } from '../../store';
+import { useGetIngredientsQuery } from '../../services/api/ingredients-api/ingredients-api';
 
 const GAP = 50;
 type IngredientVariantsType = 'bun' | 'sauce' | 'stuffing';
 
-const BurgerIngredients = ({
-  extraClass,
-  ingredients,
-}: {
-  ingredients: IngredientType[];
-  extraClass?: string;
-}) => {
+const BurgerIngredients = ({ extraClass }: { extraClass?: string }) => {
   const dispatch = useDispatch();
   const selectedIngredient = useSelector(
     (store: RootState) => store.chosenIngredient.selectedIngredient
   );
+  const { data } = useGetIngredientsQuery(undefined);
+  const ingredients: IngredientType[] = data?.data;
 
   const { isModalOpen, openModal, closeModal } = useModal();
   const [activeTitle, setTitleActive] = useState<IngredientVariantsType>('bun');
@@ -102,12 +99,14 @@ const BurgerIngredients = ({
   }, []);
 
   useEffect(() => {
-    if (positions.startingPosition + GAP <= positions.sauce) {
-      setTitleActive('bun');
-    } else if (positions.startingPosition + GAP <= positions.stuffing) {
-      setTitleActive('sauce');
-    } else {
-      setTitleActive('stuffing');
+    if (positions.startingPosition && positions.sauce && positions.stuffing) {
+      if (positions.startingPosition + GAP <= positions.sauce) {
+        setTitleActive('bun');
+      } else if (positions.startingPosition + GAP <= positions.stuffing) {
+        setTitleActive('sauce');
+      } else {
+        setTitleActive('stuffing');
+      }
     }
   }, [positions]);
 
