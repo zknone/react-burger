@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IngredientType } from '../../../types/types';
+import { ExtendedIngredientType, IngredientType } from '../../../types/types';
+import { v4 as uuid4 } from 'uuid';
 
 const initialState: {
   bun: IngredientType | null;
-  selectedIngredients: IngredientType[];
+  selectedIngredients: ExtendedIngredientType[];
 } = {
   bun: null,
   selectedIngredients: [],
@@ -13,8 +14,13 @@ const burgerConstructorSlice = createSlice({
   name: 'burgerConstructor',
   initialState,
   reducers: {
-    addIngredient: (state, action: PayloadAction<IngredientType>) => {
-      state.selectedIngredients.push(action.payload);
+    addIngredient: {
+      reducer: (state, action: PayloadAction<ExtendedIngredientType>) => {
+        state.selectedIngredients.push(action.payload);
+      },
+      prepare: (ingredient: IngredientType) => {
+        return { payload: { ...ingredient, uniqueId: uuid4() } };
+      },
     },
     removeIngredient: (state, action: PayloadAction<number>) => {
       const index = action.payload;
@@ -40,6 +46,10 @@ const burgerConstructorSlice = createSlice({
         ...state,
         selectedIngredients: newIngredients,
       };
+    },
+    emptyIngredients: (state) => {
+      state.bun = null;
+      state.selectedIngredients = [];
     },
   },
 });

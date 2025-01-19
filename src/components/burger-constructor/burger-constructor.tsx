@@ -13,6 +13,7 @@ import { useDrop } from 'react-dnd';
 import { IngredientType } from '../../types/types';
 import {
   addBun,
+  emptyIngredients,
   moveIngredient,
   removeIngredient,
 } from '../../services/slices/constructor/actions';
@@ -21,11 +22,10 @@ import { useMemo } from 'react';
 import BurgerConstructorItem from './burger-constructor-item/burger-constructor-item';
 import BurgerEmptyItem from './burger-empty-item/burger-empty-item';
 import { useSendOrderMutation } from '../../services/api/order-api/order-api';
-import { v4 as uuidv4 } from 'uuid';
 
 const BurgerConstructor = () => {
   const dispatch = useDispatch();
-  const [sendOrder] = useSendOrderMutation();
+  const [sendOrder, { data, isLoading }] = useSendOrderMutation();
   const { isModalOpen, openModal, closeModal } = useModal();
   const { bun, selectedIngredients } = useSelector(
     (state: RootState) => state.burgerConstructor
@@ -42,6 +42,7 @@ const BurgerConstructor = () => {
     if (order.length >= 3) {
       sendOrder(order);
       openModal();
+      dispatch(emptyIngredients());
     }
   };
 
@@ -81,7 +82,11 @@ const BurgerConstructor = () => {
     <div ref={dropTarget} className={`${styles.burger_container} pt-15`}>
       {isModalOpen && (
         <Modal size="L" onClose={closeModal}>
-          <BurgerOrderDetails orderNumber="12343" />
+          {data ? (
+            <BurgerOrderDetails orderNumber={data.order.number} />
+          ) : (
+            <p className="text text_type_main-default">Загрузка данных...</p>
+          )}
         </Modal>
       )}
       <div className={styles.burger_constructor_wrapper}>
@@ -106,7 +111,7 @@ const BurgerConstructor = () => {
                 index={index}
                 moveIngredient={handleMoveIngredient}
                 ingredient={item}
-                key={uuidv4()}
+                key={item.uniqueId}
                 handleClose={handleRemove}
               />
             ))}
@@ -131,8 +136,12 @@ const BurgerConstructor = () => {
             {totalPrice}
             <CurrencyIcon type="primary" />
           </p>
-          <Button htmlType="button" onClick={() => handleSendOrder(order)}>
-            Оформить заказ
+          <Button
+            htmlType="button"
+            onClick={() => handleSendOrder(order)}
+            disabled={isLoading}
+          >
+            {isLoading ? 'Оформляем заказ' : 'Оформить заказ'}
           </Button>
         </div>
       </div>

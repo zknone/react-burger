@@ -1,7 +1,7 @@
 import { createAction } from '@reduxjs/toolkit';
-import { IngredientType } from '../../../types/types';
+import { ExtendedIngredientType, IngredientType } from '../../../types/types';
 
-export const addIngredient = createAction<IngredientType>(
+export const addIngredient = createAction<ExtendedIngredientType>(
   'burgerConstructor/addIngredient'
 );
 
@@ -15,3 +15,7 @@ export const moveIngredient = createAction<{
   dragIndex: number;
   hoverIndex: number;
 }>('burgerConstructor/moveIngredient');
+
+export const emptyIngredients = createAction(
+  'burgerConstructor/emptyIngredients'
+);

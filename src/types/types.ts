@@ -17,3 +17,5 @@ export type FetchedIngredients = {
   success: boolean;
   data: IngredientType[];
 };
+
+export type ExtendedIngredientType = IngredientType & { uniqueId: string };
