@@ -2,48 +2,37 @@ import { BurgerIngredients } from './burger-ingredients/burger-ingredients';
 import { AppHeader } from './app-header/app-header';
 import { BurgerConstructor } from './burger-constructor/burger-constructor';
 import styles from './app.module.css';
-import { FetchedIngredients, IngredientType } from '../types/types';
-import { useEffect, useState } from 'react';
-import fetchData from '../utils/fetch-data';
 
-const API_URL = 'https://norma.nomoreparties.space/api/ingredients';
+import { useGetIngredientsQuery } from '../services/api/ingredients-api/ingredients-api';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { DndProvider } from 'react-dnd';
 
 function App() {
-  const [data, setData] = useState<IngredientType[]>([]);
-  const [isLoading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchIngredients = async () => {
-      setLoading(true);
-      try {
-        const { data } = await fetchData<FetchedIngredients>(API_URL);
-        setData(data);
-      } catch (error) {
-        setError('Error fetching data');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchIngredients();
-  }, []);
+  const { isLoading, error } = useGetIngredientsQuery(undefined);
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
   if (error) {
-    return <div>{error}</div>;
+    const errorMessage =
+      error instanceof Error
+        ? error.message
+        : 'status' in error
+          ? `Error ${error.status}: ${(error.data as { message?: string })?.message || 'Unknown error'}`
+          : 'An unknown error occurred';
+
+    return <div>{errorMessage}</div>;
   }
+
   return (
-    <>
+    <DndProvider backend={HTML5Backend}>
       <AppHeader />
       <main className={`${styles.content_container} pt-10`}>
-        <BurgerIngredients extraClass="ml-5" ingredients={data} />
-        <BurgerConstructor ingredients={data} />
+        <BurgerIngredients extraClass="ml-5" />
+        <BurgerConstructor />
       </main>
-    </>
+    </DndProvider>
   );
 }
 

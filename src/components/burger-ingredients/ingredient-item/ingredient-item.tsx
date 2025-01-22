@@ -1,6 +1,14 @@
+import { useDrag } from 'react-dnd';
 import { IngredientType } from '../../../types/types';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import styles from './ingredient-item.module.css';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store';
+import { useMemo } from 'react';
+
+type QuantityType = {
+  [x: string]: number;
+};
 
 const IngredientItem = ({
   ingredient,
@@ -9,14 +17,49 @@ const IngredientItem = ({
   ingredient: IngredientType;
   onClick: () => void;
 }) => {
-  const quantity = 1;
+  const { bun, selectedIngredients } = useSelector(
+    (state: RootState) => state.burgerConstructor
+  );
+
+  const ingredients = useMemo(
+    () => [bun, ...selectedIngredients],
+    [bun, selectedIngredients]
+  );
+
+  const quantity = useMemo(() => {
+    return ingredients.reduce(
+      (acc: QuantityType, item: IngredientType | null) => {
+        if (item) {
+          acc[item._id] = (acc[item._id] || 0) + 1;
+        }
+        return acc;
+      },
+      {}
+    );
+  }, [ingredients]);
+
+  const [{ isDragging }, dragRef] = useDrag({
+    type: 'ingredient',
+    item: ingredient,
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  });
+
   return (
-    <li className={styles.ingredient_item_container} onClick={onClick}>
-      <div
-        className={`${styles.ingredient_quantity_number} text text_type_digits-default`}
-      >
-        {quantity}
-      </div>
+    <li
+      className={styles.ingredient_item_container}
+      onClick={onClick}
+      ref={dragRef}
+      style={{ opacity: isDragging ? 0.5 : 1 }}
+    >
+      {quantity[ingredient._id] && (
+        <div
+          className={`${styles.ingredient_quantity_number} text text_type_digits-default`}
+        >
+          {quantity[ingredient._id]}
+        </div>
+      )}
       <img
         className={`${styles.ingredient_item_image} pl-4 pr-4 pb-1`}
         alt={ingredient.name}

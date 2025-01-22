@@ -26,16 +26,6 @@
     overflow-y: auto;
     box-sizing: border-box;
 }
- 
-.burger_constructor_item {
-    width: 100%;
-    flex: 1;
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
-    list-style-type: none;
-    padding: 0;
-}
 
 .burger_button_wrapper {
     display: flex;

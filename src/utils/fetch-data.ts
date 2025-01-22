@@ -1,3 +1,12 @@
+export const BASE_API_URL = 'https://norma.nomoreparties.space/api';
+
+export const ingredientsApiConfig = {
+  baseUrl: BASE_API_URL,
+  headers: {
+    'Content-type': 'application/json',
+  },
+};
+
 type FetchData = {
   method?: 'GET' | 'POST' | 'DELETE' | 'PUT';
   headers?: Record<string, string>;
