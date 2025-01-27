@@ -1,7 +1,5 @@
-import { BurgerIngredients } from './burger-ingredients/burger-ingredients';
-import { AppHeader } from './app-header/app-header';
-import { BurgerConstructor } from './burger-constructor/burger-constructor';
-import styles from './app.module.css';
+import { BurgerIngredients } from '../components/burger-ingredients/burger-ingredients';
+import { BurgerConstructor } from '../components/burger-constructor/burger-constructor';
 
 import { useGetIngredientsQuery } from '../services/api/ingredients-api/ingredients-api';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -27,11 +25,8 @@ function App() {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <AppHeader />
-      <main className={`${styles.content_container} pt-10`}>
-        <BurgerIngredients extraClass="ml-5" />
-        <BurgerConstructor />
-      </main>
+      <BurgerIngredients extraClass="ml-5" />
+      <BurgerConstructor />
     </DndProvider>
   );
 }
