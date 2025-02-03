@@ -39,7 +39,7 @@ const AppHeader = () => {
           </li>
         </ul>
       </nav>
-      <Logo />
+      <Logo className={styles.logo} />
       <Button
         extraClass={`${styles.menuButton} pl-5 pr-5 pt-4 pb-4`}
         type="secondary"
