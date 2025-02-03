@@ -7,6 +7,8 @@ import { store } from './store';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import LoginPage from './pages/login/login';
 import Layout from './components/layout/layout';
+import RegisterPage from './pages/register/register';
+import RestorePasswordPage from './pages/restore-password/restore-password';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -16,6 +18,8 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           <Routes>
             <Route path="/" element={<App />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/forgot-password" element={<RestorePasswordPage />} />
           </Routes>
         </Layout>
       </Router>
