@@ -1,12 +1,10 @@
 import { useState } from 'react';
 import {
-  Button,
   EmailInput,
   Input,
   PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './register.module.css';
-import { Link } from 'react-router-dom';
 
 export default function ProfilePage() {
   const [form, setForm] = useState({ name: '', email: '', password: '' });
@@ -18,8 +16,6 @@ export default function ProfilePage() {
   const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
   };
-
-  const us;
 
   return (
     <div className={styles.container}>
