@@ -8,7 +8,7 @@ import {
 import styles from './register.module.css';
 import { Link } from 'react-router-dom';
 
-export default function RegisterPage() {
+export default function ProfilePage() {
   const [form, setForm] = useState({ name: '', email: '', password: '' });
 
   const handleChange = (e: { target: { name: string; value: string } }) => {
@@ -19,12 +19,17 @@ export default function RegisterPage() {
     e.preventDefault();
   };
 
+  const us;
+
   return (
     <div className={styles.container}>
+      <div>
+        <button>Профиль</button>
+        <button>История заказов</button>
+        <button>Выход</button>
+        <p>В этом разделе вы можете изменить свои персональные данные</p>
+      </div>
       <form onSubmit={handleSubmit} className={styles.form}>
-        <h2 className={`${styles.modal_title} text text_type_main-medium`}>
-          Регистрация
-        </h2>
         <Input
           type="text"
           placeholder="Имя"
@@ -44,19 +49,7 @@ export default function RegisterPage() {
           value={form.password}
           onChange={handleChange}
         />
-        <Button htmlType="submit">Войти</Button>
       </form>
-      <div className={styles.line}>
-        <p className="text text_type_main-default text_color_inactive">
-          Уже зарегистрированы?
-        </p>
-        <Link
-          className={`${styles.link} text text_type_main-default text`}
-          to="/login"
-        >
-          Войти
-        </Link>
-      </div>
     </div>
   );
 }
