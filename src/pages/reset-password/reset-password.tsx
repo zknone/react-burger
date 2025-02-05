@@ -2,6 +2,7 @@ import { useState } from 'react';
 import {
   Button,
   EmailInput,
+  Input,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './restore-password.module.css';
 import { Link } from 'react-router-dom';
@@ -12,8 +13,8 @@ type ResetPasswordResponse = {
   success: boolean;
 };
 
-export default function RestorePasswordPage() {
-  const [form, setForm] = useState({ name: '', email: '', password: '' });
+export default function ResetPasswordPage() {
+  const [form, setForm] = useState({ token: '', password: '' });
 
   const handleChange = (e: { target: { name: string; value: string } }) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -24,14 +25,18 @@ export default function RestorePasswordPage() {
   };
 
   const handleResetPassword = async (
-    email: string
+    password: string,
+    token: string
   ): Promise<ResetPasswordResponse> => {
     try {
       const res = await fetchData<ResetPasswordResponse>(
-        `${BASE_API_URL}/password-reset`,
+        `${BASE_API_URL}/password-reset/reset`,
         {
           method: 'POST',
-          body: { email: email },
+          body: {
+            password: password,
+            token: token,
+          },
         }
       );
 
@@ -48,14 +53,20 @@ export default function RestorePasswordPage() {
           Восстановление пароля
         </h2>
         <EmailInput
-          placeholder="E-mail"
+          placeholder="Введите новый пароль"
           name="e-mail"
-          value={form.email}
+          value={form.password}
+          onChange={handleChange}
+        />
+        <Input
+          placeholder="Введите код из письма"
+          name="token"
+          value={form.token}
           onChange={handleChange}
         />
         <Button
           htmlType="submit"
-          onClick={() => handleResetPassword(form.email)}
+          onClick={() => handleResetPassword(form.password, form.token)}
         >
           Восстановить
         </Button>
