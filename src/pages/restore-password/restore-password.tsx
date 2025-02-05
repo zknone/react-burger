@@ -5,12 +5,6 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './restore-password.module.css';
 import { Link } from 'react-router-dom';
-import fetchData, { BASE_API_URL } from '../../utils/fetch-data';
-
-type ResetPasswordResponse = {
-  message: string;
-  success: boolean;
-};
 
 export default function RestorePasswordPage() {
   const [form, setForm] = useState({ name: '', email: '', password: '' });
@@ -21,24 +15,6 @@ export default function RestorePasswordPage() {
 
   const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-  };
-
-  const handleResetPassword = async (
-    email: string
-  ): Promise<ResetPasswordResponse> => {
-    try {
-      const res = await fetchData<ResetPasswordResponse>(
-        `${BASE_API_URL}/password-reset`,
-        {
-          method: 'POST',
-          body: { email: email },
-        }
-      );
-
-      return res;
-    } catch (error) {
-      throw new Error(`Problems with restoring password: ${error}`);
-    }
   };
 
   return (
@@ -53,10 +29,7 @@ export default function RestorePasswordPage() {
           value={form.email}
           onChange={handleChange}
         />
-        <Button
-          htmlType="submit"
-          onClick={() => handleResetPassword(form.email)}
-        >
+        <Button htmlType="submit" onClick={() => {}}>
           Восстановить
         </Button>
       </form>

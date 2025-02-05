@@ -7,16 +7,32 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './register.module.css';
 import { Link } from 'react-router-dom';
+import {
+  useLoginMutation,
+  useRegisterMutation,
+} from '../../services/api/authorization-api/authorization-api';
 
 export default function RegisterPage() {
+  const [register, { isLoading, data }] = useRegisterMutation();
+  const [login, { isLoading, data }] = useLoginMutation();
+
   const [form, setForm] = useState({ name: '', email: '', password: '' });
 
   const handleChange = (e: { target: { name: string; value: string } }) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: { preventDefault: () => void }) => {
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
+    try {
+      const response = await register(form).unwrap();
+      localStorage.setItem('accessToken', response.accessToken);
+      localStorage.setItem('refreshToken', response.refreshToken);
+    } catch (err) {
+      console.log(err);
+    }
+
+    console.log(data);
   };
 
   return (
@@ -44,7 +60,9 @@ export default function RegisterPage() {
           value={form.password}
           onChange={handleChange}
         />
-        <Button htmlType="submit">Войти</Button>
+        <Button disabled={isLoading} htmlType="submit">
+          Войти
+        </Button>
       </form>
       <div className={styles.line}>
         <p className="text text_type_main-default text_color_inactive">

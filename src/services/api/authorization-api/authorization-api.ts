@@ -1,0 +1,61 @@
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { BASE_API_URL, ingredientsApiConfig } from '../../../utils/fetch-data';
+import { RegisterAuthorizationResponse } from '../../../types/types';
+
+export const authorizationApi = createApi({
+  reducerPath: 'loginApi',
+  baseQuery: fetchBaseQuery({
+    baseUrl: BASE_API_URL,
+    prepareHeaders: (headers) => {
+      for (const [key, value] of Object.entries(ingredientsApiConfig.headers)) {
+        headers.set(key, value);
+      }
+
+      return headers;
+    },
+  }),
+  endpoints: (builder) => ({
+    login: builder.mutation({
+      query: ({ email, password }: { email: string; password: string }) => ({
+        url: '/auth/login',
+        method: 'POST',
+        body: JSON.stringify({ email, password }),
+      }),
+    }),
+    register: builder.mutation<
+      RegisterAuthorizationResponse,
+      {
+        email: string;
+        password: string;
+        name: string;
+      }
+    >({
+      query: ({ email, password, name }) => ({
+        url: '/auth/register',
+        method: 'POST',
+        body: JSON.stringify({ email, password, name }),
+      }),
+    }),
+    logout: builder.mutation({
+      query: (refreshToken: string) => ({
+        url: '/auth/logout',
+        method: 'POST',
+        body: JSON.stringify(refreshToken),
+      }),
+    }),
+    token: builder.mutation({
+      query: (token: string) => ({
+        url: '/auth/token',
+        method: 'POST',
+        body: JSON.stringify(token),
+      }),
+    }),
+  }),
+});
+
+export const {
+  useLoginMutation,
+  useRegisterMutation,
+  useTokenMutation,
+  useLogoutMutation,
+} = authorizationApi;
