@@ -6,16 +6,23 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './login.module.css';
 import { Link } from 'react-router-dom';
+import { useLoginMutation } from '../../services/api/authorization-api/authorization-api';
 
 export default function LoginPage() {
   const [form, setForm] = useState({ email: '', password: '' });
+  const [login, { isError, isLoading }] = useLoginMutation();
 
   const handleChange = (e: { target: { name: string; value: string } }) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: { preventDefault: () => void }) => {
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
+    try {
+      await login(form);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -36,7 +43,10 @@ export default function LoginPage() {
           value={form.password}
           onChange={handleChange}
         />
-        <Button htmlType="submit">Войти</Button>
+        <Button disabled={isLoading} htmlType="submit">
+          Войти
+        </Button>
+        {isError && <p>Введен неправильный email и пароль</p>}
       </form>
       <div className={styles.line}>
         <p className="text text_type_main-default text_color_inactive">

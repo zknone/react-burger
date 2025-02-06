@@ -13,8 +13,9 @@ import {
 } from '../../services/api/authorization-api/authorization-api';
 
 export default function RegisterPage() {
-  const [register, { isLoading, data }] = useRegisterMutation();
-  const [login, { isLoading, data }] = useLoginMutation();
+  const [register, { isLoading, data: registerResponse }] =
+    useRegisterMutation();
+  const [login] = useLoginMutation();
 
   const [form, setForm] = useState({ name: '', email: '', password: '' });
 
@@ -28,11 +29,12 @@ export default function RegisterPage() {
       const response = await register(form).unwrap();
       localStorage.setItem('accessToken', response.accessToken);
       localStorage.setItem('refreshToken', response.refreshToken);
+      await login({ email: form.name, password: form.password });
     } catch (err) {
       console.log(err);
     }
 
-    console.log(data);
+    console.log(registerResponse);
   };
 
   return (
