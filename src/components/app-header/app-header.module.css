@@ -28,6 +28,7 @@
 
 .menuButton {
     white-space: nowrap;
+    text-decoration: none;
     display: flex;
     column-gap: 8px;
     color: #8585AD;

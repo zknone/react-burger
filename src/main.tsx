@@ -10,6 +10,7 @@ import Layout from './components/layout/layout';
 import RegisterPage from './pages/register/register';
 import RestorePasswordPage from './pages/restore-password/restore-password';
 import { useTokenMutation } from './services/api/authorization-api/authorization-api';
+import ProfilePage from './pages/profile/profile';
 
 const Root = () => {
   const refreshToken = localStorage.getItem('refreshToken');
@@ -35,6 +36,7 @@ const Root = () => {
         <Routes>
           <Route path="/" element={<App />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/forgot-password" element={<RestorePasswordPage />} />
         </Routes>

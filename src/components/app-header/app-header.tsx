@@ -1,69 +1,64 @@
 import {
-  Button,
   Logo,
   BurgerIcon,
   ListIcon,
   ProfileIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './app-header.module.css';
-import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { NavLink } from 'react-router-dom';
+
 const AppHeader = () => {
-  const navigate = useNavigate();
-  const [page, setPage] = useState<'main' | 'feed' | 'account'>('main');
   return (
     <header className={`${styles.menuWrapper} pt-4 pb-4`}>
       <div className={styles.menuBackground}></div>
       <nav>
         <ul className={styles.menu}>
           <li className={styles.menuItem}>
-            <Button
-              extraClass={`${styles.menuButton} pl-5 pr-5 pt-4 pb-4`}
-              type="secondary"
-              htmlType="button"
-              onClick={() => {
-                setPage('main');
-                navigate('/');
-              }}
+            <NavLink
+              className={`${styles.menuButton} pl-5 pr-5 pt-4 pb-4 text text_type_main-default`}
+              to="/"
             >
-              <BurgerIcon type={page === 'main' ? 'primary' : 'secondary'} />
-              <span style={page === 'main' ? { color: 'white' } : {}}>
-                Constructor
-              </span>
-            </Button>
+              {({ isActive }) => (
+                <>
+                  <BurgerIcon type={isActive ? 'primary' : 'secondary'} />
+                  <span className={isActive ? styles.menuButtonActive : ''}>
+                    Constructor
+                  </span>
+                </>
+              )}
+            </NavLink>
           </li>
           <li className={styles.menuItem}>
-            <Button
-              extraClass={`${styles.menuButton} pl-5 pr-5 pt-4 pb-4`}
-              type="secondary"
-              htmlType="button"
-              onClick={() => {
-                setPage('feed');
-                navigate('/feed');
-              }}
+            <NavLink
+              className={`${styles.menuButton} pl-5 pr-5 pt-4 pb-4 text text_type_main-default`}
+              to="/feed"
             >
-              <ListIcon type={page === 'feed' ? 'primary' : 'secondary'} />{' '}
-              <span style={page === 'feed' ? { color: 'white' } : {}}>
-                {' '}
-                Order feed
-              </span>
-            </Button>
+              {({ isActive }) => (
+                <>
+                  <ListIcon type={isActive ? 'primary' : 'secondary'} />
+                  <span className={isActive ? styles.menuButtonActive : ''}>
+                    Order feed
+                  </span>
+                </>
+              )}
+            </NavLink>
           </li>
         </ul>
       </nav>
       <Logo className={styles.logo} />
-      <Button
-        extraClass={`${styles.menuButton} pl-5 pr-5 pt-4 pb-4`}
-        type="secondary"
-        htmlType="button"
-        onClick={() => {
-          setPage('account');
-          navigate('/login');
-        }}
+      <NavLink
+        className={`${styles.menuButton} pl-5 pr-5 pt-4 pb-4 text text_type_main-default`}
+        to="/profile"
       >
-        <ProfileIcon type={page === 'account' ? 'primary' : 'secondary'} />
-        My Account
-      </Button>
+        {({ isActive }) => (
+          <>
+            <ProfileIcon type={isActive ? 'primary' : 'secondary'} />
+            <span className={isActive ? styles.menuButtonActive : ''}>
+              My Account
+            </span>
+          </>
+        )}
+      </NavLink>
     </header>
   );
 };
