@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 const AppHeader = () => {
   const navigate = useNavigate();
-  const [page, setPage] = useState<'main' | 'feed'>('main');
+  const [page, setPage] = useState<'main' | 'feed' | 'account'>('main');
   return (
     <header className={`${styles.menuWrapper} pt-4 pb-4`}>
       <div className={styles.menuBackground}></div>
@@ -56,9 +56,12 @@ const AppHeader = () => {
         extraClass={`${styles.menuButton} pl-5 pr-5 pt-4 pb-4`}
         type="secondary"
         htmlType="button"
-        onClick={() => navigate('/login')}
+        onClick={() => {
+          setPage('account');
+          navigate('/login');
+        }}
       >
-        <ProfileIcon type="secondary" />
+        <ProfileIcon type={page === 'account' ? 'primary' : 'secondary'} />
         My Account
       </Button>
     </header>
