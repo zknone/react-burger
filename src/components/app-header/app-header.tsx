@@ -7,9 +7,10 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './app-header.module.css';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 const AppHeader = () => {
-  const isActive = true;
   const navigate = useNavigate();
+  const [page, setPage] = useState<'main' | 'feed'>('main');
   return (
     <header className={`${styles.menuWrapper} pt-4 pb-4`}>
       <div className={styles.menuBackground}></div>
@@ -18,13 +19,17 @@ const AppHeader = () => {
           <li className={styles.menuItem}>
             <Button
               extraClass={`${styles.menuButton} pl-5 pr-5 pt-4 pb-4`}
-              style={isActive && { color: 'white' }}
               type="secondary"
               htmlType="button"
-              onClick={() => navigate('/')}
+              onClick={() => {
+                setPage('main');
+                navigate('/');
+              }}
             >
-              <BurgerIcon type="primary" />
-              Constructor
+              <BurgerIcon type={page === 'main' ? 'primary' : 'secondary'} />
+              <span style={page === 'main' ? { color: 'white' } : {}}>
+                Constructor
+              </span>
             </Button>
           </li>
           <li className={styles.menuItem}>
@@ -32,9 +37,16 @@ const AppHeader = () => {
               extraClass={`${styles.menuButton} pl-5 pr-5 pt-4 pb-4`}
               type="secondary"
               htmlType="button"
-              onClick={() => navigate('/feed')}
+              onClick={() => {
+                setPage('feed');
+                navigate('/feed');
+              }}
             >
-              <ListIcon type="secondary" /> Order feed
+              <ListIcon type={page === 'feed' ? 'primary' : 'secondary'} />{' '}
+              <span style={page === 'feed' ? { color: 'white' } : {}}>
+                {' '}
+                Order feed
+              </span>
             </Button>
           </li>
         </ul>

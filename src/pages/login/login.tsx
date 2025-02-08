@@ -19,7 +19,12 @@ export default function LoginPage() {
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     try {
-      await login(form);
+      const response = await login(form).unwrap();
+      if (response.success) {
+        localStorage.setItem('accessToken', response.accessToken);
+        localStorage.setItem('refreshToken', response.refreshToken);
+        console.log('login', response);
+      }
     } catch (error) {
       console.log(error);
     }

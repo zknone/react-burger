@@ -37,6 +37,10 @@
     }
 }
 
+.menuButtonActive {
+    color: white;
+}
+
 
 .logo {
     margin-right: 200px;
