@@ -65,6 +65,17 @@ export const authorizationApi = createApi({
         };
       },
     }),
+    restorePassword: builder.mutation({
+      query: (email: string) => {
+        return {
+          url: 'password-reset',
+          method: 'POST',
+          body: {
+            email,
+          },
+        };
+      },
+    }),
   }),
 });
 
@@ -75,4 +86,5 @@ export const {
   useLogoutMutation,
   useGetUserQuery,
   useResetPasswordMutation,
+  useRestorePasswordMutation,
 } = authorizationApi;

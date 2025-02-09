@@ -5,16 +5,19 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './restore-password.module.css';
 import { Link } from 'react-router-dom';
+import { useRestorePassword } from '../../utils/api';
 
 export default function RestorePasswordPage() {
-  const [form, setForm] = useState({ name: '', email: '', password: '' });
+  const [email, setEmail] = useState('');
+  const { restorePass, isLoading, error } = useRestorePassword();
 
-  const handleChange = (e: { target: { name: string; value: string } }) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
   };
 
   const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
+    restorePass(email);
   };
 
   return (
@@ -26,12 +29,14 @@ export default function RestorePasswordPage() {
         <EmailInput
           placeholder="E-mail"
           name="e-mail"
-          value={form.email}
+          value={email}
           onChange={handleChange}
         />
-        <Button htmlType="submit" onClick={() => {}}>
+        <Button disabled={isLoading} htmlType="submit" onClick={handleSubmit}>
           Восстановить
         </Button>
+
+        {error && <div>{error}</div>}
       </form>
       <div className={styles.line}>
         <p className="text text_type_main-default text_color_inactive">

@@ -4,6 +4,7 @@ import {
   useLogoutMutation,
   useRegisterMutation,
   useResetPasswordMutation,
+  useRestorePasswordMutation,
   useTokenMutation,
 } from '../services/api/authorization-api/authorization-api';
 
@@ -111,4 +112,26 @@ const useResetPassword = () => {
   return { resetPass, error, isLoading };
 };
 
-export { useRegister, useLogin, useToken, useLogout, useResetPassword };
+const useRestorePassword = () => {
+  const [restorePassword, { isLoading }] = useRestorePasswordMutation();
+  const [error, setError] = useState<string | null>(null);
+
+  const restorePass = async (email: string) => {
+    try {
+      await restorePassword(email);
+    } catch (error) {
+      setError('Ошибка восстановления пароля по этому email');
+    }
+  };
+
+  return { restorePass, isLoading, error };
+};
+
+export {
+  useRegister,
+  useLogin,
+  useToken,
+  useLogout,
+  useResetPassword,
+  useRestorePassword,
+};
