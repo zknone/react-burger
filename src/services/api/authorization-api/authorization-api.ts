@@ -24,11 +24,7 @@ export const authorizationApi = createApi({
     }),
     register: builder.mutation<
       RegisterAuthorizationResponse,
-      {
-        email: string;
-        password: string;
-        name: string;
-      }
+      { email: string; password: string; name: string }
     >({
       query: ({ email, password, name }) => ({
         url: '/auth/register',
@@ -37,18 +33,25 @@ export const authorizationApi = createApi({
       }),
     }),
     logout: builder.mutation({
-      query: (refreshToken: string) => ({
-        url: '/auth/logout',
-        method: 'POST',
-        body: JSON.stringify(refreshToken),
-      }),
+      query: (refreshToken: string) => {
+        return {
+          url: '/auth/logout',
+          method: 'POST',
+          body: JSON.stringify({ token: refreshToken }),
+        };
+      },
     }),
     token: builder.mutation({
-      query: (token: string) => ({
-        url: '/auth/token',
-        method: 'POST',
-        body: JSON.stringify(token),
-      }),
+      query: (refreshToken: string) => {
+        return {
+          url: '/auth/token',
+          method: 'POST',
+          body: JSON.stringify({ token: refreshToken }),
+        };
+      },
+    }),
+    getUser: builder.query({
+      query: () => '/auth/user',
     }),
   }),
 });
@@ -58,4 +61,5 @@ export const {
   useRegisterMutation,
   useTokenMutation,
   useLogoutMutation,
+  useGetUserQuery,
 } = authorizationApi;

@@ -7,17 +7,12 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './register.module.css';
 import { Link } from 'react-router-dom';
-import {
-  useLoginMutation,
-  useRegisterMutation,
-} from '../../services/api/authorization-api/authorization-api';
+import { useRegister } from '../../utils/api';
 
 export default function RegisterPage() {
-  const [register, { isLoading, data: registerResponse }] =
-    useRegisterMutation();
-  const [login] = useLoginMutation();
-
   const [form, setForm] = useState({ name: '', email: '', password: '' });
+  const { registerUser, isRegisterLoading, isLoginLoading, error } =
+    useRegister();
 
   const handleChange = (e: { target: { name: string; value: string } }) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -25,16 +20,7 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    try {
-      const response = await register(form).unwrap();
-      localStorage.setItem('accessToken', response.accessToken);
-      localStorage.setItem('refreshToken', response.refreshToken);
-      await login({ email: form.name, password: form.password });
-    } catch (err) {
-      console.log(err);
-    }
-
-    console.log(registerResponse);
+    registerUser(form);
   };
 
   return (
@@ -62,9 +48,13 @@ export default function RegisterPage() {
           value={form.password}
           onChange={handleChange}
         />
-        <Button disabled={isLoading} htmlType="submit">
+        <Button
+          disabled={isRegisterLoading || isLoginLoading}
+          htmlType="submit"
+        >
           Войти
         </Button>
+        {error && <div>{JSON.stringify(error)}</div>}
       </form>
       <div className={styles.line}>
         <p className="text text_type_main-default text_color_inactive">

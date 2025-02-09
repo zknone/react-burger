@@ -6,11 +6,12 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './login.module.css';
 import { Link } from 'react-router-dom';
-import { useLoginMutation } from '../../services/api/authorization-api/authorization-api';
+import { useLogin } from '../../utils/api';
 
 export default function LoginPage() {
   const [form, setForm] = useState({ email: '', password: '' });
-  const [login, { isError, isLoading }] = useLoginMutation();
+
+  const { loginUser, error, isLoading } = useLogin();
 
   const handleChange = (e: { target: { name: string; value: string } }) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -18,16 +19,7 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    try {
-      const response = await login(form).unwrap();
-      if (response.success) {
-        localStorage.setItem('accessToken', response.accessToken);
-        localStorage.setItem('refreshToken', response.refreshToken);
-        console.log('login', response);
-      }
-    } catch (error) {
-      console.log(error);
-    }
+    loginUser(form);
   };
 
   return (
@@ -51,7 +43,7 @@ export default function LoginPage() {
         <Button disabled={isLoading} htmlType="submit">
           Войти
         </Button>
-        {isError && <p>Введен неправильный email и пароль</p>}
+        {error && <p>Введен неправильный email и пароль</p>}
       </form>
       <div className={styles.line}>
         <p className="text text_type_main-default text_color_inactive">
