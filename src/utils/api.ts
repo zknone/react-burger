@@ -3,6 +3,7 @@ import {
   useLoginMutation,
   useLogoutMutation,
   useRegisterMutation,
+  useResetPasswordMutation,
   useTokenMutation,
 } from '../services/api/authorization-api/authorization-api';
 
@@ -95,4 +96,19 @@ const useLogout = () => {
   return { logoutUser, isLoading, error };
 };
 
-export { useRegister, useLogin, useToken, useLogout };
+const useResetPassword = () => {
+  const [resetPassword, { isLoading }] = useResetPasswordMutation();
+  const [error, setError] = useState<string | null>(null);
+
+  const resetPass = async (token: string, newPassword: string) => {
+    try {
+      await resetPassword({ token, password: newPassword });
+    } catch (error) {
+      setError('Не смог обновить пароль');
+    }
+  };
+
+  return { resetPass, error, isLoading };
+};
+
+export { useRegister, useLogin, useToken, useLogout, useResetPassword };

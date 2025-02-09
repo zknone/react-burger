@@ -53,6 +53,18 @@ export const authorizationApi = createApi({
     getUser: builder.query({
       query: () => '/auth/user',
     }),
+    resetPassword: builder.mutation({
+      query: ({ password, token }: { password: string; token: string }) => {
+        return {
+          url: 'password-reset/reset',
+          method: 'POST',
+          body: {
+            password,
+            token,
+          },
+        };
+      },
+    }),
   }),
 });
 
@@ -62,4 +74,5 @@ export const {
   useTokenMutation,
   useLogoutMutation,
   useGetUserQuery,
+  useResetPasswordMutation,
 } = authorizationApi;

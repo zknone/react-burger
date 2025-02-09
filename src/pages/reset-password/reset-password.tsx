@@ -6,12 +6,7 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './restore-password.module.css';
 import { Link } from 'react-router-dom';
-import fetchData, { BASE_API_URL } from '../../utils/fetch-data';
-
-type ResetPasswordResponse = {
-  message: string;
-  success: boolean;
-};
+import { useResetPassword } from '../../utils/api';
 
 export default function ResetPasswordPage() {
   const [form, setForm] = useState({ token: '', password: '' });
@@ -19,31 +14,11 @@ export default function ResetPasswordPage() {
   const handleChange = (e: { target: { name: string; value: string } }) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
+  const { resetPass, error, isLoading } = useResetPassword();
 
   const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-  };
-
-  const handleResetPassword = async (
-    password: string,
-    token: string
-  ): Promise<ResetPasswordResponse> => {
-    try {
-      const res = await fetchData<ResetPasswordResponse>(
-        `${BASE_API_URL}/password-reset/reset`,
-        {
-          method: 'POST',
-          body: {
-            password: password,
-            token: token,
-          },
-        }
-      );
-
-      return res;
-    } catch (error) {
-      throw new Error(`Problems with restoring password: ${error}`);
-    }
+    resetPass(form.token, form.password);
   };
 
   return (
@@ -64,12 +39,10 @@ export default function ResetPasswordPage() {
           value={form.token}
           onChange={handleChange}
         />
-        <Button
-          htmlType="submit"
-          onClick={() => handleResetPassword(form.password, form.token)}
-        >
+        <Button disabled={isLoading} htmlType="submit" onClick={handleSubmit}>
           Восстановить
         </Button>
+        {error && <div>{error}</div>}
       </form>
       <div className={styles.line}>
         <p className="text text_type_main-default text_color_inactive">
