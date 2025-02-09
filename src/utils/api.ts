@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import {
   useLoginMutation,
+  useLogoutMutation,
   useRegisterMutation,
+  useTokenMutation,
 } from '../services/api/authorization-api/authorization-api';
 
 const useRegister = () => {
@@ -52,4 +54,45 @@ const useLogin = () => {
   return { loginUser, isLoading, error };
 };
 
-export { useRegister, useLogin };
+const useToken = () => {
+  const [token] = useTokenMutation();
+  const refreshToken = localStorage.getItem('refreshToken');
+
+  const getNewToken = () => {
+    if (!refreshToken) return;
+    token(refreshToken)
+      .unwrap()
+      .then((data) => {
+        localStorage.setItem('refreshToken', data.refreshToken);
+      })
+      .catch(() => {
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('accessToken');
+      });
+  };
+
+  return { getNewToken };
+};
+
+const useLogout = () => {
+  const [logout, { isLoading }] = useLogoutMutation();
+  const [error, setError] = useState<string | null>(null);
+
+  const logoutUser = async () => {
+    const refreshToken = localStorage.getItem('refreshToken');
+    if (!refreshToken) return;
+    try {
+      await logout(refreshToken);
+      localStorage.removeItem('refreshToken');
+      localStorage.removeItem('accessToken');
+    } catch (error) {
+      setError('Ошибка разлогирования');
+      localStorage.removeItem('refreshToken');
+      localStorage.removeItem('accessToken');
+    }
+  };
+
+  return { logoutUser, isLoading, error };
+};
+
+export { useRegister, useLogin, useToken, useLogout };
