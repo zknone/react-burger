@@ -9,27 +9,15 @@ import LoginPage from './pages/login/login';
 import Layout from './components/layout/layout';
 import RegisterPage from './pages/register/register';
 import RestorePasswordPage from './pages/restore-password/restore-password';
-import { useTokenMutation } from './services/api/authorization-api/authorization-api';
 import ProfilePage from './pages/profile/profile';
 import IngredientPage from './pages/ingredient/ingredient';
+import { useToken } from './utils/api';
 
 const Root = () => {
-  const refreshToken = localStorage.getItem('refreshToken');
-  const [token] = useTokenMutation();
-
+  const { getNewToken } = useToken();
   useEffect(() => {
-    if (!refreshToken) return;
-
-    token(refreshToken)
-      .unwrap()
-      .then((data) => {
-        localStorage.setItem('accessToken', data.accessToken);
-      })
-      .catch(() => {
-        localStorage.removeItem('refreshToken');
-        localStorage.removeItem('accessToken');
-      });
-  }, [token]);
+    getNewToken();
+  }, [getNewToken]);
 
   return (
     <Router>
