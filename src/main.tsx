@@ -12,6 +12,10 @@ import RestorePasswordPage from './pages/restore-password/restore-password';
 import ProfilePage from './pages/profile/profile';
 import IngredientPage from './pages/ingredient/ingredient';
 import { checkUserAuth } from './services/auth/check-user-auth';
+import {
+  OnlyAuth,
+  OnlyUnAuth,
+} from './components/protected-route/protected-route';
 
 const Root = () => {
   const dispatch = useAppDispatch();
@@ -25,11 +29,23 @@ const Root = () => {
       <Layout>
         <Routes>
           <Route path="/" element={<App />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/register" element={<RegisterPage />} />
+          <Route
+            path="/login"
+            element={<OnlyUnAuth component={<LoginPage />} />}
+          />
+          <Route
+            path="/profile"
+            element={<OnlyAuth component={<ProfilePage />} />}
+          />
+          <Route
+            path="/register"
+            element={<OnlyUnAuth component={<RegisterPage />} />}
+          />
           <Route path="/ingredients/:id" element={<IngredientPage />} />
-          <Route path="/forgot-password" element={<RestorePasswordPage />} />
+          <Route
+            path="/forgot-password"
+            element={<OnlyUnAuth component={<RestorePasswordPage />} />}
+          />
         </Routes>
       </Layout>
     </Router>

@@ -82,7 +82,9 @@ const useLogout = () => {
 
   const logoutUser = async () => {
     const refreshToken = localStorage.getItem('refreshToken');
+    console.log(refreshToken);
     if (!refreshToken) return;
+    console.log(refreshToken);
     try {
       await logout(refreshToken);
       localStorage.removeItem('refreshToken');

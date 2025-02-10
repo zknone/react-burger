@@ -5,16 +5,21 @@ import {
   PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './profile.module.css';
+import { useLogout } from '../../utils/api';
 
 export default function ProfilePage() {
   const [form, setForm] = useState({ name: '', email: '', password: '' });
+
+  const { logoutUser } = useLogout();
 
   const handleChange = (e: { target: { name: string; value: string } }) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: { preventDefault: () => void }) => {
+  const handleLogout = (e: { preventDefault: () => void }) => {
     e.preventDefault();
+    logoutUser();
+    console.log('разлогинился');
   };
 
   return (
@@ -22,10 +27,10 @@ export default function ProfilePage() {
       <div>
         <button>Профиль</button>
         <button>История заказов</button>
-        <button>Выход</button>
+        <button onClick={handleLogout}>Выход</button>
         <p>В этом разделе вы можете изменить свои персональные данные</p>
       </div>
-      <form onSubmit={handleSubmit} className={styles.form}>
+      <form className={styles.form}>
         <Input
           type="text"
           placeholder="Имя"

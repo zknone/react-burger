@@ -7,6 +7,12 @@ export const checkUserAuth = () => async (dispatch: AppDispatch) => {
 
   if (!refreshToken) {
     dispatch(setIsAuthChecked(true));
+    dispatch(
+      getProfile({
+        user: { name: '', email: '' },
+        success: false,
+      })
+    );
     return;
   }
 
