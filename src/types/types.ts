@@ -46,5 +46,28 @@ export type ProfileResponse = {
     name: string;
   };
 };
+export type ErrorType = {
+  status: number;
+  data: {
+    success: boolean;
+    message: string;
+  };
+};
+
+export type LoginRequest = {
+  email: string;
+  password: string;
+};
+
+export type LoginResponse = {
+  success: boolean;
+  accessToken: string;
+  refreshToken: string;
+  message?: string;
+  user: {
+    email: string;
+    name: string;
+  };
+};
 
 export type ExtendedIngredientType = IngredientType & { uniqueId: string };
