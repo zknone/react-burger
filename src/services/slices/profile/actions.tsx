@@ -7,3 +7,8 @@ export const getProfile = createAction<ProfileResponse | null>(
 export const changeProfile = createAction<{ name: string; email: string }>(
   'profile/changeProfile'
 );
+export const setIsAuthChecked = createAction<boolean>(
+  'profile/setIsAuthChecked'
+);
+export const setCanReset = createAction<boolean>('profile/setCanReset');
+export const resetProfile = createAction('profile/resetProfile');

@@ -4,6 +4,7 @@ import { ProfileResponse } from '../../../types/types';
 type Profile = {
   user: { name: string; email: string };
   isAuthChecked: boolean;
+  canResetPassword: boolean;
 };
 
 const initialState: Profile = {
@@ -12,6 +13,7 @@ const initialState: Profile = {
     email: '',
   },
   isAuthChecked: false,
+  canResetPassword: false,
 };
 
 const profileSlice = createSlice({
@@ -25,6 +27,9 @@ const profileSlice = createSlice({
     setIsAuthChecked: (state, action: PayloadAction<boolean>) => {
       state.isAuthChecked = action.payload;
     },
+    setCanReset: (state, action: PayloadAction<boolean>) => {
+      state.canResetPassword = action.payload;
+    },
     resetProfile: (state) => {
       state.user = { name: '', email: '' };
       state.isAuthChecked = true;
@@ -32,6 +37,6 @@ const profileSlice = createSlice({
   },
 });
 
-export const { setProfile, setIsAuthChecked, resetProfile } =
+export const { setProfile, setIsAuthChecked, resetProfile, setCanReset } =
   profileSlice.actions;
 export default profileSlice.reducer;
