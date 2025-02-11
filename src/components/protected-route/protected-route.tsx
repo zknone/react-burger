@@ -13,7 +13,9 @@ const ProtectedRoute = ({
   const isAuthChecked = useSelector(
     (state: RootState) => state.profile.isAuthChecked
   );
-  const user = useSelector((state: RootState) => state.profile.profile);
+  const user = useSelector((state: RootState) => state.profile.user);
+
+  console.log(isAuthChecked, user);
   const location = useLocation();
 
   if (!isAuthChecked) {
