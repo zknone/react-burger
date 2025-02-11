@@ -65,7 +65,7 @@ const useLogin = () => {
       const response = await login(form).unwrap();
       localStorage.setItem('accessToken', response.accessToken);
       localStorage.setItem('refreshToken', response.refreshToken);
-      dispatch(setProfile(response));
+      if (response.success) dispatch(setProfile(response));
 
       return { status: 200, data: response };
     } catch (err) {
@@ -198,7 +198,9 @@ const useRestorePassword = () => {
 };
 
 const useProfile = () => {
-  const [changeProfile, { isLoading, error }] = useChangeProfileMutation();
+  const [changeProfile, { isLoading, error, isSuccess }] =
+    useChangeProfileMutation();
+  const dispatch = useDispatch();
 
   const changeProfileCredentials = async (form: {
     name: string;
@@ -209,6 +211,7 @@ const useProfile = () => {
       const response = await changeProfile(form).unwrap();
       localStorage.setItem('accessToken', response.accessToken);
       localStorage.setItem('refreshToken', response.refreshToken);
+      if (response.success) dispatch(setProfile(response));
 
       return { status: 200, data: response };
     } catch (err) {
@@ -225,7 +228,7 @@ const useProfile = () => {
     }
   };
 
-  return { changeProfileCredentials, isLoading, error };
+  return { changeProfileCredentials, isLoading, error, isSuccess };
 };
 
 export {

@@ -22,7 +22,8 @@ export default function ProfilePage() {
   });
 
   const { logoutUser } = useLogout();
-  const { changeProfileCredentials, error, isLoading } = useProfile();
+  const { changeProfileCredentials, error, isLoading, isSuccess } =
+    useProfile();
 
   const navigate = useNavigate();
 
@@ -104,6 +105,7 @@ export default function ProfilePage() {
         <Button disabled={form.password === '' || isLoading} htmlType="submit">
           Сохранить
         </Button>
+        {isSuccess && <p>Данные успешно изменены</p>}
         {error && 'data' in error && (
           <p>
             {(error as FetchBaseQueryError & { data?: ErrorType['data'] }).data
