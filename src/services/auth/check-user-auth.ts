@@ -1,6 +1,6 @@
 import { AppDispatch } from '../../store';
 import { authorizationApi } from '../api/authorization-api/authorization-api';
-import { getProfile, setIsAuthChecked } from '../slices/profile/reducers';
+import { setProfile, setIsAuthChecked } from '../slices/profile/reducers';
 
 export const checkUserAuth = () => async (dispatch: AppDispatch) => {
   const refreshToken = localStorage.getItem('refreshToken');
@@ -8,7 +8,7 @@ export const checkUserAuth = () => async (dispatch: AppDispatch) => {
   if (!refreshToken) {
     dispatch(setIsAuthChecked(true));
     dispatch(
-      getProfile({
+      setProfile({
         user: { name: '', email: '' },
         success: false,
       })
@@ -28,7 +28,7 @@ export const checkUserAuth = () => async (dispatch: AppDispatch) => {
       authorizationApi.endpoints.getUser.initiate(undefined)
     ).unwrap();
 
-    dispatch(getProfile(userResponse));
+    dispatch(setProfile(userResponse));
   } catch (error) {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
