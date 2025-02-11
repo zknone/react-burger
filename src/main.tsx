@@ -37,7 +37,10 @@ const Root = () => {
           <Route
             path="/profile"
             element={<OnlyAuth component={<ProfilePage />} />}
-          />
+          >
+            <Route path="orders" element={<OnlyAuth component={<></>} />} />
+          </Route>
+
           <Route
             path="/register"
             element={<OnlyUnAuth component={<RegisterPage />} />}
