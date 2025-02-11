@@ -2,12 +2,12 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ProfileResponse } from '../../../types/types';
 
 type Profile = {
-  profile: { name: string; email: string };
+  user: { name: string; email: string };
   isAuthChecked: boolean;
 };
 
 const initialState: Profile = {
-  profile: {
+  user: {
     name: '',
     email: '',
   },
@@ -18,19 +18,20 @@ const profileSlice = createSlice({
   name: 'chosenIngredient',
   initialState,
   reducers: {
-    getProfile: (state, action: PayloadAction<ProfileResponse>) => {
-      state.profile.email = action.payload.user.email;
-      state.profile.name = action.payload.user.name;
-    },
-    changeProfile: (state, action: PayloadAction<Profile>) => {
-      state = action.payload;
+    setProfile: (state, action: PayloadAction<ProfileResponse>) => {
+      state.user.email = action.payload.user.email;
+      state.user.name = action.payload.user.name;
     },
     setIsAuthChecked: (state, action: PayloadAction<boolean>) => {
       state.isAuthChecked = action.payload;
     },
+    resetProfile: (state) => {
+      state.user = { name: '', email: '' };
+      state.isAuthChecked = true;
+    },
   },
 });
 
-export const { getProfile, changeProfile, setIsAuthChecked } =
+export const { setProfile, setIsAuthChecked, resetProfile } =
   profileSlice.actions;
 export default profileSlice.reducer;
