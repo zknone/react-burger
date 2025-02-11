@@ -16,13 +16,13 @@ import {
   OnlyAuth,
   OnlyUnAuth,
 } from './components/protected-route/protected-route';
+import ResetPasswordPage from './pages/reset-password/reset-password';
 
 const Root = () => {
   const dispatch = useAppDispatch();
-
   useEffect(() => {
     dispatch(checkUserAuth());
-  }, [dispatch]);
+  }, []);
 
   return (
     <Router>
@@ -45,6 +45,10 @@ const Root = () => {
           <Route
             path="/forgot-password"
             element={<OnlyUnAuth component={<RestorePasswordPage />} />}
+          />
+          <Route
+            path="/reset-password"
+            element={<OnlyUnAuth component={<ResetPasswordPage />} />}
           />
         </Routes>
       </Layout>
