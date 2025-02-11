@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import {
   useLoginMutation,
   useLogoutMutation,
@@ -7,11 +6,16 @@ import {
   useRestorePasswordMutation,
   useTokenMutation,
 } from '../services/api/authorization-api/authorization-api';
+import { useDispatch } from 'react-redux';
+import { resetProfile, setProfile } from '../services/slices/profile/reducers';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import { ErrorType } from '../types/types';
 
 const useRegister = () => {
-  const [register, { isLoading: isRegisterLoading }] = useRegisterMutation();
-  const [login, { isLoading: isLoginLoading }] = useLoginMutation();
-  const [error, setError] = useState<string | null>(null);
+  const [register, { isLoading: isRegisterLoading, error: registerError }] =
+    useRegisterMutation();
+  const [login, { isLoading: isLoginLoading, error: loginError }] =
+    useLoginMutation();
 
   const registerUser = async (form: {
     name: string;
@@ -26,30 +30,57 @@ const useRegister = () => {
       if (response.success) {
         await login({ email: form.email, password: form.password }).unwrap();
       }
+
+      return { status: 200, data: response };
     } catch (err) {
-      setError('Ошибка регистрации');
-      console.error(err);
+      const typedError = err as FetchBaseQueryError & {
+        data?: ErrorType['data'];
+      };
+      return {
+        status: typedError.status || 500,
+        data: {
+          success: false,
+          message: typedError.data?.message || 'Ошибка регистрации',
+        },
+      };
     }
   };
 
-  return { registerUser, isRegisterLoading, isLoginLoading, error };
+  return {
+    registerUser,
+    isRegisterLoading,
+    isLoginLoading,
+    registerError,
+    loginError,
+  };
 };
 
 const useLogin = () => {
-  const [login, { isLoading }] = useLoginMutation();
-  const [error, setError] = useState<string | null>(null);
+  const [login, { isLoading, error }] = useLoginMutation();
+  const dispatch = useDispatch();
 
   const loginUser = async (form: { email: string; password: string }) => {
     try {
       const response = await login(form).unwrap();
-      if (response.success) {
-        localStorage.setItem('accessToken', response.accessToken);
-        localStorage.setItem('refreshToken', response.refreshToken);
-        console.log('login', response);
-      }
-    } catch (error) {
-      setError('Ошибка логирования');
-      console.log(error);
+      localStorage.setItem('accessToken', response.accessToken);
+      localStorage.setItem('refreshToken', response.refreshToken);
+      dispatch(setProfile(response));
+
+      return { status: 200, data: response };
+    } catch (err) {
+      console.error('Ошибка входа:', err);
+
+      const typedError = err as FetchBaseQueryError & {
+        data?: ErrorType['data'];
+      };
+
+      return {
+        status: typedError.status || 500,
+        data: {
+          success: false,
+          message: typedError.data?.message || 'Ошибка входа',
+        },
+      };
     }
   };
 
@@ -60,17 +91,25 @@ const useToken = () => {
   const [token] = useTokenMutation();
   const refreshToken = localStorage.getItem('refreshToken');
 
-  const getNewToken = () => {
+  const getNewToken = async () => {
     if (!refreshToken) return;
-    token(refreshToken)
-      .unwrap()
-      .then((data) => {
-        localStorage.setItem('refreshToken', data.refreshToken);
-      })
-      .catch(() => {
-        localStorage.removeItem('refreshToken');
-        localStorage.removeItem('accessToken');
-      });
+    try {
+      const data = await token(refreshToken).unwrap();
+      localStorage.setItem('refreshToken', data.refreshToken);
+
+      return { status: 200, data: data };
+    } catch (err) {
+      const typedError = err as FetchBaseQueryError & {
+        data?: ErrorType['data'];
+      };
+      return {
+        status: typedError.status || 500,
+        data: {
+          success: false,
+          message: typedError.data?.message || 'Ошибка обновления токена',
+        },
+      };
+    }
   };
 
   return { getNewToken };
@@ -78,51 +117,79 @@ const useToken = () => {
 
 const useLogout = () => {
   const [logout, { isLoading }] = useLogoutMutation();
-  const [error, setError] = useState<string | null>(null);
+  const dispatch = useDispatch();
 
   const logoutUser = async () => {
     const refreshToken = localStorage.getItem('refreshToken');
-    console.log(refreshToken);
     if (!refreshToken) return;
-    console.log(refreshToken);
     try {
       await logout(refreshToken);
       localStorage.removeItem('refreshToken');
       localStorage.removeItem('accessToken');
-    } catch (error) {
-      setError('Ошибка разлогирования');
-      localStorage.removeItem('refreshToken');
-      localStorage.removeItem('accessToken');
+      dispatch(resetProfile());
+
+      return { status: 200, data: { success: true } };
+    } catch (err) {
+      const typedError = err as FetchBaseQueryError & {
+        data?: ErrorType['data'];
+      };
+      return {
+        status: typedError.status || 500,
+        data: {
+          success: false,
+          message: typedError.data?.message || 'Ошибка разлогирования',
+        },
+      };
     }
   };
 
-  return { logoutUser, isLoading, error };
+  return { logoutUser, isLoading };
 };
 
 const useResetPassword = () => {
-  const [resetPassword, { isLoading }] = useResetPasswordMutation();
-  const [error, setError] = useState<string | null>(null);
+  const [resetPassword, { isLoading, error }] = useResetPasswordMutation();
 
   const resetPass = async (token: string, newPassword: string) => {
     try {
-      await resetPassword({ token, password: newPassword });
-    } catch (error) {
-      setError('Не смог обновить пароль');
+      await resetPassword({ token, password: newPassword }).unwrap();
+      return { status: 200, data: { success: true } };
+    } catch (err) {
+      const typedError = err as FetchBaseQueryError & {
+        data?: ErrorType['data'];
+      };
+      return {
+        status: typedError.status || 500,
+        data: {
+          success: false,
+          message: typedError.data?.message || 'Не смог обновить пароль',
+        },
+      };
     }
   };
 
-  return { resetPass, error, isLoading };
+  return { resetPass, isLoading, error };
 };
 
 const useRestorePassword = () => {
-  const [restorePassword, { isLoading }] = useRestorePasswordMutation();
-  const [error, setError] = useState<string | null>(null);
+  const [restorePassword, { isLoading, error }] = useRestorePasswordMutation();
 
   const restorePass = async (email: string) => {
     try {
-      await restorePassword(email);
-    } catch (error) {
-      setError('Ошибка восстановления пароля по этому email');
+      await restorePassword(email).unwrap();
+      return { status: 200, data: { success: true } };
+    } catch (err) {
+      const typedError = err as FetchBaseQueryError & {
+        data?: ErrorType['data'];
+      };
+      return {
+        status: typedError.status || 500,
+        data: {
+          success: false,
+          message:
+            typedError.data?.message ||
+            'Ошибка восстановления пароля по этому email',
+        },
+      };
     }
   };
 
