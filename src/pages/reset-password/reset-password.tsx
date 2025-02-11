@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Button,
   Input,
@@ -9,9 +9,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useResetPassword } from '../../utils/api';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { ErrorType } from '../../types/types';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 export default function ResetPasswordPage() {
   const [form, setForm] = useState({ password: '', token: '' });
+  const canResetPassword = useSelector(
+    (state: RootState) => state.profile.canResetPassword
+  );
 
   const handleChange = (e: { target: { name: string; value: string } }) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -31,6 +36,10 @@ export default function ResetPasswordPage() {
       console.log(err);
     }
   };
+
+  useEffect(() => {
+    if (!canResetPassword) navigate('/forgot-password');
+  }, [canResetPassword, navigate]);
 
   return (
     <div className={styles.container}>

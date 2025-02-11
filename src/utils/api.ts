@@ -8,7 +8,11 @@ import {
   useTokenMutation,
 } from '../services/api/authorization-api/authorization-api';
 import { useDispatch } from 'react-redux';
-import { resetProfile, setProfile } from '../services/slices/profile/reducers';
+import {
+  resetProfile,
+  setCanReset,
+  setProfile,
+} from '../services/slices/profile/reducers';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { ErrorType } from '../types/types';
 
@@ -149,10 +153,18 @@ const useLogout = () => {
 
 const useResetPassword = () => {
   const [resetPassword, { isLoading, error }] = useResetPasswordMutation();
+  const dispatch = useDispatch();
 
   const resetPass = async (token: string, newPassword: string) => {
     try {
-      await resetPassword({ token, password: newPassword }).unwrap();
+      const response = await resetPassword({
+        token,
+        password: newPassword,
+      }).unwrap();
+
+      if (response.success) {
+        dispatch(setCanReset(false));
+      }
       return { status: 200, data: { success: true } };
     } catch (err) {
       const typedError = err as FetchBaseQueryError & {
@@ -173,10 +185,14 @@ const useResetPassword = () => {
 
 const useRestorePassword = () => {
   const [restorePassword, { isLoading, error }] = useRestorePasswordMutation();
+  const dispatch = useDispatch();
 
   const restorePass = async (email: string) => {
     try {
-      await restorePassword(email).unwrap();
+      const response = await restorePassword(email).unwrap();
+      if (response.success) {
+        dispatch(setCanReset(true));
+      }
       return { status: 200, data: { success: true } };
     } catch (err) {
       const typedError = err as FetchBaseQueryError & {
