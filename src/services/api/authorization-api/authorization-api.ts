@@ -37,6 +37,24 @@ export const authorizationApi = createApi({
         body: JSON.stringify({ email, password, name }),
       }),
     }),
+    changeProfile: builder.mutation<
+      RegisterAuthorizationResponse,
+      { email: string; password: string; name: string }
+    >({
+      query: ({ email, password, name }) => {
+        const token = localStorage.getItem('accessToken');
+
+        return {
+          url: '/auth/user',
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `${token}`,
+          },
+          body: JSON.stringify({ email, password, name }),
+        };
+      },
+    }),
     logout: builder.mutation({
       query: (refreshToken: string) => {
         return {
@@ -92,4 +110,5 @@ export const {
   useGetUserQuery,
   useResetPasswordMutation,
   useRestorePasswordMutation,
+  useChangeProfileMutation,
 } = authorizationApi;

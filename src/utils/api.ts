@@ -1,4 +1,5 @@
 import {
+  useChangeProfileMutation,
   useLoginMutation,
   useLogoutMutation,
   useRegisterMutation,
@@ -196,6 +197,37 @@ const useRestorePassword = () => {
   return { restorePass, isLoading, error };
 };
 
+const useProfile = () => {
+  const [changeProfile, { isLoading, error }] = useChangeProfileMutation();
+
+  const changeProfileCredentials = async (form: {
+    name: string;
+    email: string;
+    password: string;
+  }) => {
+    try {
+      const response = await changeProfile(form).unwrap();
+      localStorage.setItem('accessToken', response.accessToken);
+      localStorage.setItem('refreshToken', response.refreshToken);
+
+      return { status: 200, data: response };
+    } catch (err) {
+      const typedError = err as FetchBaseQueryError & {
+        data?: ErrorType['data'];
+      };
+      return {
+        status: typedError.status || 500,
+        data: {
+          success: false,
+          message: typedError.data?.message || 'Ошибка регистрации',
+        },
+      };
+    }
+  };
+
+  return { changeProfileCredentials, isLoading, error };
+};
+
 export {
   useRegister,
   useLogin,
@@ -203,4 +235,5 @@ export {
   useLogout,
   useResetPassword,
   useRestorePassword,
+  useProfile,
 };

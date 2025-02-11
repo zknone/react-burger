@@ -1,14 +1,17 @@
 import { useState } from 'react';
 import {
+  Button,
   EmailInput,
   Input,
   PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './profile.module.css';
-import { useLogout } from '../../utils/api';
+import { useLogout, useProfile } from '../../utils/api';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import { ErrorType } from '../../types/types';
 
 export default function ProfilePage() {
   const user = useSelector((state: RootState) => state.profile.user);
@@ -19,6 +22,7 @@ export default function ProfilePage() {
   });
 
   const { logoutUser } = useLogout();
+  const { changeProfileCredentials, error, isLoading } = useProfile();
 
   const navigate = useNavigate();
 
@@ -30,6 +34,15 @@ export default function ProfilePage() {
     e.preventDefault();
     logoutUser();
     navigate('/');
+  };
+
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    try {
+      await changeProfileCredentials(form);
+    } catch (err) {
+      console.log('ошибка измненения данных', err);
+    }
   };
 
   return (
@@ -65,9 +78,8 @@ export default function ProfilePage() {
           В этом разделе вы можете изменить свои персональные данные
         </p>
       </div>
-      <form className={styles.form}>
+      <form className={styles.form} onSubmit={handleSubmit}>
         <Input
-          disabled
           type="text"
           placeholder="Имя"
           name="name"
@@ -76,7 +88,6 @@ export default function ProfilePage() {
           icon={'EditIcon'}
         />
         <EmailInput
-          disabled
           placeholder="E-mail"
           name="email"
           value={form.email}
@@ -84,13 +95,22 @@ export default function ProfilePage() {
           isIcon
         />
         <PasswordInput
-          disabled
           placeholder="Пароль"
           name="password"
           value={form.password}
           onChange={handleChange}
           icon={'EditIcon'}
         />
+        <Button disabled={form.password === '' || isLoading} htmlType="submit">
+          Сохранить
+        </Button>
+        {error && 'data' in error && (
+          <p>
+            {(error as FetchBaseQueryError & { data?: ErrorType['data'] }).data
+              ?.message ||
+              'Ошибка измненения пароль, имени или почтового адреса'}
+          </p>
+        )}
       </form>
     </div>
   );
