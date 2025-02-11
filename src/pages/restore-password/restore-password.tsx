@@ -4,20 +4,30 @@ import {
   EmailInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './restore-password.module.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useRestorePassword } from '../../utils/api';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import { ErrorType } from '../../types/types';
 
 export default function RestorePasswordPage() {
   const [email, setEmail] = useState('');
   const { restorePass, isLoading, error } = useRestorePassword();
+  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
   };
 
-  const handleSubmit = (e: { preventDefault: () => void }) => {
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    restorePass(email);
+    try {
+      const response = await restorePass(email);
+      if (response.data.success) {
+        navigate('/reset-password');
+      }
+    } catch (erorr) {
+      console.log('restor password error: ', error);
+    }
   };
 
   return (
@@ -32,11 +42,15 @@ export default function RestorePasswordPage() {
           value={email}
           onChange={handleChange}
         />
-        <Button disabled={isLoading} htmlType="submit" onClick={handleSubmit}>
+        <Button disabled={isLoading} htmlType="submit">
           Восстановить
         </Button>
-
-        {error && <div>{error}</div>}
+        {error && 'data' in error && (
+          <p>
+            {(error as FetchBaseQueryError & { data?: ErrorType['data'] }).data
+              ?.message || 'Ошибка восстановления пароля'}
+          </p>
+        )}
       </form>
       <div className={styles.line}>
         <p className="text text_type_main-default text_color_inactive">

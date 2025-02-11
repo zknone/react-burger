@@ -5,23 +5,31 @@ import {
   PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './login.module.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useLogin } from '../../utils/api';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import { ErrorType } from '../../types/types';
 
 export default function LoginPage() {
   const [form, setForm] = useState({ email: '', password: '' });
+  const navigate = useNavigate();
 
-  const { loginUser, error, isLoading } = useLogin();
+  const { loginUser, isLoading, error } = useLogin();
 
   const handleChange = (e: { target: { name: string; value: string } }) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: { preventDefault: () => void }) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    loginUser(form);
-  };
+    const result = await loginUser(form);
 
+    if (result.status === 200) {
+      navigate('/profile');
+    } else {
+      console.error(result.data.message);
+    }
+  };
   return (
     <div className={styles.container}>
       <form onSubmit={handleSubmit} className={styles.form}>
@@ -43,7 +51,12 @@ export default function LoginPage() {
         <Button disabled={isLoading} htmlType="submit">
           Войти
         </Button>
-        {error && <p>Введен неправильный email и пароль</p>}
+        {error && 'data' in error && (
+          <p>
+            {(error as FetchBaseQueryError & { data?: ErrorType['data'] }).data
+              ?.message || 'Ошибка входа'}
+          </p>
+        )}
       </form>
       <div className={styles.line}>
         <p className="text text_type_main-default text_color_inactive">

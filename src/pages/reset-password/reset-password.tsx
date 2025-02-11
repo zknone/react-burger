@@ -1,24 +1,35 @@
 import { useState } from 'react';
 import {
   Button,
-  EmailInput,
   Input,
+  PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import styles from './restore-password.module.css';
-import { Link } from 'react-router-dom';
+import styles from './reset-password.module.css';
+import { Link, useNavigate } from 'react-router-dom';
 import { useResetPassword } from '../../utils/api';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import { ErrorType } from '../../types/types';
 
 export default function ResetPasswordPage() {
-  const [form, setForm] = useState({ token: '', password: '' });
+  const [form, setForm] = useState({ password: '', token: '' });
 
   const handleChange = (e: { target: { name: string; value: string } }) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
-  const { resetPass, error, isLoading } = useResetPassword();
 
-  const handleSubmit = (e: { preventDefault: () => void }) => {
+  const { resetPass, error, isLoading } = useResetPassword();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    resetPass(form.token, form.password);
+    try {
+      const response = await resetPass(form.token, form.password);
+      if (response.data.success) {
+        navigate('/login');
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -27,9 +38,9 @@ export default function ResetPasswordPage() {
         <h2 className={`${styles.modal_title} text text_type_main-medium`}>
           Восстановление пароля
         </h2>
-        <EmailInput
+        <PasswordInput
           placeholder="Введите новый пароль"
-          name="e-mail"
+          name="password"
           value={form.password}
           onChange={handleChange}
         />
@@ -42,7 +53,12 @@ export default function ResetPasswordPage() {
         <Button disabled={isLoading} htmlType="submit" onClick={handleSubmit}>
           Восстановить
         </Button>
-        {error && <div>{error}</div>}
+        {error && 'data' in error && (
+          <p>
+            {(error as FetchBaseQueryError & { data?: ErrorType['data'] }).data
+              ?.message || 'Ошибка сброса пароля'}
+          </p>
+        )}
       </form>
       <div className={styles.line}>
         <p className="text text_type_main-default text_color_inactive">

@@ -8,11 +8,18 @@ import {
 import styles from './register.module.css';
 import { Link } from 'react-router-dom';
 import { useRegister } from '../../utils/api';
+import { ErrorType } from '../../types/types';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 
 export default function RegisterPage() {
   const [form, setForm] = useState({ name: '', email: '', password: '' });
-  const { registerUser, isRegisterLoading, isLoginLoading, error } =
-    useRegister();
+  const {
+    registerUser,
+    isRegisterLoading,
+    isLoginLoading,
+    registerError,
+    loginError,
+  } = useRegister();
 
   const handleChange = (e: { target: { name: string; value: string } }) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -20,6 +27,7 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
+
     registerUser(form);
   };
 
@@ -54,7 +62,25 @@ export default function RegisterPage() {
         >
           Войти
         </Button>
-        {error && <div>{JSON.stringify(error)}</div>}
+        {registerError && 'data' in registerError && (
+          <p>
+            {(
+              registerError as FetchBaseQueryError & {
+                data?: ErrorType['data'];
+              }
+            ).data?.message || 'Ошибка регистрации'}
+          </p>
+        )}
+
+        {loginError && 'data' in loginError && (
+          <p>
+            {(
+              loginError as FetchBaseQueryError & {
+                data?: ErrorType['data'];
+              }
+            ).data?.message || 'Ошибка логирования после регистрации'}
+          </p>
+        )}
       </form>
       <div className={styles.line}>
         <p className="text text_type_main-default text_color_inactive">
