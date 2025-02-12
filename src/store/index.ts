@@ -1,6 +1,5 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { ingredientsApi } from '../services/api/ingredients-api/ingredients-api';
-import chosenIngredientReducer from '../services/slices/chose-ingredient/reducers';
 import burgerConstructorReducer from '../services/slices/constructor/reducers';
 import profileReducer from '../services/slices/profile/reducers';
 import { orderApi } from '../services/api/order-api/order-api';
@@ -11,7 +10,6 @@ const rootReducer = combineReducers({
   [ingredientsApi.reducerPath]: ingredientsApi.reducer,
   [orderApi.reducerPath]: orderApi.reducer,
   [authorizationApi.reducerPath]: authorizationApi.reducer,
-  chosenIngredient: chosenIngredientReducer,
   burgerConstructor: burgerConstructorReducer,
   profile: profileReducer,
 });
