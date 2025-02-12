@@ -29,11 +29,14 @@ const useRegister = () => {
   }) => {
     try {
       const response = await register(form).unwrap();
-      localStorage.setItem('accessToken', response.accessToken);
-      localStorage.setItem('refreshToken', response.refreshToken);
 
       if (response.success) {
-        await login({ email: form.email, password: form.password }).unwrap();
+        const loginResponse = await login({
+          email: form.email,
+          password: form.password,
+        }).unwrap();
+        localStorage.setItem('accessToken', loginResponse.accessToken);
+        localStorage.setItem('refreshToken', loginResponse.refreshToken);
       }
 
       return { status: 200, data: response };
@@ -225,8 +228,6 @@ const useProfile = () => {
   }) => {
     try {
       const response = await changeProfile(form).unwrap();
-      localStorage.setItem('accessToken', response.accessToken);
-      localStorage.setItem('refreshToken', response.refreshToken);
       if (response.success) dispatch(setProfile(response));
 
       return { status: 200, data: response };
