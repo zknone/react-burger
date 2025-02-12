@@ -15,11 +15,10 @@ import { ErrorType } from '../../types/types';
 
 export default function ProfilePage() {
   const user = useSelector((state: RootState) => state.profile.user);
-  const [form, setForm] = useState({
-    name: user.name,
-    email: user.email,
-    password: '',
-  });
+  const initialForm = { name: user.name, email: user.email, password: '' };
+
+  const [form, setForm] = useState(initialForm);
+  const [savedForm] = useState(initialForm);
 
   const { logoutUser } = useLogout();
   const { changeProfileCredentials, error, isLoading, isSuccess } =
@@ -42,7 +41,17 @@ export default function ProfilePage() {
     try {
       await changeProfileCredentials(form);
     } catch (err) {
-      console.log('ошибка измненения данных', err);
+      console.log('Ошибка изменения данных', err);
+    }
+  };
+
+  const handleReset = async (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    setForm(savedForm);
+    try {
+      await changeProfileCredentials(savedForm);
+    } catch (err) {
+      console.log('Ошибка изменения данных', err);
     }
   };
 
@@ -51,7 +60,7 @@ export default function ProfilePage() {
       <div className={styles.wrapper}>
         <NavLink
           to="/profile"
-          className={(isActive) =>
+          className={({ isActive }) =>
             isActive
               ? `${styles.link} ${styles.link__active} text text_type_main-default`
               : `${styles.link} text text_type_main-default`
@@ -102,7 +111,15 @@ export default function ProfilePage() {
           onChange={handleChange}
           icon={'EditIcon'}
         />
-        <Button disabled={form.password === '' || isLoading} htmlType="submit">
+        <Button
+          disabled={isLoading}
+          htmlType="reset"
+          type="secondary"
+          onClick={handleReset}
+        >
+          Отменить
+        </Button>
+        <Button disabled={isLoading} htmlType="submit">
           Сохранить
         </Button>
         {isSuccess && <p>Данные успешно изменены</p>}
@@ -110,7 +127,7 @@ export default function ProfilePage() {
           <p>
             {(error as FetchBaseQueryError & { data?: ErrorType['data'] }).data
               ?.message ||
-              'Ошибка измненения пароль, имени или почтового адреса'}
+              'Ошибка изменения пароля, имени или почтового адреса'}
           </p>
         )}
       </form>
