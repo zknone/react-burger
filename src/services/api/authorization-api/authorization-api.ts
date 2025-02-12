@@ -1,11 +1,19 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { BASE_API_URL, ingredientsApiConfig } from '../../../utils/fetch-data';
 import {
   LoginRequest,
   LoginResponse,
   RegisterAuthorizationResponse,
   TokenResponse,
 } from '../../../types/types';
+
+export const BASE_API_URL = 'https://norma.nomoreparties.space/api';
+
+export const ingredientsApiConfig = {
+  baseUrl: BASE_API_URL,
+  headers: {
+    'Content-type': 'application/json',
+  },
+};
 
 export const authorizationApi = createApi({
   reducerPath: 'loginApi',
