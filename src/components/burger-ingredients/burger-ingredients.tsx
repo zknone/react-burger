@@ -2,30 +2,17 @@ import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingredients.module.css';
 import { IngredientsGroup } from './ingredients-group/ingredients-group';
 import { IngredientType } from '../../types/types';
-import { useModal } from '../../hooks/use-modal';
-import { IngredientPopupDetails } from './ingredient-popup-details/ingredient-popup-details';
-import { Modal } from '../modal/modal';
+
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-  chooseIngredient,
-  closeIngredient,
-} from '../../services/slices/chose-ingredient/actions';
-import { RootState } from '../../store';
 import { useGetIngredientsQuery } from '../../services/api/ingredients-api/ingredients-api';
 
 const GAP = 50;
 type IngredientVariantsType = 'bun' | 'sauce' | 'stuffing';
 
 const BurgerIngredients = ({ extraClass }: { extraClass?: string }) => {
-  const dispatch = useDispatch();
-  const selectedIngredient = useSelector(
-    (store: RootState) => store.chosenIngredient.selectedIngredient
-  );
   const { data } = useGetIngredientsQuery(undefined);
   const ingredients: IngredientType[] = data?.data;
 
-  const { isModalOpen, openModal, closeModal } = useModal();
   const [activeTitle, setTitleActive] = useState<IngredientVariantsType>('bun');
   const [positions, setPositions] = useState({
     startingPosition: 0,
@@ -33,16 +20,6 @@ const BurgerIngredients = ({ extraClass }: { extraClass?: string }) => {
     sauce: 0,
     stuffing: 0,
   });
-
-  const handleCloseModal = () => {
-    dispatch(closeIngredient());
-    closeModal();
-  };
-
-  const handleIngredientSelected = (ingredient: IngredientType) => {
-    dispatch(chooseIngredient(ingredient));
-    openModal();
-  };
 
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const bunRef = useRef<HTMLDivElement | null>(null);
@@ -116,17 +93,6 @@ const BurgerIngredients = ({ extraClass }: { extraClass?: string }) => {
 
   return (
     <div className={`${styles.ingredients_content_container} ${extraClass}`}>
-      {isModalOpen && selectedIngredient && (
-        <Modal onClose={handleCloseModal} title="Детали ингредиента">
-          <IngredientPopupDetails
-            img={selectedIngredient.image}
-            protein={selectedIngredient.proteins}
-            calories={selectedIngredient.calories}
-            fat={selectedIngredient.fat}
-            carbs={selectedIngredient.carbohydrates}
-          />
-        </Modal>
-      )}
       <h2 className="text text_type_main-large mb-5">Соберите бургер</h2>
       <div className={styles.ingredients_tabs}>
         <Tab
@@ -161,23 +127,16 @@ const BurgerIngredients = ({ extraClass }: { extraClass?: string }) => {
         className={`${styles.ingredients_container} pt-6 pb-6 pr-10 custom-scroll`}
         ref={scrollRef}
       >
-        <IngredientsGroup
-          ref={bunRef}
-          title="Булки"
-          ingredients={bunsData}
-          handleIngredientSelected={handleIngredientSelected}
-        />
+        <IngredientsGroup ref={bunRef} title="Булки" ingredients={bunsData} />
         <IngredientsGroup
           ref={sauceRef}
           title="Соусы"
           ingredients={sauceData}
-          handleIngredientSelected={handleIngredientSelected}
         />
         <IngredientsGroup
           ref={stuffingRef}
           title="Начинки"
           ingredients={mainCourseData}
-          handleIngredientSelected={handleIngredientSelected}
         />
       </div>
     </div>

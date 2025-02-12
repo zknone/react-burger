@@ -7,23 +7,25 @@ import { IngredientType } from '../../types/types';
 export default function IngredientPage() {
   const { id } = useParams();
 
-  const { data } = useGetIngredientsQuery(undefined);
-  const ingredients: IngredientType[] = data?.data;
+  const { data, isLoading, error } = useGetIngredientsQuery(undefined);
 
-  const foundIngredient = ingredients.filter((item) => item._id === id)[0];
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error loading ingredients</div>;
+
+  const ingredients: IngredientType[] = data?.data || [];
+
+  const foundIngredient = ingredients.find((item) => item._id === id);
+
+  if (!foundIngredient) {
+    return <div>Ingredient not found</div>;
+  }
 
   return (
     <div className={styles.container}>
       <h2 className={`${styles.modal_title} text text_type_main-large`}>
         {foundIngredient.name}
       </h2>
-      <IngredientPopupDetails
-        img={foundIngredient.image_large}
-        protein={foundIngredient.proteins}
-        calories={foundIngredient.calories}
-        carbs={foundIngredient.carbohydrates}
-        fat={foundIngredient.fat}
-      />
+      <IngredientPopupDetails />
     </div>
   );
 }
