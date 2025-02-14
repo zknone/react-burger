@@ -32,7 +32,7 @@ const Root = () => {
 
   useEffect(() => {
     dispatch(checkUserAuth());
-  }, []);
+  }, [dispatch]);
 
   return (
     <Router>
@@ -46,8 +46,6 @@ const LayoutWithLocation = () => {
   const navigate = useNavigate();
   const state = (location.state as { backgroundLocation?: Location }) || {};
 
-  console.log(location);
-
   return (
     <Layout>
       {state.backgroundLocation && (
@@ -58,7 +56,6 @@ const LayoutWithLocation = () => {
               <Modal
                 title="Детали ингредиента"
                 onClose={() => {
-                  console.log('pressed');
                   navigate(state.backgroundLocation?.pathname || '/');
                 }}
               >
