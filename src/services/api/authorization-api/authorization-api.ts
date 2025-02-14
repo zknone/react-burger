@@ -34,7 +34,7 @@ export const authorizationApi = createApi({
       query: ({ email, password, name }) => ({
         url: '/auth/register',
         method: 'POST',
-        body: JSON.stringify({ email, password, name }),
+        body: { email, password, name },
       }),
     }),
     changeProfile: builder.mutation<
@@ -51,7 +51,7 @@ export const authorizationApi = createApi({
             'Content-Type': 'application/json',
             Authorization: `${token}`,
           },
-          body: JSON.stringify({ email, password, name }),
+          body: { email, password, name },
         };
       },
     }),
@@ -60,7 +60,7 @@ export const authorizationApi = createApi({
         return {
           url: '/auth/logout',
           method: 'POST',
-          body: JSON.stringify({ token: refreshToken }),
+          body: { token: refreshToken },
         };
       },
     }),

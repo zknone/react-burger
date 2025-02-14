@@ -23,7 +23,6 @@ const fetchWithRefreshQuery: BaseQueryFn<
   });
 
   let result = await baseQuery(args, api, extraOptions);
-  console.log('results from query', result, args, api, extraOptions);
 
   if (result.error && result.error.status === 401) {
     const refreshToken = localStorage.getItem('refreshToken');
