@@ -1,10 +1,11 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi } from '@reduxjs/toolkit/query/react';
 import {
   LoginRequest,
   LoginResponse,
   RegisterAuthorizationResponse,
   TokenResponse,
 } from '../../../types/types';
+import fetchWithRefreshQuery from './fetch-with-base-query';
 
 export const BASE_API_URL = 'https://norma.nomoreparties.space/api';
 
@@ -17,16 +18,7 @@ export const ingredientsApiConfig = {
 
 export const authorizationApi = createApi({
   reducerPath: 'loginApi',
-  baseQuery: fetchBaseQuery({
-    baseUrl: BASE_API_URL,
-    prepareHeaders: (headers) => {
-      for (const [key, value] of Object.entries(ingredientsApiConfig.headers)) {
-        headers.set(key, value);
-      }
-
-      return headers;
-    },
-  }),
+  baseQuery: fetchWithRefreshQuery,
   endpoints: (builder) => ({
     login: builder.mutation<LoginResponse, LoginRequest>({
       query: (credentials) => ({
@@ -73,16 +65,24 @@ export const authorizationApi = createApi({
       },
     }),
     token: builder.mutation<TokenResponse, string>({
-      query: (refreshToken: string) => {
-        return {
-          url: '/auth/token',
-          method: 'POST',
-          body: JSON.stringify({ token: refreshToken }),
-        };
-      },
+      query: (refreshToken) => ({
+        url: '/auth/token',
+        method: 'POST',
+        body: { token: refreshToken },
+      }),
     }),
     getUser: builder.query({
-      query: () => '/auth/user',
+      query: () => {
+        const token = localStorage.getItem('accessToken');
+        return {
+          url: '/auth/user',
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `${token}`,
+          },
+        };
+      },
     }),
     resetPassword: builder.mutation({
       query: ({ password, token }: { password: string; token: string }) => {
@@ -113,7 +113,6 @@ export const authorizationApi = createApi({
 export const {
   useLoginMutation,
   useRegisterMutation,
-  useTokenMutation,
   useLogoutMutation,
   useGetUserQuery,
   useResetPasswordMutation,
