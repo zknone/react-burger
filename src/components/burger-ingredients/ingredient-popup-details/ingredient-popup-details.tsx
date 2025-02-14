@@ -5,7 +5,6 @@ import { IngredientType } from '../../../types/types';
 
 const IngredientPopupDetails = () => {
   const { id } = useParams();
-  console.log(id);
 
   const { data, isLoading, error } = useGetIngredientsQuery(undefined);
 

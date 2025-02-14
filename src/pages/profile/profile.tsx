@@ -38,21 +38,13 @@ export default function ProfilePage() {
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    try {
-      await changeProfileCredentials(form);
-    } catch (err) {
-      console.log('Ошибка изменения данных', err);
-    }
+    await changeProfileCredentials(form);
   };
 
   const handleReset = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     setForm(savedForm);
-    try {
-      await changeProfileCredentials(savedForm);
-    } catch (err) {
-      console.log('Ошибка изменения данных', err);
-    }
+    await changeProfileCredentials(savedForm);
   };
 
   return (

@@ -27,11 +27,7 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    try {
-      await registerUser(form);
-    } catch (err) {
-      console.log(err);
-    }
+    await registerUser(form);
   };
 
   return (

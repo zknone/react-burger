@@ -24,6 +24,8 @@ export default function LoginPage() {
     e.preventDefault();
     const result = await loginUser(form);
 
+    console.log(result);
+
     if (result.status === 200) {
       navigate('/profile');
     } else {

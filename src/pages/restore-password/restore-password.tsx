@@ -20,13 +20,9 @@ export default function RestorePasswordPage() {
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    try {
-      const response = await restorePass(email);
-      if (response.data.success) {
-        navigate('/reset-password');
-      }
-    } catch (erorr) {
-      console.log('restor password error: ', error);
+    const response = await restorePass(email);
+    if (response.data.success) {
+      navigate('/reset-password');
     }
   };
 

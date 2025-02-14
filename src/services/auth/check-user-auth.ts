@@ -4,6 +4,7 @@ import { setProfile, setIsAuthChecked } from '../slices/profile/reducers';
 
 export const checkUserAuth = () => async (dispatch: AppDispatch) => {
   const refreshToken = localStorage.getItem('refreshToken');
+  console.log('отработало!', refreshToken);
 
   if (!refreshToken) {
     dispatch(setIsAuthChecked(true));

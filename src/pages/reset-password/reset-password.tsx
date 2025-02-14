@@ -27,13 +27,9 @@ export default function ResetPasswordPage() {
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    try {
-      const response = await resetPass(form.token, form.password);
-      if (response.data.success) {
-        navigate('/login');
-      }
-    } catch (err) {
-      console.log(err);
+    const response = await resetPass(form.token, form.password);
+    if (response.data.success) {
+      navigate('/login');
     }
   };
 
