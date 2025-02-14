@@ -5,7 +5,6 @@ import {
   useRegisterMutation,
   useResetPasswordMutation,
   useRestorePasswordMutation,
-  useTokenMutation,
 } from '../services/api/authorization-api/authorization-api';
 import { useDispatch } from 'react-redux';
 import {
@@ -93,34 +92,6 @@ const useLogin = () => {
   };
 
   return { loginUser, isLoading, error };
-};
-
-const useToken = () => {
-  const [token] = useTokenMutation();
-  const refreshToken = localStorage.getItem('refreshToken');
-
-  const getNewToken = async () => {
-    if (!refreshToken) return;
-    try {
-      const data = await token(refreshToken).unwrap();
-      localStorage.setItem('refreshToken', data.refreshToken);
-
-      return { status: 200, data: data };
-    } catch (err) {
-      const typedError = err as FetchBaseQueryError & {
-        data?: ErrorType['data'];
-      };
-      return {
-        status: typedError.status || 500,
-        data: {
-          success: false,
-          message: typedError.data?.message || 'Ошибка обновления токена',
-        },
-      };
-    }
-  };
-
-  return { getNewToken };
 };
 
 const useLogout = () => {
@@ -228,6 +199,7 @@ const useProfile = () => {
   }) => {
     try {
       const response = await changeProfile(form).unwrap();
+
       if (response.success) dispatch(setProfile(response));
 
       return { status: 200, data: response };
@@ -251,7 +223,6 @@ const useProfile = () => {
 export {
   useRegister,
   useLogin,
-  useToken,
   useLogout,
   useResetPassword,
   useRestorePassword,
