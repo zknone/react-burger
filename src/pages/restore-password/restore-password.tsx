@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import {
   Button,
   EmailInput,
@@ -18,7 +18,7 @@ export default function RestorePasswordPage() {
     setEmail(e.target.value);
   };
 
-  const handleSubmit = async (e: { preventDefault: () => void }) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const response = await restorePass(email);
     if (response.data.success) {

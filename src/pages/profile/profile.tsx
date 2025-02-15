@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import {
   Button,
   EmailInput,
@@ -30,18 +30,18 @@ export default function ProfilePage() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleLogout = (e: { preventDefault: () => void }) => {
+  const handleLogout = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     logoutUser();
     navigate('/');
   };
 
-  const handleSubmit = async (e: { preventDefault: () => void }) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     await changeProfileCredentials(form);
   };
 
-  const handleReset = async (e: { preventDefault: () => void }) => {
+  const handleReset = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setForm(savedForm);
     await changeProfileCredentials(savedForm);

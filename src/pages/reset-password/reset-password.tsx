@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { SyntheticEvent, useEffect, useState } from 'react';
 import {
   Button,
   Input,
@@ -25,7 +25,7 @@ export default function ResetPasswordPage() {
   const { resetPass, error, isLoading } = useResetPassword();
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: { preventDefault: () => void }) => {
+  const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
     const response = await resetPass(form.token, form.password);
     if (response.data.success) {
