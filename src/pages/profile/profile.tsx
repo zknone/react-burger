@@ -12,12 +12,14 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { ErrorType } from '../../types/types';
+import { useForm } from '../../utils/useForm';
 
 export default function ProfilePage() {
   const user = useSelector((state: RootState) => state.profile.user);
   const initialForm = { name: user.name, email: user.email, password: '' };
 
-  const [form, setForm] = useState(initialForm);
+  const { form, handleChange, setForm } = useForm(initialForm);
+
   const [savedForm] = useState(initialForm);
 
   const { logoutUser } = useLogout();
@@ -25,10 +27,6 @@ export default function ProfilePage() {
     useProfile();
 
   const navigate = useNavigate();
-
-  const handleChange = (e: { target: { name: string; value: string } }) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
 
   const handleLogout = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();

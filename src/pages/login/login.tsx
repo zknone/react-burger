@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import {
   Button,
   EmailInput,
@@ -9,16 +8,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useLogin } from '../../utils/api';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { ErrorType } from '../../types/types';
+import { useForm } from '../../utils/useForm';
 
 export default function LoginPage() {
-  const [form, setForm] = useState({ email: '', password: '' });
   const navigate = useNavigate();
 
   const { loginUser, isLoading, error } = useLogin();
 
-  const handleChange = (e: { target: { name: string; value: string } }) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  const { form, handleChange } = useForm({ email: '', password: '' });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent } from 'react';
 import {
   Button,
   EmailInput,
@@ -10,9 +10,10 @@ import { Link } from 'react-router-dom';
 import { useRegister } from '../../utils/api';
 import { ErrorType } from '../../types/types';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import { useForm } from '../../utils/useForm';
 
 export default function RegisterPage() {
-  const [form, setForm] = useState({ name: '', email: '', password: '' });
+  const { form, handleChange } = useForm({ name: '', email: '', password: '' });
   const {
     registerUser,
     isRegisterLoading,
@@ -20,10 +21,6 @@ export default function RegisterPage() {
     registerError,
     loginError,
   } = useRegister();
-
-  const handleChange = (e: { target: { name: string; value: string } }) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
