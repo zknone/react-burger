@@ -1,5 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { BASE_API_URL, ingredientsApiConfig } from '../../../utils/fetch-data';
+import {
+  BASE_API_URL,
+  ingredientsApiConfig,
+} from '../authorization-api/authorization-api';
 
 export const ingredientsApi = createApi({
   reducerPath: 'ingredientsApi',

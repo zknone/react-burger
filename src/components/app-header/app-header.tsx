@@ -1,49 +1,64 @@
 import {
-  Button,
   Logo,
   BurgerIcon,
   ListIcon,
   ProfileIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './app-header.module.css';
+import { NavLink } from 'react-router-dom';
+
 const AppHeader = () => {
-  const isActive = true;
   return (
     <header className={`${styles.menuWrapper} pt-4 pb-4`}>
       <div className={styles.menuBackground}></div>
       <nav>
         <ul className={styles.menu}>
           <li className={styles.menuItem}>
-            <Button
-              extraClass={`${styles.menuButton} pl-5 pr-5 pt-4 pb-4`}
-              style={isActive && { color: 'white' }}
-              type="secondary"
-              htmlType="button"
+            <NavLink
+              className={`${styles.menuButton} pl-5 pr-5 pt-4 pb-4 text text_type_main-default`}
+              to="/"
             >
-              <BurgerIcon type="primary" />
-              Constructor
-            </Button>
+              {({ isActive }) => (
+                <>
+                  <BurgerIcon type={isActive ? 'primary' : 'secondary'} />
+                  <span className={isActive ? styles.menuButtonActive : ''}>
+                    Constructor
+                  </span>
+                </>
+              )}
+            </NavLink>
           </li>
           <li className={styles.menuItem}>
-            <Button
-              extraClass={`${styles.menuButton} pl-5 pr-5 pt-4 pb-4`}
-              type="secondary"
-              htmlType="button"
+            <NavLink
+              className={`${styles.menuButton} pl-5 pr-5 pt-4 pb-4 text text_type_main-default`}
+              to="/feed"
             >
-              <ListIcon type="secondary" /> Order feed
-            </Button>
+              {({ isActive }) => (
+                <>
+                  <ListIcon type={isActive ? 'primary' : 'secondary'} />
+                  <span className={isActive ? styles.menuButtonActive : ''}>
+                    Order feed
+                  </span>
+                </>
+              )}
+            </NavLink>
           </li>
         </ul>
       </nav>
-      <Logo />
-      <Button
-        extraClass={`${styles.menuButton} pl-5 pr-5 pt-4 pb-4`}
-        type="secondary"
-        htmlType="button"
+      <Logo className={styles.logo} />
+      <NavLink
+        className={`${styles.menuButton} pl-5 pr-5 pt-4 pb-4 text text_type_main-default`}
+        to="/profile"
       >
-        <ProfileIcon type="secondary" />
-        My Account
-      </Button>
+        {({ isActive }) => (
+          <>
+            <ProfileIcon type={isActive ? 'primary' : 'secondary'} />
+            <span className={isActive ? styles.menuButtonActive : ''}>
+              My Account
+            </span>
+          </>
+        )}
+      </NavLink>
     </header>
   );
 };

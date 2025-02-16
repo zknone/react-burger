@@ -8,9 +8,8 @@ const IngredientsGroup = forwardRef<
   {
     title: string;
     ingredients: IngredientType[];
-    handleIngredientSelected: (ingredient: IngredientType) => void;
   }
->(({ title, ingredients, handleIngredientSelected }, ref) => {
+>(({ title, ingredients }, ref) => {
   return (
     <div>
       <h3 className="text text_type_main-medium mb-6" ref={ref}>
@@ -18,11 +17,7 @@ const IngredientsGroup = forwardRef<
       </h3>
       <ul className={styles.ingredients_group_container}>
         {ingredients.map((item) => (
-          <IngredientItem
-            key={item._id}
-            ingredient={item}
-            onClick={() => handleIngredientSelected(item)}
-          />
+          <IngredientItem key={item._id} ingredient={item} />
         ))}
       </ul>
     </div>

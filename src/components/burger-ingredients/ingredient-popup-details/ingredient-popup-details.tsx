@@ -1,31 +1,37 @@
+import { useParams } from 'react-router-dom';
 import styles from './ingredient-popup-details.module.css';
+import { useGetIngredientsQuery } from '../../../services/api/ingredients-api/ingredients-api';
+import { IngredientType } from '../../../types/types';
 
-const IngredientPopupDetails = ({
-  img,
-  calories,
-  protein,
-  carbs,
-  fat,
-}: {
-  img: string;
-  protein: number;
-  carbs: number;
-  calories: number;
-  fat: number;
-}) => {
+const IngredientPopupDetails = () => {
+  const { id } = useParams();
+
+  const { data, isLoading, error } = useGetIngredientsQuery(undefined);
+
+  const ingredients: IngredientType[] = data?.data;
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error loading ingredients</div>;
+
+  const selectedIngredient = ingredients?.find(
+    (item: IngredientType) => item._id === id
+  );
+
+  if (!selectedIngredient) return <div>Ingredient not found</div>;
+
   return (
     <div className={styles.burger_popup_container}>
       <img
         className="mb-4"
         width={480}
         height={240}
-        src={img}
-        alt="Заказ исполнен"
+        src={selectedIngredient.image_large}
+        alt="Ingredient"
       />
       <p
         className={`${styles.burger_popup_text} text text_type_main-medium mb-6`}
       >
-        Биокотлета из марсианской Магнолии
+        {selectedIngredient.name}
       </p>
       <dl className={styles.burger_popup_details}>
         <div className={styles.burger_popup_detail_item}>
@@ -33,7 +39,7 @@ const IngredientPopupDetails = ({
             Калории,ккал
           </dt>
           <dd className="text text_type_main-default text_color_inactive">
-            {calories}
+            {selectedIngredient.calories}
           </dd>
         </div>
         <div className={styles.burger_popup_detail_item}>
@@ -41,7 +47,7 @@ const IngredientPopupDetails = ({
             Белки, г
           </dt>
           <dd className="text text_type_main-default text_color_inactive">
-            {protein}
+            {selectedIngredient.proteins}
           </dd>
         </div>
         <div className={styles.burger_popup_detail_item}>
@@ -49,7 +55,7 @@ const IngredientPopupDetails = ({
             Жиры, г
           </dt>
           <dd className="text text_type_main-default text_color_inactive">
-            {fat}
+            {selectedIngredient.fat}
           </dd>
         </div>
         <div className={styles.burger_popup_detail_item}>
@@ -57,7 +63,7 @@ const IngredientPopupDetails = ({
             Углеводы, г
           </dt>
           <dd className="text text_type_main-default text_color_inactive">
-            {carbs}
+            {selectedIngredient.carbohydrates}
           </dd>
         </div>
       </dl>
