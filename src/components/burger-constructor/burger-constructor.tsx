@@ -22,6 +22,7 @@ import { useMemo } from 'react';
 import BurgerConstructorItem from './burger-constructor-item/burger-constructor-item';
 import BurgerEmptyItem from './burger-empty-item/burger-empty-item';
 import { useSendOrderMutation } from '../../services/api/order-api/order-api';
+import Loader from '../loader/laoder';
 
 const BurgerConstructor = () => {
   const dispatch = useDispatch();
@@ -85,7 +86,7 @@ const BurgerConstructor = () => {
           {data ? (
             <BurgerOrderDetails orderNumber={data.order.number} />
           ) : (
-            <p className="text text_type_main-default">Загрузка данных...</p>
+            <Loader />
           )}
         </Modal>
       )}
