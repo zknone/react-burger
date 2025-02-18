@@ -2,6 +2,7 @@ import { useSelector } from 'react-redux';
 import { Navigate, useLocation } from 'react-router-dom';
 import { RootState } from '../../store';
 import React from 'react';
+import Loader from '../loader/laoder';
 
 const ProtectedRoute = ({
   onlyUnAuth = false,
@@ -18,7 +19,7 @@ const ProtectedRoute = ({
   const location = useLocation();
 
   if (!isAuthChecked) {
-    return <p>Идет загрузка...</p>;
+    return <Loader />;
   }
 
   if (!onlyUnAuth && !user.email) {

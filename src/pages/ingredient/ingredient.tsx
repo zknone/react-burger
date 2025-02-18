@@ -3,13 +3,14 @@ import { IngredientPopupDetails } from '../../components/burger-ingredients/ingr
 import styles from './ingredient.module.css';
 import { useGetIngredientsQuery } from '../../services/api/ingredients-api/ingredients-api';
 import { IngredientType } from '../../types/types';
+import Loader from '../../components/loader/laoder';
 
 export default function IngredientPage() {
   const { id } = useParams();
 
   const { data, isLoading, error } = useGetIngredientsQuery(undefined);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <Loader />;
   if (error) return <div>Error loading ingredients</div>;
 
   const ingredients: IngredientType[] = data?.data || [];

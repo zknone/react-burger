@@ -5,12 +5,13 @@ import { useGetIngredientsQuery } from '../services/api/ingredients-api/ingredie
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DndProvider } from 'react-dnd';
 import styles from './app.module.css';
+import Loader from '../components/loader/laoder';
 
 function App() {
   const { isLoading, error } = useGetIngredientsQuery(undefined);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
   if (error) {
