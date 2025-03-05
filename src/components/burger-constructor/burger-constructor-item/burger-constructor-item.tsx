@@ -5,18 +5,21 @@ import {
   ConstructorElement,
   DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
+import { FC } from 'react';
 
-export default function BurgerConstructorItem({
-  ingredient,
-  index,
-  moveIngredient,
-  handleClose,
-}: {
+type BurgerConstructorItemProps = {
   ingredient: IngredientType;
   index: number;
   handleClose: (index: number) => void;
   moveIngredient: (dragIndex: number, hoverIndex: number) => void;
-}) {
+};
+
+const BurgerConstructorItem: FC<BurgerConstructorItemProps> = ({
+  ingredient,
+  index,
+  moveIngredient,
+  handleClose,
+}) => {
   const [{ isDragging }, dragRef] = useDrag({
     type: 'ingredientToSort',
     item: { index },
@@ -51,4 +54,6 @@ export default function BurgerConstructorItem({
       />
     </li>
   );
-}
+};
+
+export default BurgerConstructorItem;

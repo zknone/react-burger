@@ -3,13 +3,15 @@ import styles from './burger-ingredients.module.css';
 import { IngredientsGroup } from './ingredients-group/ingredients-group';
 import { IngredientType } from '../../types/types';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { FC, useEffect, useMemo, useRef, useState } from 'react';
 import { useGetIngredientsQuery } from '../../services/api/ingredients-api/ingredients-api';
 
 const GAP = 50;
 type IngredientVariantsType = 'bun' | 'sauce' | 'stuffing';
 
-const BurgerIngredients = ({ extraClass }: { extraClass?: string }) => {
+type BurgerIngredientsProps = { extraClass?: string };
+
+const BurgerIngredients: FC<BurgerIngredientsProps> = ({ extraClass }) => {
   const { data } = useGetIngredientsQuery(undefined);
   const ingredients: IngredientType[] = data?.data;
 

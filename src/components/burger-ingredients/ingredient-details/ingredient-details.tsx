@@ -1,13 +1,13 @@
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './ingredient-details.module.css';
+import { FC } from 'react';
 
-const IngredientDetails = ({
-  price,
-  title,
-}: {
+type IngredientDetailsProps = {
   price: number;
   title: string;
-}) => {
+};
+
+const IngredientDetails: FC<IngredientDetailsProps> = ({ price, title }) => {
   return (
     <>
       <p
