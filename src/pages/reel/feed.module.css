@@ -1,0 +1,46 @@
+.container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 60px;
+}
+
+.ordersWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.orderList {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin: 0;
+    padding: 0;
+}
+
+.dataWrapper {
+    display: flex;
+    flex-direction: column;
+    gap:60px;
+    margin-top: 54px;
+}
+.infoWrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.ordersTitlesWrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+.categoryTitle {}
+.orderTitlesList {
+    padding: 0;
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px
+}
+.orderTitle {}
+.infoSubTitle {}
+.infoTitle {}

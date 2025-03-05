@@ -26,6 +26,7 @@ import ResetPasswordPage from './pages/reset-password/reset-password';
 import NotFoundPage from './pages/not-found-page/not-found-page';
 import { Modal } from './components/modal/modal';
 import { IngredientPopupDetails } from './components/burger-ingredients/ingredient-popup-details/ingredient-popup-details';
+import FeedPage from './pages/reel/feed';
 
 const Root = () => {
   const dispatch = useAppDispatch();
@@ -72,6 +73,8 @@ const LayoutWithLocation = () => {
           path="/login"
           element={<OnlyUnAuth component={<LoginPage />} />}
         />
+
+        <Route path="/feed" element={<OnlyAuth component={<FeedPage />} />} />
         <Route
           path="/profile"
           element={<OnlyAuth component={<ProfilePage />} />}
