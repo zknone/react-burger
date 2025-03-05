@@ -1,4 +1,4 @@
-import { FormEvent, SyntheticEvent, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import {
   Button,
   EmailInput,
@@ -18,7 +18,7 @@ export default function ProfilePage() {
   const user = useSelector((state: RootState) => state.profile.user);
   const initialForm = { name: user.name, email: user.email, password: '' };
 
-  const { form, handleChange, setForm } = useForm(initialForm);
+  const { form, handleChange, resetForm } = useForm(initialForm);
 
   const [savedForm] = useState(initialForm);
 
@@ -39,9 +39,8 @@ export default function ProfilePage() {
     await changeProfileCredentials(form);
   };
 
-  const handleReset = async (e: SyntheticEvent) => {
-    e.preventDefault();
-    setForm(savedForm);
+  const handleReset = async () => {
+    resetForm();
     await changeProfileCredentials(savedForm);
   };
 

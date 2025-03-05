@@ -1,14 +1,23 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useRef, useState } from 'react';
 
 function useForm<T extends { [key: string]: string }>(baseForm: T) {
   const [form, setForm] = useState<T>(baseForm);
+  const prevFormRef = useRef<T>({ ...baseForm });
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
-    setForm((prevForm) => ({ ...prevForm, [name]: value }));
+
+    setForm((prevForm) => ({
+      ...prevForm,
+      [name]: value,
+    }));
   }
 
-  return { form, handleChange, setForm };
+  function resetForm() {
+    setForm(prevFormRef.current);
+  }
+
+  return { form, handleChange, setForm, resetForm };
 }
 
 export { useForm };
