@@ -2,52 +2,78 @@ import { FC } from 'react';
 // import { useGetIngredientsQuery } from '../../services/api/ingredients-api/ingredients-api';
 import styles from './order-item.module.css';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { IngredientType, Order } from '../../types/types';
+import { useGetIngredientsQuery } from '../../services/api/ingredients-api/ingredients-api';
 
-type OrderProps = {
-  //   id: number;
+type IngredientCacheType = {
+  [key: string]: IngredientType;
 };
 
-const mockData = {
-  orderId: 345,
-  date: 'Сегодня, 16:20',
-  title: 'Death Star Starship Main бургер',
-  ingredients: ['1', '2', '3', '4', '5', '6', '8', '12'],
-  summ: 540,
-};
+const OrderItem: FC<Order> = ({
+  ingredients,
+  status,
+  number,
+  createdAt,
+  updatedAt,
+  name,
+}) => {
+  const { data } = useGetIngredientsQuery(undefined);
 
-const OrderItem: FC<OrderProps> = () => {
-  //   const { data, isLoading, error } = useGetIngredientsQuery(id);
+  const ingredientsData = data?.data;
+
+  if (!ingredientsData) {
+    return <p>Загрузка ингредиентов...</p>;
+  }
+
+  const ingredientsCache: IngredientCacheType = ingredientsData?.reduce(
+    (acc: IngredientCacheType, value: IngredientType) => {
+      acc[value._id] = value;
+      return acc;
+    },
+    {}
+  );
+
+  const orderSumm = ingredients.reduce((acc, item) => {
+    return acc + ingredientsCache[item].price;
+  }, 0);
 
   return (
     <li className={styles.container}>
       <div className={styles.titleWrapper}>
-        <span className="text text_type_main-default">#{mockData.orderId}</span>
+        <span className="text text_type_main-default">#{number}</span>
         <span className={`text text_type_main-default ${styles.dateTitle}`}>
-          {mockData.date}
+          {createdAt}
         </span>
       </div>
-      <h3 className="text text_type_main-medium">{mockData.title}</h3>
+      <h3 className="text text_type_main-medium">{name}</h3>
       <div className={styles.ingredientsWrapper}>
         <ul className={styles.ingredientsList}>
-          {mockData.ingredients.slice(0, 5).map((item, index) => (
+          {ingredients.slice(0, 5).map((item, index) => (
             <li
               key={index}
               className={styles.ingredientListItem}
               style={{
-                zIndex: mockData.ingredients.length - index,
+                zIndex: ingredients.length - index,
                 marginLeft: index === 0 ? '0' : '-24px',
               }}
             >
-              <div className={styles.svgBackground}>
-                <span>
-                  {index < 4 ? item : `+${mockData.ingredients.length - index}`}
-                </span>
+              <div className={styles.imgBackground}>
+                {index < 4 ? (
+                  <img
+                    className={styles.img}
+                    src={ingredientsCache[item]?.image_mobile}
+                    alt={ingredientsCache[item].name}
+                    loading="lazy"
+                  />
+                ) : (
+                  <span>{`+${ingredients.length - index}`}</span>
+                )}
               </div>
             </li>
           ))}
         </ul>
         <div className={styles.priceWrapper}>
-          <span className="text text_type_digits-default">{mockData.summ}</span>
+          <span className="text text_type_digits-default">{orderSumm}</span>
           <CurrencyIcon type="primary" />
         </div>
       </div>
