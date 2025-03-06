@@ -70,4 +70,21 @@ export type LoginResponse = {
   };
 };
 
+export type Order = {
+  ingredients: string[];
+  _id: string;
+  status: 'done' | 'pending' | 'canceled';
+  number: number;
+  createdAt: string;
+  updatedAt: string;
+  name: string;
+};
+
+export type SocketResponse = {
+  orders: Order[];
+  success: boolean;
+  total: number;
+  totalToday: number;
+};
+
 export type ExtendedIngredientType = IngredientType & { uniqueId: string };
