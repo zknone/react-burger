@@ -13,6 +13,9 @@ function FeedPage() {
 
   console.log(data, error, isSocketOpen, isLoading);
 
+  const finishedOrders = data.orders.filter((item) => item.status === 'done');
+  const pendingOrders = data.orders.filter((item) => item.status === 'pending');
+
   useEffect(() => {
     dispatch(startSocket());
 
@@ -37,21 +40,17 @@ function FeedPage() {
           <div>
             <h3 className="text text_type_main-medium">Готовы</h3>
             <ul className={styles.orderTitlesList}>
-              <li className="text text_type_main-default">034533</li>
-              <li className="text text_type_main-default">034533</li>
-              <li className="text text_type_main-default">034533</li>
-              <li className="text text_type_main-default">034533</li>
-              <li className="text text_type_main-default">034533</li>
+              {finishedOrders.map((item) => (
+                <li className="text text_type_main-default">{`#${item.number}`}</li>
+              ))}
             </ul>
           </div>
           <div>
             <h3 className="text text_type_main-medium">В работе</h3>
             <ul className={styles.orderTitlesList}>
-              <li className="text text_type_main-default">034531</li>
-              <li className="text text_type_main-default">034531</li>
-              <li className="text text_type_main-default">034531</li>
-              <li className="text text_type_main-default">034531</li>
-              <li className="text text_type_main-default">034531</li>
+              {pendingOrders.map((item) => (
+                <li className="text text_type_main-default">{`#${item.number}`}</li>
+              ))}
             </ul>
           </div>
         </div>
@@ -59,13 +58,13 @@ function FeedPage() {
           <span className="text text_type_main-medium">
             Выполнено за все время:
           </span>
-          <h2 className="text text_type_digits-large">28 752</h2>
+          <h2 className="text text_type_digits-large">{data.total}</h2>
         </div>
         <div className={styles.infoWrapper}>
           <span className="text text_type_main-medium">
             Выполнено за сегодня:
           </span>
-          <h2 className="text text_type_digits-large">138</h2>
+          <h2 className="text text_type_digits-large">{data.totalToday}</h2>
         </div>
       </div>
     </div>
