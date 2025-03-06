@@ -1,35 +1,34 @@
+import { useDispatch, useSelector } from 'react-redux';
 import OrderItem from '../../components/reel-item/order-item';
 import styles from './feed.module.css';
-// import Loader from '../../components/loader/laoder';
-// import { useGetIngredientsQuery } from '../../services/api/ingredients-api/ingredients-api';
+import { RootState } from '../../store';
+import { useEffect } from 'react';
+import { startSocket, stopSocket } from '../../services/slices/socket/actions';
 
 function FeedPage() {
-  // const { isLoading, error } = useGetIngredientsQuery(undefined);
+  const dispatch = useDispatch();
+  const { data, isSocketOpen, error, isLoading } = useSelector(
+    (state: RootState) => state.socket
+  );
 
-  // if (isLoading) {
-  //   return <Loader />;
-  // }
+  console.log(data, error, isSocketOpen, isLoading);
 
-  // if (error) {
-  //   const errorMessage =
-  //     error instanceof Error
-  //       ? error.message
-  //       : 'status' in error
-  //         ? `Error ${error.status}: ${(error.data as { message?: string })?.message || 'Unknown error'}`
-  //         : 'An unknown error occurred';
+  useEffect(() => {
+    dispatch(startSocket());
 
-  //   return <div>{errorMessage}</div>;
-  // }
+    return () => {
+      dispatch(stopSocket());
+    };
+  }, [dispatch]);
 
   return (
     <div className={styles.container}>
       <div className={styles.ordersWrapper}>
         <h3 className="text text_type_main-large">Лента заказов</h3>
         <ul className={styles.orderList}>
-          <OrderItem />
-          <OrderItem />
-          <OrderItem />
-          <OrderItem />
+          {data.orders.map((item) => (
+            <OrderItem key={item._id} {...item} />
+          ))}
         </ul>
       </div>
 
