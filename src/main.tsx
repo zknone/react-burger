@@ -26,7 +26,7 @@ import ResetPasswordPage from './pages/reset-password/reset-password';
 import NotFoundPage from './pages/not-found-page/not-found-page';
 import { Modal } from './components/modal/modal';
 import { IngredientPopupDetails } from './components/burger-ingredients/ingredient-popup-details/ingredient-popup-details';
-import FeedPage from './pages/reel/feed';
+import FeedPage from './pages/feed/feed';
 
 const Root = () => {
   const dispatch = useAppDispatch();
