@@ -15,7 +15,9 @@
     flex-direction: column;
     gap: 24px;
     margin: 0;
-    padding: 0;
+    padding: 0 20px 0;
+    max-height: calc(100vh - 250px);
+    overflow: scroll;
 }
 
 .dataWrapper {
@@ -23,6 +25,8 @@
     flex-direction: column;
     gap:60px;
     margin-top: 54px;
+    max-height: calc(100vh - 150px);
+
 }
 .infoWrapper {
     display: flex;
@@ -32,15 +36,15 @@
 .ordersTitlesWrapper {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    gap: 36px;
 }
-.categoryTitle {}
+
 .orderTitlesList {
     padding: 0;
     list-style-type: none;
     display: flex;
     flex-direction: column;
-    gap: 8px
+    gap: 8px;
+    overflow: scroll;
+    max-height: 220px;
 }
-.orderTitle {}
-.infoSubTitle {}
-.infoTitle {}

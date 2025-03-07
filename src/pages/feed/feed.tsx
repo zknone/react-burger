@@ -4,14 +4,13 @@ import styles from './feed.module.css';
 import { RootState } from '../../store';
 import { useEffect } from 'react';
 import { startSocket, stopSocket } from '../../services/slices/socket/actions';
+import Loader from '../../components/loader/laoder';
 
 function FeedPage() {
   const dispatch = useDispatch();
-  const { data, isSocketOpen, error, isLoading } = useSelector(
+  const { data, isSocketOpen, isLoading } = useSelector(
     (state: RootState) => state.socket
   );
-
-  console.log(data, error, isSocketOpen, isLoading);
 
   const finishedOrders = data.orders.filter((item) => item.status === 'done');
   const pendingOrders = data.orders.filter((item) => item.status === 'pending');
@@ -23,6 +22,10 @@ function FeedPage() {
       dispatch(stopSocket());
     };
   }, [dispatch]);
+
+  if (isLoading || !isSocketOpen) {
+    return <Loader />;
+  }
 
   return (
     <div className={styles.container}>
@@ -41,7 +44,7 @@ function FeedPage() {
             <h3 className="text text_type_main-medium">Готовы</h3>
             <ul className={styles.orderTitlesList}>
               {finishedOrders.map((item) => (
-                <li className="text text_type_main-default">{`#${item.number}`}</li>
+                <li className="text text_type_digits-default">{`#${item.number}`}</li>
               ))}
             </ul>
           </div>
@@ -49,7 +52,7 @@ function FeedPage() {
             <h3 className="text text_type_main-medium">В работе</h3>
             <ul className={styles.orderTitlesList}>
               {pendingOrders.map((item) => (
-                <li className="text text_type_main-default">{`#${item.number}`}</li>
+                <li className="text text_type_digits-default">{`#${item.number}`}</li>
               ))}
             </ul>
           </div>
