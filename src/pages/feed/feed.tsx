@@ -52,7 +52,10 @@ function FeedPage() {
             <h3 className="text text_type_main-medium">В работе</h3>
             <ul className={styles.orderTitlesList}>
               {pendingOrders.map((item) => (
-                <li className="text text_type_digits-default">{`#${item.number}`}</li>
+                <li
+                  className="text text_type_digits-default"
+                  key={item.number}
+                >{`#${item.number}`}</li>
               ))}
             </ul>
           </div>
