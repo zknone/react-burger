@@ -8,7 +8,7 @@ import styles from './order-history.module.css';
 
 const OrderHistory = () => {
   const dispatch = useDispatch();
-  const { data, isLoading, isSocketOpen } = useSelector(
+  const { privateData, isLoading, isSocketOpen } = useSelector(
     (state: RootState) => state.socket
   );
 
@@ -20,12 +20,12 @@ const OrderHistory = () => {
     };
   }, [dispatch]);
 
-  if (isLoading || !isSocketOpen || data.orders) {
+  if (isLoading || !isSocketOpen || privateData.orders) {
     <Loader />;
   }
   return (
     <ul className={styles.feed}>
-      {data.orders.map((item) => (
+      {privateData.orders.map((item) => (
         <OrderItem key={item._id} {...item} />
       ))}
     </ul>
