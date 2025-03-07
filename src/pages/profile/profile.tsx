@@ -1,30 +1,11 @@
-import { FormEvent, useState } from 'react';
-import {
-  Button,
-  EmailInput,
-  Input,
-  PasswordInput,
-} from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './profile.module.css';
-import { useLogout, useProfile } from '../../utils/api';
-import { NavLink, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
-import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
-import { ErrorType } from '../../types/types';
-import { useForm } from '../../utils/useForm';
+import { useLogout } from '../../utils/api';
+import { NavLink, Route, Routes, useNavigate } from 'react-router-dom';
+import ProfileForm from '../../components/profile-form/profile-form';
+import OrderHistory from '../../components/order-history/order-history';
 
 export default function ProfilePage() {
-  const user = useSelector((state: RootState) => state.profile.user);
-  const initialForm = { name: user.name, email: user.email, password: '' };
-
-  const { form, handleChange, resetForm } = useForm(initialForm);
-
-  const [savedForm] = useState(initialForm);
-
   const { logoutUser } = useLogout();
-  const { changeProfileCredentials, error, isLoading, isSuccess } =
-    useProfile();
 
   const navigate = useNavigate();
 
@@ -32,16 +13,6 @@ export default function ProfilePage() {
     e.preventDefault();
     await logoutUser();
     navigate('/');
-  };
-
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    await changeProfileCredentials(form);
-  };
-
-  const handleReset = async () => {
-    resetForm();
-    await changeProfileCredentials(savedForm);
   };
 
   return (
@@ -77,49 +48,11 @@ export default function ProfilePage() {
           В этом разделе вы можете изменить свои персональные данные
         </p>
       </div>
-      <form className={styles.form} onSubmit={handleSubmit}>
-        <Input
-          type="text"
-          placeholder="Имя"
-          name="name"
-          value={form.name}
-          onChange={handleChange}
-          icon={'EditIcon'}
-        />
-        <EmailInput
-          placeholder="E-mail"
-          name="email"
-          value={form.email}
-          onChange={handleChange}
-          isIcon
-        />
-        <PasswordInput
-          placeholder="Пароль"
-          name="password"
-          value={form.password}
-          onChange={handleChange}
-          icon={'EditIcon'}
-        />
-        <Button
-          disabled={isLoading}
-          htmlType="reset"
-          type="secondary"
-          onClick={handleReset}
-        >
-          Отменить
-        </Button>
-        <Button disabled={isLoading} htmlType="submit">
-          Сохранить
-        </Button>
-        {isSuccess && <p>Данные успешно изменены</p>}
-        {error && 'data' in error && (
-          <p>
-            {(error as FetchBaseQueryError & { data?: ErrorType['data'] }).data
-              ?.message ||
-              'Ошибка изменения пароля, имени или почтового адреса'}
-          </p>
-        )}
-      </form>
+
+      <Routes>
+        <Route path="/" element={<ProfileForm />} />
+        <Route path="/orders" element={<OrderHistory />} />
+      </Routes>
     </div>
   );
 }

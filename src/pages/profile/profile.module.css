@@ -5,13 +5,7 @@
     gap: 60px;
 }
 
-.form {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    align-items: center;
-    margin-bottom: 56px;
-}
+
 
 .line {
     display: flex;
