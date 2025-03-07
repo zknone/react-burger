@@ -3,6 +3,7 @@ import { SocketResponse } from '../../../types/types';
 
 type Socket = {
   data: SocketResponse;
+  privateData: SocketResponse;
   isSocketOpen: boolean;
   isLoading: boolean;
   error: string | null;
@@ -12,6 +13,12 @@ const initialState: Socket = {
   isSocketOpen: false,
   isLoading: false,
   data: {
+    orders: [],
+    success: false,
+    total: 0,
+    totalToday: 0,
+  },
+  privateData: {
     orders: [],
     success: false,
     total: 0,
@@ -37,10 +44,18 @@ const socketSlice = createSlice({
       state.isSocketOpen = false;
       state.isLoading = false;
     },
-    wsGetMessage: (state, action: PayloadAction<SocketResponse>) => {
+    wsGetAllOrders: (state, action: PayloadAction<SocketResponse>) => {
       state.isLoading = false;
+
+      console.log(action);
       if (JSON.stringify(state.data) !== JSON.stringify(action.payload)) {
         state.data = action.payload;
+      }
+    },
+    wsGetAllPrivateOrders: (state, action: PayloadAction<SocketResponse>) => {
+      state.isLoading = false;
+      if (JSON.stringify(state.data) !== JSON.stringify(action.payload)) {
+        state.privateData = action.payload;
       }
     },
   },
@@ -50,6 +65,7 @@ export const {
   wsConnectionSuccess,
   wsConnectionError,
   wsConnectionClosed,
-  wsGetMessage,
+  wsGetAllOrders,
+  wsGetAllPrivateOrders,
 } = socketSlice.actions;
 export default socketSlice.reducer;

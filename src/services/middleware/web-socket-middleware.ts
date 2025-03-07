@@ -4,7 +4,8 @@ import {
   wsConnectionClosed,
   wsConnectionError,
   wsConnectionSuccess,
-  wsGetMessage,
+  wsGetAllOrders,
+  wsGetAllPrivateOrders,
 } from '../slices/socket/reducers';
 import { SocketResponse } from '../../types/types';
 
@@ -14,57 +15,96 @@ type Action<T = string, P = unknown> = {
 };
 
 const createWebSocketMiddleware = (
-  wsUrl: string
+  wsUrl: string,
+  accessToken: string | null
 ): Middleware<unknown, RootState, AppDispatch> => {
-  let socket: WebSocket | null = null;
+  let privateSocket: WebSocket | null = null;
+  let allOrdersSocket: WebSocket | null = null;
 
-  return (store) => {
-    return (next) => (action: unknown) => {
-      const { type, payload } = action as Action<string, unknown>;
+  return (store) => (next) => (action: unknown) => {
+    const { type, payload } = action as Action<string, unknown>;
 
-      const storeTyped = store as {
-        dispatch: AppDispatch;
-        getState: () => RootState;
-      };
+    const storeTyped = store as {
+      dispatch: AppDispatch;
+      getState: () => RootState;
+    };
 
-      console.log('сработало', type);
-      if (type === 'socket/start') {
-        console.log('сокет сработало');
-        socket = new WebSocket(wsUrl);
-      }
+    if (type === 'socket/start') {
+      if (!allOrdersSocket) {
+        allOrdersSocket = new WebSocket(`${wsUrl}/all`);
 
-      if (socket) {
-        socket.onopen = () => {
+        allOrdersSocket.onopen = () => {
           storeTyped.dispatch(wsConnectionSuccess());
         };
 
-        socket.onerror = (event: Event) => {
+        allOrdersSocket.onerror = (event: Event) => {
           storeTyped.dispatch(wsConnectionError(JSON.stringify(event)));
         };
 
-        socket.onmessage = (event: MessageEvent) => {
+        allOrdersSocket.onmessage = (event: MessageEvent) => {
           try {
             const data: SocketResponse = JSON.parse(event.data);
-            storeTyped.dispatch(wsGetMessage(data));
+            storeTyped.dispatch(wsGetAllOrders(data));
           } catch (error) {
-            console.error('Error parsing WebSocket message:', error);
+            console.error('Ошибка парсинга allOrdersSocket:', error);
           }
         };
 
-        socket.onclose = () => {
+        allOrdersSocket.onclose = () => {
           storeTyped.dispatch(wsConnectionClosed());
+          allOrdersSocket = null;
         };
-
-        if (type === 'WS_SEND_MESSAGE') {
-          const message = payload;
-          socket.send(JSON.stringify(message));
-        }
-
-        return next(action);
       }
 
-      return next(action);
-    };
+      if (!privateSocket && accessToken) {
+        privateSocket = new WebSocket(`${wsUrl}?token=${accessToken}`);
+
+        privateSocket.onopen = () => {
+          storeTyped.dispatch(wsConnectionSuccess());
+        };
+
+        privateSocket.onerror = (event: Event) => {
+          storeTyped.dispatch(wsConnectionError(JSON.stringify(event)));
+        };
+
+        privateSocket.onmessage = (event: MessageEvent) => {
+          try {
+            const data: SocketResponse = JSON.parse(event.data);
+            storeTyped.dispatch(wsGetAllPrivateOrders(data));
+          } catch (error) {
+            console.error('Ошибка парсинга privateSocket:', error);
+          }
+        };
+
+        privateSocket.onclose = () => {
+          storeTyped.dispatch(wsConnectionClosed());
+          privateSocket = null;
+        };
+      }
+    }
+
+    if (type === 'socket/stop') {
+      if (allOrdersSocket) {
+        allOrdersSocket.close();
+        allOrdersSocket = null;
+      }
+      if (privateSocket) {
+        privateSocket.close();
+        privateSocket = null;
+      }
+    }
+
+    if (type === 'WS_SEND_MESSAGE') {
+      const message = payload;
+      if (allOrdersSocket?.readyState === WebSocket.OPEN) {
+        allOrdersSocket.send(JSON.stringify(message));
+      }
+      if (privateSocket?.readyState === WebSocket.OPEN) {
+        privateSocket.send(JSON.stringify(message));
+      }
+    }
+
+    return next(action);
   };
 };
 

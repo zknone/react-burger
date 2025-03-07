@@ -8,9 +8,14 @@ import { authorizationApi } from '../services/api/authorization-api/authorizatio
 import { useDispatch } from 'react-redux';
 import createWebSocketMiddleware from '../services/middleware/web-socket-middleware';
 
-const WS_URL = 'wss://norma.nomoreparties.space/orders/all';
+const WS_URL = 'wss://norma.nomoreparties.space/orders';
 
-const wsMiddleware: Middleware = createWebSocketMiddleware(WS_URL);
+const accessToken =
+  localStorage.getItem('accessToken')?.slice(6).trim() || null;
+
+console.log('Токен:', accessToken);
+
+const wsMiddleware: Middleware = createWebSocketMiddleware(WS_URL, accessToken);
 
 const rootReducer = combineReducers({
   [ingredientsApi.reducerPath]: ingredientsApi.reducer,
