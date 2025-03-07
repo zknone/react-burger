@@ -1,7 +1,10 @@
 import { FC } from 'react';
 // import { useGetIngredientsQuery } from '../../services/api/ingredients-api/ingredients-api';
 import styles from './order-item.module.css';
-import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import {
+  CurrencyIcon,
+  FormattedDate,
+} from '@ya.praktikum/react-developer-burger-ui-components';
 import { IngredientType, Order } from '../../types/types';
 import { useGetIngredientsQuery } from '../../services/api/ingredients-api/ingredients-api';
 
@@ -33,7 +36,7 @@ const OrderItem: FC<Order> = ({
     {}
   );
 
-  const orderSumm = ingredients.reduce((acc, item) => {
+  const orderSum = ingredients.reduce((acc, item) => {
     return acc + ingredientsCache[item].price;
   }, 0);
 
@@ -41,9 +44,10 @@ const OrderItem: FC<Order> = ({
     <li className={styles.container}>
       <div className={styles.titleWrapper}>
         <span className="text text_type_main-default">#{number}</span>
-        <span className={`text text_type_main-default ${styles.dateTitle}`}>
-          {createdAt}
-        </span>
+        <FormattedDate
+          className="text text_type_main-default text_color_inactive"
+          date={new Date(createdAt)}
+        />
       </div>
       <h3 className="text text_type_main-medium">{name}</h3>
       <div className={styles.ingredientsWrapper}>
@@ -73,7 +77,7 @@ const OrderItem: FC<Order> = ({
           ))}
         </ul>
         <div className={styles.priceWrapper}>
-          <span className="text text_type_digits-default">{orderSumm}</span>
+          <span className="text text_type_digits-default">{orderSum}</span>
           <CurrencyIcon type="primary" />
         </div>
       </div>
