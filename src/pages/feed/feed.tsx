@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import OrderItem from '../../components/reel-item/order-item';
+import OrderItem from '../../components/order-item/order-item';
 import styles from './feed.module.css';
 import { RootState } from '../../store';
 import { useEffect } from 'react';
@@ -24,7 +24,7 @@ function FeedPage() {
     };
   }, [dispatch]);
 
-  if (isLoading || !isSocketOpen) {
+  if (isLoading && !isSocketOpen && data) {
     return <Loader />;
   }
 
