@@ -3,6 +3,8 @@
     flex-direction: column;
     max-width: 40%;
     gap: 24px;
-    max-height: calc(100vh - 360px);
+    max-height: calc(100vh - 200px);
     overflow: scroll;
+    margin: -5% 0 0;
+    padding: 0;
 }

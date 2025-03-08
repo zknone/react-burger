@@ -7,6 +7,7 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { IngredientType, Order } from '../../types/types';
 import { useGetIngredientsQuery } from '../../services/api/ingredients-api/ingredients-api';
+import { STATUSES } from '../../consts';
 
 type IngredientCacheType = {
   [key: string]: IngredientType;
@@ -36,21 +37,6 @@ const OrderItem: FC<Order> = ({
     {}
   );
 
-  const statuses = {
-    done: {
-      color: '#00CCCC',
-      title: 'Выполнен',
-    },
-    pending: {
-      color: '#F2F2F3',
-      title: 'В работе',
-    },
-    canceled: {
-      color: '#E52B1A',
-      title: 'Отменен',
-    },
-  };
-
   const orderSum = ingredients.reduce((acc, item) => {
     return acc + ingredientsCache[item].price;
   }, 0);
@@ -68,9 +54,9 @@ const OrderItem: FC<Order> = ({
       {isOrderHistoryItem && (
         <span
           className="text text_type_main-default"
-          style={{ color: statuses[status].color }}
+          style={{ color: STATUSES[status].color }}
         >
-          {statuses[status].title}
+          {STATUSES[status].title}
         </span>
       )}
       <div className={styles.ingredientsWrapper}>

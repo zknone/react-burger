@@ -5,6 +5,7 @@ import { RootState } from '../../store';
 import { useEffect } from 'react';
 import { startSocket, stopSocket } from '../../services/slices/socket/actions';
 import Loader from '../../components/loader/laoder';
+import { STATUSES } from '../../consts';
 
 function FeedPage() {
   const dispatch = useDispatch();
@@ -44,7 +45,10 @@ function FeedPage() {
             <h3 className="text text_type_main-medium">Готовы</h3>
             <ul className={styles.orderTitlesList}>
               {finishedOrders.map((item) => (
-                <li className="text text_type_digits-default">{`#${item.number}`}</li>
+                <li
+                  className="text text_type_digits-default"
+                  style={{ color: STATUSES[item.status].color }}
+                >{`#${item.number}`}</li>
               ))}
             </ul>
           </div>
