@@ -88,4 +88,15 @@ export type SocketResponse = {
   totalToday: number;
 };
 
+export type IngredientCacheType = {
+  [key: string]: IngredientType;
+};
+
+export type CountedIngredientCacheType = {
+  [key: string]: {
+    value: IngredientType;
+    count: number;
+  };
+};
+
 export type ExtendedIngredientType = IngredientType & { uniqueId: string };
