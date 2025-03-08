@@ -27,6 +27,7 @@ import NotFoundPage from './pages/not-found-page/not-found-page';
 import { Modal } from './components/modal/modal';
 import { IngredientPopupDetails } from './components/burger-ingredients/ingredient-popup-details/ingredient-popup-details';
 import FeedPage from './pages/feed/feed';
+import OrderDetails from './components/order-details/order-details';
 
 const Root = () => {
   const dispatch = useAppDispatch();
@@ -42,6 +43,7 @@ const Root = () => {
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 const LayoutWithLocation = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -61,6 +63,30 @@ const LayoutWithLocation = () => {
                 }}
               >
                 <IngredientPopupDetails />
+              </Modal>
+            }
+          />
+          <Route
+            path="/feed/:id"
+            element={
+              <Modal
+                onClose={() => {
+                  navigate(state.backgroundLocation?.pathname || '/');
+                }}
+              >
+                <OrderDetails />
+              </Modal>
+            }
+          />
+          <Route
+            path="profile/orders/:id"
+            element={
+              <Modal
+                onClose={() => {
+                  navigate(state.backgroundLocation?.pathname || '/');
+                }}
+              >
+                <OrderDetails isPrivateOrders />
               </Modal>
             }
           />
