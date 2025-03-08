@@ -26,7 +26,7 @@ const OrderHistory = () => {
   return (
     <ul className={styles.feed}>
       {privateData.orders.map((item) => (
-        <OrderItem key={item._id} {...item} />
+        <OrderItem isOrderHistoryItem key={item._id} {...item} />
       ))}
     </ul>
   );

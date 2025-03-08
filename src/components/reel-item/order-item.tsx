@@ -17,7 +17,7 @@ const OrderItem: FC<Order> = ({
   status,
   number,
   createdAt,
-  updatedAt,
+  isOrderHistoryItem = false,
   name,
 }) => {
   const { data } = useGetIngredientsQuery(undefined);
@@ -36,6 +36,21 @@ const OrderItem: FC<Order> = ({
     {}
   );
 
+  const statuses = {
+    done: {
+      color: '#00CCCC',
+      title: 'Выполнен',
+    },
+    pending: {
+      color: '#F2F2F3',
+      title: 'В работе',
+    },
+    canceled: {
+      color: '#E52B1A',
+      title: 'Отменен',
+    },
+  };
+
   const orderSum = ingredients.reduce((acc, item) => {
     return acc + ingredientsCache[item].price;
   }, 0);
@@ -50,6 +65,14 @@ const OrderItem: FC<Order> = ({
         />
       </div>
       <h3 className="text text_type_main-medium">{name}</h3>
+      {isOrderHistoryItem && (
+        <span
+          className="text text_type_main-default"
+          style={{ color: statuses[status].color }}
+        >
+          {statuses[status].title}
+        </span>
+      )}
       <div className={styles.ingredientsWrapper}>
         <ul className={styles.ingredientsList}>
           {ingredients.slice(0, 5).map((item, index) => (

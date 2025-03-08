@@ -78,6 +78,7 @@ export type Order = {
   createdAt: string;
   updatedAt: string;
   name: string;
+  isOrderHistoryItem?: boolean;
 };
 
 export type SocketResponse = {
