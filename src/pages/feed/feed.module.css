@@ -4,13 +4,13 @@
     gap: 60px;
 }
 
-.ordersWrapper {
+.orders_wrapper {
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
-.orderList {
+.order_list {
     display: flex;
     flex-direction: column;
     gap: 24px;
@@ -20,7 +20,7 @@
     overflow: scroll;
 }
 
-.dataWrapper {
+.data_wrapper {
     display: flex;
     flex-direction: column;
     gap:60px;
@@ -28,18 +28,18 @@
     max-height: calc(100vh - 150px);
 
 }
-.infoWrapper {
+.info_wrapper {
     display: flex;
     flex-direction: column;
 }
 
-.ordersTitlesWrapper {
+.orders_titles_wrapper {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 36px;
 }
 
-.orderTitlesList {
+.order_titles_list {
     padding: 0;
     list-style-type: none;
     display: flex;

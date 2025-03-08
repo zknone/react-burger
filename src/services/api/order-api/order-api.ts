@@ -31,7 +31,21 @@ export const orderApi = createApi({
         };
       },
     }),
+    getOrder: builder.query({
+      query: (id: string) => {
+        const token = localStorage.getItem('accessToken');
+
+        return {
+          url: `/orders/${id}`,
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `${token}`,
+          },
+        };
+      },
+    }),
   }),
 });
 
-export const { useSendOrderMutation } = orderApi;
+export const { useSendOrderMutation, useGetOrderQuery } = orderApi;

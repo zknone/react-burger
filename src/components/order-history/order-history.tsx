@@ -20,9 +20,10 @@ const OrderHistory = () => {
     };
   }, [dispatch]);
 
-  if (isLoading && !isSocketOpen && privateData.orders) {
-    <Loader />;
+  if (isLoading || !isSocketOpen || !privateData) {
+    return <Loader />;
   }
+
   return (
     <ul className={styles.feed}>
       {privateData.orders.map((item) => (

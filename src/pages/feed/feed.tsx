@@ -13,9 +13,6 @@ function FeedPage() {
     (state: RootState) => state.socket
   );
 
-  const finishedOrders = data.orders.filter((item) => item.status === 'done');
-  const pendingOrders = data.orders.filter((item) => item.status === 'pending');
-
   useEffect(() => {
     dispatch(startSocket());
 
@@ -24,26 +21,31 @@ function FeedPage() {
     };
   }, [dispatch]);
 
-  if (isLoading && !isSocketOpen && data) {
+  if (isLoading || !isSocketOpen || !data) {
     return <Loader />;
   }
 
+  const finishedOrders = data?.orders.filter((item) => item.status === 'done');
+  const pendingOrders = data?.orders.filter(
+    (item) => item.status === 'pending'
+  );
+
   return (
     <div className={styles.container}>
-      <div className={styles.ordersWrapper}>
+      <div className={styles.orders_wrapper}>
         <h3 className="text text_type_main-large">Лента заказов</h3>
-        <ul className={styles.orderList}>
+        <ul className={styles.order_list}>
           {data.orders.map((item) => (
             <OrderItem key={item._id} {...item} />
           ))}
         </ul>
       </div>
 
-      <div className={styles.dataWrapper}>
-        <div className={styles.ordersTitlesWrapper}>
+      <div className={styles.data_wrapper}>
+        <div className={styles.orders_titles_wrapper}>
           <div>
             <h3 className="text text_type_main-medium">Готовы</h3>
-            <ul className={styles.orderTitlesList}>
+            <ul className={styles.order_titles_list}>
               {finishedOrders.map((item) => (
                 <li
                   className="text text_type_digits-default"
@@ -54,7 +56,7 @@ function FeedPage() {
           </div>
           <div>
             <h3 className="text text_type_main-medium">В работе</h3>
-            <ul className={styles.orderTitlesList}>
+            <ul className={styles.order_titles_list}>
               {pendingOrders.map((item) => (
                 <li
                   className="text text_type_digits-default"
@@ -64,13 +66,13 @@ function FeedPage() {
             </ul>
           </div>
         </div>
-        <div className={styles.infoWrapper}>
+        <div className={styles.info_wrapper}>
           <span className="text text_type_main-medium">
             Выполнено за все время:
           </span>
           <h2 className="text text_type_digits-large">{data.total}</h2>
         </div>
-        <div className={styles.infoWrapper}>
+        <div className={styles.info_wrapper}>
           <span className="text text_type_main-medium">
             Выполнено за сегодня:
           </span>

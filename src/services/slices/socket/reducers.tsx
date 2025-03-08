@@ -2,8 +2,8 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { SocketResponse } from '../../../types/types';
 
 type Socket = {
-  data: SocketResponse;
-  privateData: SocketResponse;
+  data: SocketResponse | null;
+  privateData: SocketResponse | null;
   isSocketOpen: boolean;
   isLoading: boolean;
   error: string | null;
@@ -12,18 +12,8 @@ type Socket = {
 const initialState: Socket = {
   isSocketOpen: false,
   isLoading: false,
-  data: {
-    orders: [],
-    success: false,
-    total: 0,
-    totalToday: 0,
-  },
-  privateData: {
-    orders: [],
-    success: false,
-    total: 0,
-    totalToday: 0,
-  },
+  data: null,
+  privateData: null,
   error: null,
 };
 
@@ -50,12 +40,14 @@ const socketSlice = createSlice({
       console.log(action);
       if (JSON.stringify(state.data) !== JSON.stringify(action.payload)) {
         state.data = action.payload;
+        state.isLoading = false;
       }
     },
     wsGetAllPrivateOrders: (state, action: PayloadAction<SocketResponse>) => {
       state.isLoading = false;
       if (JSON.stringify(state.data) !== JSON.stringify(action.payload)) {
         state.privateData = action.payload;
+        state.isLoading = false;
       }
     },
   },

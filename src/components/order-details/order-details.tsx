@@ -12,10 +12,12 @@ import {
   CurrencyIcon,
   FormattedDate,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useSelector } from 'react-redux';
-import { FC } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { FC, useEffect } from 'react';
 import { RootState } from '../../store';
 import Loader from '../loader/laoder';
+import { startSocket, stopSocket } from '../../services/slices/socket/actions';
+import { useGetOrderQuery } from '../../services/api/order-api/order-api';
 
 type OrderDetailsProps = {
   isPrivateOrders?: boolean;
@@ -24,16 +26,40 @@ type OrderDetailsProps = {
 const OrderDetails: FC<OrderDetailsProps> = ({ isPrivateOrders = false }) => {
   const { data } = useGetIngredientsQuery(undefined);
   const { id } = useParams();
+  const {
+    data: orderData,
+    isLoading,
+    isError,
+  } = useGetOrderQuery(id as string);
+  const dispatch = useDispatch();
 
   const socketData = useSelector((state: RootState) => state.socket);
 
   const ingredientsData = data?.data;
   const ordersData = isPrivateOrders ? socketData.privateData : socketData.data;
 
-  const order = ordersData?.orders?.find((item: Order) => item._id === id);
+  const order = socketData.isSocketOpen
+    ? ordersData?.orders?.find((item: Order) => item._id === id)
+    : orderData;
+
+  useEffect(() => {
+    dispatch(startSocket());
+
+    return () => {
+      dispatch(stopSocket());
+    };
+  }, [dispatch]);
+
+  if (socketData.isLoading || !socketData.isSocketOpen || !data || isLoading) {
+    return <Loader />;
+  }
+
+  if (isError) {
+    return <div>Error loading order details</div>;
+  }
 
   if (!order) {
-    return <Loader />;
+    return <div>No order data found. May be this data is private</div>;
   }
 
   const ingredientsCache: CountedIngredientCacheType = ingredientsData?.reduce(
@@ -44,7 +70,7 @@ const OrderDetails: FC<OrderDetailsProps> = ({ isPrivateOrders = false }) => {
     {}
   );
 
-  order?.ingredients.map((item) => {
+  order?.ingredients.map((item: string) => {
     ingredientsCache[item].count += 1;
   });
 
@@ -67,10 +93,11 @@ const OrderDetails: FC<OrderDetailsProps> = ({ isPrivateOrders = false }) => {
       </h3>
       <span
         className={`text text_type_main-default mb-15 ${styles.status}`}
-        style={{ color: STATUSES[order.status].color }}
+        style={{ color: STATUSES[order.status as keyof typeof STATUSES].color }}
       >
-        {STATUSES[order.status].title}
+        {STATUSES[order.status as keyof typeof STATUSES].title}
       </span>
+
       <h3 className={`text text_type_main-medium mb-6 ${styles.title}`}>
         Состав:{' '}
       </h3>
