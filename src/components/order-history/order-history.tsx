@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import OrderItem from '../reel-item/order-item';
+import OrderItem from '../order-item/order-item';
 import { RootState } from '../../store';
 import Loader from '../loader/laoder';
 import { useEffect } from 'react';
@@ -20,7 +20,7 @@ const OrderHistory = () => {
     };
   }, [dispatch]);
 
-  if (isLoading || !isSocketOpen || privateData.orders) {
+  if (isLoading && !isSocketOpen && privateData.orders) {
     <Loader />;
   }
   return (
