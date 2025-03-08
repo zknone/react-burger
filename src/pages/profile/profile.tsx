@@ -20,6 +20,7 @@ export default function ProfilePage() {
       <div className={styles.wrapper}>
         <NavLink
           to="/profile"
+          end
           className={({ isActive }) =>
             isActive
               ? `${styles.link} ${styles.link__active} text text_type_main-default`
