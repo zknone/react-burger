@@ -1,0 +1,50 @@
+.container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 60px;
+}
+
+.orders_wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.order_list {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin: 0;
+    padding: 0 20px 0 0;
+    max-height: calc(100vh - 250px);
+    overflow: scroll;
+}
+
+.data_wrapper {
+    display: flex;
+    flex-direction: column;
+    gap:60px;
+    margin-top: 54px;
+    max-height: calc(100vh - 150px);
+
+}
+.info_wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.orders_titles_wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 36px;
+}
+
+.order_titles_list {
+    padding: 0;
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow: scroll;
+    max-height: 220px;
+}

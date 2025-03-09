@@ -23,9 +23,7 @@ export default function IngredientPage() {
 
   return (
     <div className={styles.container}>
-      <h2 className={`${styles.modal_title} text text_type_main-large`}>
-        {foundIngredient.name}
-      </h2>
+      <h2 className="text text_type_main-large">{foundIngredient.name}</h2>
       <IngredientPopupDetails />
     </div>
   );

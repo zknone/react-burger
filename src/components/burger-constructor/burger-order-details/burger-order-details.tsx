@@ -1,6 +1,9 @@
+import { FC } from 'react';
 import done from '../../../assets/done.png';
 
-const BurgerOrderDetails = ({ orderNumber }: { orderNumber: string }) => {
+type BurgerOrderDetailsProps = { orderNumber: string };
+
+const BurgerOrderDetails: FC<BurgerOrderDetailsProps> = ({ orderNumber }) => {
   return (
     <>
       <h2 className="text text_type_digits-large mb-8">{orderNumber}</h2>

@@ -18,13 +18,36 @@ export const orderApi = createApi({
   }),
   endpoints: (builder) => ({
     sendOrder: builder.mutation({
-      query: (order: string[]) => ({
-        url: '/orders',
-        method: 'POST',
-        body: JSON.stringify({ ingredients: order }),
-      }),
+      query: (order: string[]) => {
+        const token = localStorage.getItem('accessToken');
+        return {
+          url: '/orders',
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `${token}`,
+          },
+          body: JSON.stringify({ ingredients: order }),
+        };
+      },
+    }),
+    getOrder: builder.query({
+      query: (number?: number) => {
+        const token = localStorage.getItem('accessToken');
+        if (number === undefined) {
+          throw new Error('There is no order number');
+        }
+        return {
+          url: `/orders/${number}`,
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: token ? `${token}` : '',
+          },
+        };
+      },
     }),
   }),
 });
 
-export const { useSendOrderMutation } = orderApi;
+export const { useSendOrderMutation, useGetOrderQuery } = orderApi;
