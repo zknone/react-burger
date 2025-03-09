@@ -68,7 +68,7 @@ const LayoutWithLocation = () => {
             }
           />
           <Route
-            path="/feed/:id"
+            path="/feed/:number"
             element={
               <Modal
                 onClose={() => {
@@ -80,7 +80,7 @@ const LayoutWithLocation = () => {
             }
           />
           <Route
-            path="profile/orders/:id"
+            path="profile/orders/:number"
             element={
               <Modal
                 onClose={() => {
@@ -113,8 +113,8 @@ const LayoutWithLocation = () => {
           element={<OnlyUnAuth component={<RegisterPage />} />}
         />
         <Route path="/ingredients/:id" element={<IngredientPage />} />
-        <Route path="profile/orders/:id" element={<OrderPage />} />
-        <Route path="/feed/:id" element={<OrderPage />} />
+        <Route path="profile/orders/:number" element={<OrderPage />} />
+        <Route path="/feed/:number" element={<OrderPage />} />
         <Route
           path="/forgot-password"
           element={<OnlyUnAuth component={<RestorePasswordPage />} />}

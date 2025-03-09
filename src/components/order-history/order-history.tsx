@@ -20,8 +20,16 @@ const OrderHistory = () => {
     };
   }, [dispatch]);
 
-  if (isLoading || !isSocketOpen || !privateData) {
-    return <Loader />;
+  if (isLoading || !isSocketOpen) {
+    return (
+      <div className="ml-30">
+        <Loader />
+      </div>
+    );
+  }
+
+  if (!privateData?.orders) {
+    return <div>No orders found.</div>;
   }
 
   return (

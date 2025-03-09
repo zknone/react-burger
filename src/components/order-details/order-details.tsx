@@ -25,12 +25,16 @@ type OrderDetailsProps = {
 
 const OrderDetails: FC<OrderDetailsProps> = ({ isPrivateOrders = false }) => {
   const { data } = useGetIngredientsQuery(undefined);
-  const { id } = useParams();
+  const params = useParams();
+  const { number } = params;
+
+  console.log(number);
+  const parsedNumber = number ? Number.parseInt(number) : undefined;
   const {
     data: orderData,
     isLoading,
     isError,
-  } = useGetOrderQuery(id as string);
+  } = useGetOrderQuery(parsedNumber);
   const dispatch = useDispatch();
 
   const socketData = useSelector((state: RootState) => state.socket);
@@ -39,7 +43,7 @@ const OrderDetails: FC<OrderDetailsProps> = ({ isPrivateOrders = false }) => {
   const ordersData = isPrivateOrders ? socketData.privateData : socketData.data;
 
   const order = socketData.isSocketOpen
-    ? ordersData?.orders?.find((item: Order) => item._id === id)
+    ? ordersData?.orders?.find((item: Order) => item.number === parsedNumber)
     : orderData;
 
   useEffect(() => {

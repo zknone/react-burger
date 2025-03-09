@@ -12,7 +12,6 @@ import { Link, useLocation } from 'react-router-dom';
 const LAST_INDEX_TO_SHOW = 4;
 
 const OrderItem: FC<Order> = ({
-  _id,
   ingredients,
   status,
   number,
@@ -44,7 +43,7 @@ const OrderItem: FC<Order> = ({
   return (
     <li className={styles.container}>
       <Link
-        to={_id}
+        to={number.toString()}
         state={{ backgroundLocation: location }}
         className={styles.link}
       >

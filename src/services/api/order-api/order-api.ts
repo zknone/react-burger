@@ -32,15 +32,17 @@ export const orderApi = createApi({
       },
     }),
     getOrder: builder.query({
-      query: (id: string) => {
+      query: (number?: number) => {
         const token = localStorage.getItem('accessToken');
-
+        if (number === undefined) {
+          throw new Error('There is no order number');
+        }
         return {
-          url: `/orders/${id}`,
+          url: `/orders/${number}`,
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `${token}`,
+            Authorization: token ? `${token}` : '',
           },
         };
       },
