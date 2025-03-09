@@ -4,14 +4,16 @@ import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import styles from './ingredient-item.module.css';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
-import { useMemo } from 'react';
+import { FC, useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 type QuantityType = {
   [x: string]: number;
 };
 
-const IngredientItem = ({ ingredient }: { ingredient: IngredientType }) => {
+type IngredientItemProps = { ingredient: IngredientType };
+
+const IngredientItem: FC<IngredientItemProps> = ({ ingredient }) => {
   const { bun, selectedIngredients } = useSelector(
     (state: RootState) => state.burgerConstructor
   );
