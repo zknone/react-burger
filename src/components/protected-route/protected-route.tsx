@@ -1,8 +1,7 @@
-import { useSelector } from 'react-redux';
 import { Navigate, useLocation } from 'react-router-dom';
-import { RootState } from '../../store';
 import React, { FC } from 'react';
 import Loader from '../loader/laoder';
+import { useTypedSelector } from '../../utils/typed-hooks';
 
 type ProtectedRouteProps = {
   onlyUnAuth?: boolean;
@@ -13,10 +12,10 @@ const ProtectedRoute: FC<ProtectedRouteProps> = ({
   onlyUnAuth = false,
   component,
 }) => {
-  const isAuthChecked = useSelector(
-    (state: RootState) => state.profile.isAuthChecked
+  const isAuthChecked = useTypedSelector(
+    (state) => state.profile.isAuthChecked
   );
-  const user = useSelector((state: RootState) => state.profile.user);
+  const user = useTypedSelector((state) => state.profile.user);
 
   const location = useLocation();
 

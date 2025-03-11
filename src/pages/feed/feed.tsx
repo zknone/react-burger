@@ -1,16 +1,16 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import OrderItem from '../../components/order-item/order-item';
 import styles from './feed.module.css';
-import { RootState } from '../../store';
 import { useEffect } from 'react';
 import { startSocket, stopSocket } from '../../services/slices/socket/actions';
 import Loader from '../../components/loader/laoder';
 import { STATUSES } from '../../consts';
+import { useTypedSelector } from '../../utils/typed-hooks';
 
 function FeedPage() {
   const dispatch = useDispatch();
-  const { data, isSocketOpen, isLoading } = useSelector(
-    (state: RootState) => state.socket
+  const { data, isSocketOpen, isLoading } = useTypedSelector(
+    (state) => state.socket
   );
 
   useEffect(() => {
@@ -33,7 +33,7 @@ function FeedPage() {
   return (
     <div className={styles.container}>
       <div className={styles.orders_wrapper}>
-        <h3 className="text text_type_main-large">Лента заказов</h3>
+        <h2 className="text text_type_main-large">Лента заказов</h2>
         <ul className={styles.order_list}>
           {data.orders.map((item) => (
             <OrderItem key={item._id} {...item} />
@@ -48,6 +48,7 @@ function FeedPage() {
             <ul className={styles.order_titles_list}>
               {finishedOrders.map((item) => (
                 <li
+                  key={item._id}
                   className="text text_type_digits-default"
                   style={{ color: STATUSES[item.status].color }}
                 >{`#${item.number}`}</li>
@@ -70,7 +71,7 @@ function FeedPage() {
           <span className="text text_type_main-medium">
             Выполнено за все время:
           </span>
-          <h2 className="text text_type_digits-large">{data.total}</h2>
+          <h3 className="text text_type_digits-large">{data.total}</h3>
         </div>
         <div className={styles.info_wrapper}>
           <span className="text text_type_main-medium">

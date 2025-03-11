@@ -13,9 +13,7 @@ const WS_URL = 'wss://norma.nomoreparties.space/orders';
 const accessToken =
   localStorage.getItem('accessToken')?.slice(6).trim() || null;
 
-console.log('Токен:', accessToken);
-
-const wsMiddleware: Middleware = createWebSocketMiddleware(WS_URL, accessToken);
+const wsMiddleware: Middleware = createWebSocketMiddleware(WS_URL);
 
 const rootReducer = combineReducers({
   [ingredientsApi.reducerPath]: ingredientsApi.reducer,

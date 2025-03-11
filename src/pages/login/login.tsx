@@ -8,7 +8,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useLogin } from '../../utils/api';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { ErrorType } from '../../types/types';
-import { useForm } from '../../utils/useForm';
+import { useForm } from '../../utils/use-form';
 
 export default function LoginPage() {
   const navigate = useNavigate();

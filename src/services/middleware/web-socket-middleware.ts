@@ -8,6 +8,7 @@ import {
   wsGetAllPrivateOrders,
 } from '../slices/socket/reducers';
 import { SocketResponse } from '../../types/types';
+import { checkUserAuth } from '../auth/check-user-auth';
 
 type Action<T = string, P = unknown> = {
   type: T;
@@ -15,8 +16,7 @@ type Action<T = string, P = unknown> = {
 };
 
 const createWebSocketMiddleware = (
-  wsUrl: string,
-  accessToken: string | null
+  wsUrl: string
 ): Middleware<unknown, RootState, AppDispatch> => {
   let privateSocket: WebSocket | null = null;
   let allOrdersSocket: WebSocket | null = null;
@@ -31,7 +31,8 @@ const createWebSocketMiddleware = (
 
     if (type === 'socket/start') {
       if (!allOrdersSocket) {
-        allOrdersSocket = new WebSocket(`${wsUrl}/all`);
+        const currentSocket = new WebSocket(`${wsUrl}/all`);
+        allOrdersSocket = currentSocket;
 
         allOrdersSocket.onopen = () => {
           storeTyped.dispatch(wsConnectionSuccess());
@@ -51,35 +52,61 @@ const createWebSocketMiddleware = (
         };
 
         allOrdersSocket.onclose = () => {
-          storeTyped.dispatch(wsConnectionClosed());
-          allOrdersSocket = null;
+          if (allOrdersSocket === currentSocket) {
+            storeTyped.dispatch(wsConnectionClosed());
+            allOrdersSocket = null;
+          }
         };
       }
 
-      if (!privateSocket && accessToken) {
-        privateSocket = new WebSocket(`${wsUrl}?token=${accessToken}`);
-
-        privateSocket.onopen = () => {
-          storeTyped.dispatch(wsConnectionSuccess());
+      if (!privateSocket) {
+        const parseToken = () => {
+          return localStorage.getItem('accessToken')?.slice(6).trim() || null;
         };
 
-        privateSocket.onerror = (event: Event) => {
-          storeTyped.dispatch(wsConnectionError(JSON.stringify(event)));
+        let accessToken = localStorage.getItem('accessToken');
+
+        const initializePrivateSocket = (token: string | null) => {
+          if (!token) return;
+
+          privateSocket = new WebSocket(`${wsUrl}?token=${parseToken()}`);
+
+          privateSocket.onopen = () => {
+            storeTyped.dispatch(wsConnectionSuccess());
+          };
+
+          privateSocket.onerror = (event: Event) => {
+            storeTyped.dispatch(wsConnectionError(JSON.stringify(event)));
+          };
+
+          privateSocket.onmessage = (event: MessageEvent) => {
+            try {
+              const data: SocketResponse = JSON.parse(event.data);
+              storeTyped.dispatch(wsGetAllPrivateOrders(data));
+            } catch (error) {
+              console.error('Ошибка парсинга privateSocket:', error);
+            }
+          };
+
+          privateSocket.onclose = () => {
+            storeTyped.dispatch(wsConnectionClosed());
+            privateSocket = null;
+          };
         };
 
-        privateSocket.onmessage = (event: MessageEvent) => {
-          try {
-            const data: SocketResponse = JSON.parse(event.data);
-            storeTyped.dispatch(wsGetAllPrivateOrders(data));
-          } catch (error) {
-            console.error('Ошибка парсинга privateSocket:', error);
-          }
-        };
-
-        privateSocket.onclose = () => {
-          storeTyped.dispatch(wsConnectionClosed());
-          privateSocket = null;
-        };
+        if (!accessToken) {
+          storeTyped
+            .dispatch(checkUserAuth())
+            .then(() => {
+              accessToken = localStorage.getItem('accessToken');
+              initializePrivateSocket(accessToken);
+            })
+            .catch((error) => {
+              console.error('Ошибка обновления токена:', error);
+            });
+        } else {
+          initializePrivateSocket(accessToken);
+        }
       }
     }
 

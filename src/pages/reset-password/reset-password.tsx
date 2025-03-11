@@ -9,14 +9,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useResetPassword } from '../../utils/api';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { ErrorType } from '../../types/types';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
-import { useForm } from '../../utils/useForm';
+import { useForm } from '../../utils/use-form';
+import { useTypedSelector } from '../../utils/typed-hooks';
 
 export default function ResetPasswordPage() {
   const { form, handleChange } = useForm({ password: '', token: '' });
-  const canResetPassword = useSelector(
-    (state: RootState) => state.profile.canResetPassword
+  const canResetPassword = useTypedSelector(
+    (state) => state.profile.canResetPassword
   );
 
   const { resetPass, error, isLoading } = useResetPassword();

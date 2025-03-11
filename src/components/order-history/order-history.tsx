@@ -1,15 +1,15 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import OrderItem from '../order-item/order-item';
-import { RootState } from '../../store';
 import Loader from '../loader/laoder';
 import { useEffect } from 'react';
 import { startSocket, stopSocket } from '../../services/slices/socket/actions';
 import styles from './order-history.module.css';
+import { useTypedSelector } from '../../utils/typed-hooks';
 
 const OrderHistory = () => {
   const dispatch = useDispatch();
-  const { privateData, isLoading, isSocketOpen } = useSelector(
-    (state: RootState) => state.socket
+  const { privateData, isLoading, isSocketOpen } = useTypedSelector(
+    (state) => state.socket
   );
 
   useEffect(() => {

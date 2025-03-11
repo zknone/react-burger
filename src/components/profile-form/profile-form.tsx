@@ -5,16 +5,15 @@ import {
   PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useProfile } from '../../utils/api';
-import { useForm } from '../../utils/useForm';
-import { useSelector } from 'react-redux';
+import { useForm } from '../../utils/use-form';
 import { FormEvent, useState } from 'react';
-import { RootState } from '../../store';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { ErrorType } from '../../types/types';
 import styles from './profile-form.module.css';
+import { useTypedSelector } from '../../utils/typed-hooks';
 
 const ProfileForm = () => {
-  const user = useSelector((state: RootState) => state.profile.user);
+  const user = useTypedSelector((state) => state.profile.user);
   const initialForm = { name: user.name, email: user.email, password: '' };
   const { form, handleChange, resetForm } = useForm(initialForm);
 
