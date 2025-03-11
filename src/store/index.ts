@@ -10,9 +10,6 @@ import createWebSocketMiddleware from '../services/middleware/web-socket-middlew
 
 const WS_URL = 'wss://norma.nomoreparties.space/orders';
 
-const accessToken =
-  localStorage.getItem('accessToken')?.slice(6).trim() || null;
-
 const wsMiddleware: Middleware = createWebSocketMiddleware(WS_URL);
 
 const rootReducer = combineReducers({
