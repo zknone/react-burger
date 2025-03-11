@@ -12,40 +12,39 @@ import {
   CurrencyIcon,
   FormattedDate,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { FC, useEffect } from 'react';
-import { RootState } from '../../store';
 import Loader from '../loader/laoder';
 import { startSocket, stopSocket } from '../../services/slices/socket/actions';
 import { useGetOrderQuery } from '../../services/api/order-api/order-api';
+import { useTypedSelector } from '../../utils/typed-hooks';
 
 type OrderDetailsProps = {
   isPrivateOrders?: boolean;
 };
 
 const OrderDetails: FC<OrderDetailsProps> = ({ isPrivateOrders = false }) => {
-  const { data } = useGetIngredientsQuery(undefined);
+  const dispatch = useDispatch();
   const params = useParams();
   const { number } = params;
-
-  console.log(number);
   const parsedNumber = number ? Number.parseInt(number) : undefined;
+  const { data: ingredientsResponse } = useGetIngredientsQuery(undefined);
   const {
     data: orderData,
     isLoading,
     isError,
   } = useGetOrderQuery(parsedNumber);
-  const dispatch = useDispatch();
+  const exactBurgerOrder = orderData?.orders?.[0];
 
-  const socketData = useSelector((state: RootState) => state.socket);
+  const socketData = useTypedSelector((state) => state.socket);
 
-  const ingredientsData = data?.data;
+  const ingredientsData = ingredientsResponse?.data;
+
   const ordersData = isPrivateOrders ? socketData.privateData : socketData.data;
 
-  const order = socketData.isSocketOpen
-    ? ordersData?.orders?.find((item: Order) => item.number === parsedNumber)
-    : orderData;
-
+  const order =
+    ordersData?.orders?.find((item: Order) => item.number === parsedNumber) ||
+    exactBurgerOrder;
   useEffect(() => {
     dispatch(startSocket());
 
@@ -54,7 +53,12 @@ const OrderDetails: FC<OrderDetailsProps> = ({ isPrivateOrders = false }) => {
     };
   }, [dispatch]);
 
-  if (socketData.isLoading || !socketData.isSocketOpen || !data || isLoading) {
+  if (
+    socketData.isLoading ||
+    !socketData.isSocketOpen ||
+    !ingredientsResponse ||
+    isLoading
+  ) {
     return <Loader />;
   }
 
