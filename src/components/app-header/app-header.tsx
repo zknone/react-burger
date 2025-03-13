@@ -9,34 +9,34 @@ import { NavLink } from 'react-router-dom';
 
 const AppHeader = () => {
   return (
-    <header className={`${styles.menuWrapper} pt-4 pb-4`}>
-      <div className={styles.menuBackground}></div>
+    <header className={`${styles.menu_wrapper} pt-4 pb-4`}>
+      <div className={styles.menu_background}></div>
       <nav>
         <ul className={styles.menu}>
-          <li className={styles.menuItem}>
+          <li className={styles.menu_item}>
             <NavLink
-              className={`${styles.menuButton} pl-5 pr-5 pt-4 pb-4 text text_type_main-default`}
+              className={`${styles.menu_button} pl-5 pr-5 pt-4 pb-4 text text_type_main-default`}
               to="/"
             >
               {({ isActive }) => (
                 <>
                   <BurgerIcon type={isActive ? 'primary' : 'secondary'} />
-                  <span className={isActive ? styles.menuButtonActive : ''}>
+                  <span className={isActive ? styles.menu_button_active : ''}>
                     Constructor
                   </span>
                 </>
               )}
             </NavLink>
           </li>
-          <li className={styles.menuItem}>
+          <li className={styles.menu_item}>
             <NavLink
-              className={`${styles.menuButton} pl-5 pr-5 pt-4 pb-4 text text_type_main-default`}
+              className={`${styles.menu_button} pl-5 pr-5 pt-4 pb-4 text text_type_main-default`}
               to="/feed"
             >
               {({ isActive }) => (
                 <>
                   <ListIcon type={isActive ? 'primary' : 'secondary'} />
-                  <span className={isActive ? styles.menuButtonActive : ''}>
+                  <span className={isActive ? styles.menu_button_active : ''}>
                     Order feed
                   </span>
                 </>
@@ -47,13 +47,13 @@ const AppHeader = () => {
       </nav>
       <Logo className={styles.logo} />
       <NavLink
-        className={`${styles.menuButton} pl-5 pr-5 pt-4 pb-4 text text_type_main-default`}
+        className={`${styles.menu_button} pl-5 pr-5 pt-4 pb-4 text text_type_main-default`}
         to="/profile"
       >
         {({ isActive }) => (
           <>
             <ProfileIcon type={isActive ? 'primary' : 'secondary'} />
-            <span className={isActive ? styles.menuButtonActive : ''}>
+            <span className={isActive ? styles.menu_button_active : ''}>
               My Account
             </span>
           </>

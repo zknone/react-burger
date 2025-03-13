@@ -7,8 +7,7 @@ import styles from './burger-constructor.module.css';
 import { Modal } from '../modal/modal';
 import BurgerOrderDetails from './burger-order-details/burger-order-details';
 import { useModal } from '../../hooks/use-modal';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../store';
+import { useDispatch } from 'react-redux';
 import { useDrop } from 'react-dnd';
 import { IngredientType } from '../../types/types';
 import {
@@ -23,13 +22,14 @@ import BurgerConstructorItem from './burger-constructor-item/burger-constructor-
 import BurgerEmptyItem from './burger-empty-item/burger-empty-item';
 import { useSendOrderMutation } from '../../services/api/order-api/order-api';
 import Loader from '../loader/laoder';
+import { useTypedSelector } from '../../utils/typed-hooks';
 
 const BurgerConstructor = () => {
   const dispatch = useDispatch();
   const [sendOrder, { data, isLoading }] = useSendOrderMutation();
   const { isModalOpen, openModal, closeModal } = useModal();
-  const { bun, selectedIngredients } = useSelector(
-    (state: RootState) => state.burgerConstructor
+  const { bun, selectedIngredients } = useTypedSelector(
+    (state) => state.burgerConstructor
   );
   const handleRemove = (index: number) => {
     dispatch(removeIngredient(index));

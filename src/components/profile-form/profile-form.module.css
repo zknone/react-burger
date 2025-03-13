@@ -1,6 +1,7 @@
-.container {
+.form {
     display: flex;
     flex-direction: column;
+    gap: 24px;
     align-items: center;
-    padding-top: 120px;
+    margin-bottom: 56px;
 }

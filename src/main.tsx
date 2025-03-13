@@ -26,6 +26,9 @@ import ResetPasswordPage from './pages/reset-password/reset-password';
 import NotFoundPage from './pages/not-found-page/not-found-page';
 import { Modal } from './components/modal/modal';
 import { IngredientPopupDetails } from './components/burger-ingredients/ingredient-popup-details/ingredient-popup-details';
+import FeedPage from './pages/feed/feed';
+import OrderDetails from './components/order-details/order-details';
+import OrderPage from './pages/order/order';
 
 const Root = () => {
   const dispatch = useAppDispatch();
@@ -41,6 +44,7 @@ const Root = () => {
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 const LayoutWithLocation = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -63,6 +67,30 @@ const LayoutWithLocation = () => {
               </Modal>
             }
           />
+          <Route
+            path="/feed/:number"
+            element={
+              <Modal
+                onClose={() => {
+                  navigate(state.backgroundLocation?.pathname || '/');
+                }}
+              >
+                <OrderDetails />
+              </Modal>
+            }
+          />
+          <Route
+            path="profile/orders/:number"
+            element={
+              <Modal
+                onClose={() => {
+                  navigate(state.backgroundLocation?.pathname || '/');
+                }}
+              >
+                <OrderDetails isPrivateOrders />
+              </Modal>
+            }
+          />
         </Routes>
       )}
 
@@ -72,6 +100,8 @@ const LayoutWithLocation = () => {
           path="/login"
           element={<OnlyUnAuth component={<LoginPage />} />}
         />
+
+        <Route path="/feed" element={<FeedPage />} />
         <Route
           path="/profile"
           element={<OnlyAuth component={<ProfilePage />} />}
@@ -83,6 +113,8 @@ const LayoutWithLocation = () => {
           element={<OnlyUnAuth component={<RegisterPage />} />}
         />
         <Route path="/ingredients/:id" element={<IngredientPage />} />
+        <Route path="profile/orders/:number" element={<OrderPage />} />
+        <Route path="/feed/:number" element={<OrderPage />} />
         <Route
           path="/forgot-password"
           element={<OnlyUnAuth component={<RestorePasswordPage />} />}
