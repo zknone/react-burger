@@ -1,5 +1,5 @@
 import { useDrag, useDrop } from 'react-dnd';
-import { IngredientType } from '../../../types/types';
+import { ExtendedIngredientType } from '../../../types/types';
 import styles from './burger-constructor-item.module.css';
 import {
   ConstructorElement,
@@ -8,7 +8,7 @@ import {
 import { FC } from 'react';
 
 type BurgerConstructorItemProps = {
-  ingredient: IngredientType;
+  ingredient: ExtendedIngredientType;
   index: number;
   handleClose: (index: number) => void;
   moveIngredient: (dragIndex: number, hoverIndex: number) => void;
