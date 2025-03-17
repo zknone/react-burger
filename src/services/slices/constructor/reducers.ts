@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ExtendedIngredientType, IngredientType } from '../../../types/types';
 import { v4 as uuid4 } from 'uuid';
 
-const initialState: {
+export const initialState: {
   bun: IngredientType | null;
   selectedIngredients: ExtendedIngredientType[];
 } = {
@@ -54,6 +54,12 @@ const burgerConstructorSlice = createSlice({
   },
 });
 
-export const { addIngredient, removeIngredient } =
-  burgerConstructorSlice.actions;
+export const {
+  addIngredient,
+  removeIngredient,
+  addBun,
+  moveIngredient,
+  emptyIngredients,
+} = burgerConstructorSlice.actions;
 export default burgerConstructorSlice.reducer;
+export { burgerConstructorSlice };
