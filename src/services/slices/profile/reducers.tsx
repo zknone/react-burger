@@ -7,7 +7,7 @@ type Profile = {
   canResetPassword: boolean;
 };
 
-const initialState: Profile = {
+export const initialState: Profile = {
   user: {
     name: '',
     email: '',
@@ -39,4 +39,5 @@ const profileSlice = createSlice({
 
 export const { setProfile, setIsAuthChecked, resetProfile, setCanReset } =
   profileSlice.actions;
+export { profileSlice };
 export default profileSlice.reducer;
