@@ -9,7 +9,7 @@ type Socket = {
   error: string | null;
 };
 
-const initialState: Socket = {
+export const initialState: Socket = {
   isSocketOpen: false,
   isLoading: false,
   data: null,
@@ -36,8 +36,6 @@ const socketSlice = createSlice({
     },
     wsGetAllOrders: (state, action: PayloadAction<SocketResponse>) => {
       state.isLoading = false;
-
-      console.log(action);
       if (JSON.stringify(state.data) !== JSON.stringify(action.payload)) {
         state.data = action.payload;
         state.isLoading = false;
@@ -61,3 +59,5 @@ export const {
   wsGetAllPrivateOrders,
 } = socketSlice.actions;
 export default socketSlice.reducer;
+
+export { socketSlice };
