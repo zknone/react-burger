@@ -29,6 +29,7 @@
     "uuid": "^11.0.5"
   },
   "devDependencies": {
+    "@4tw/cypress-drag-drop": "^2.3.0",
     "@cypress/react": "^9.0.0",
     "@cypress/vite-dev-server": "^6.0.2",
     "@testing-library/react": "^16.2.0",
