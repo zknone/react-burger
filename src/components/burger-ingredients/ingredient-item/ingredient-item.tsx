@@ -5,6 +5,7 @@ import styles from './ingredient-item.module.css';
 import { FC, useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTypedSelector } from '../../../utils/typed-hooks';
+import { v4 as uuid4 } from 'uuid';
 
 type QuantityType = {
   [x: string]: number;
@@ -38,7 +39,7 @@ const IngredientItem: FC<IngredientItemProps> = ({ ingredient }) => {
 
   const [{ isDragging }, dragRef] = useDrag({
     type: 'ingredient',
-    item: ingredient,
+    item: { uniqueId: uuid4(), ...ingredient },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
@@ -48,6 +49,7 @@ const IngredientItem: FC<IngredientItemProps> = ({ ingredient }) => {
     <li
       className={styles.ingredient_item}
       ref={dragRef}
+      data-test-id={`ingredient-${ingredient._id}`}
       style={{ opacity: isDragging ? 0.5 : 1 }}
     >
       <Link
