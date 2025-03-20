@@ -4,8 +4,6 @@ import { FC, ReactNode, useEffect, useRef } from 'react';
 import ModalOverlay from './modal-overlay/modal-overlay';
 import ReactDOM from 'react-dom';
 
-const modalRoot = document.getElementById('modal-root');
-
 type ModalProps = {
   title?: string;
   size?: 'M' | 'L';
@@ -14,6 +12,7 @@ type ModalProps = {
 };
 
 const Modal: FC<ModalProps> = ({ title, size = 'M', children, onClose }) => {
+  const modalRoot = document.getElementById('modal-root');
   const paddingSize = size === 'M' ? 10 : 30;
   const modalRef = useRef<HTMLDivElement | null>(null);
 
@@ -42,6 +41,7 @@ const Modal: FC<ModalProps> = ({ title, size = 'M', children, onClose }) => {
   const modalContent = (
     <ModalOverlay>
       <div
+        data-test-id="burger-modal"
         ref={modalRef}
         style={{ width: size === 'M' ? '640px' : '480px' }}
         className={`${styles.modal_container} pt-${paddingSize} pb-${paddingSize} pr-${paddingSize} pl-${paddingSize}`}
