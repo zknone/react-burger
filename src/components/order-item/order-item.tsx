@@ -36,6 +36,10 @@ const OrderItem: FC<Order> = ({
     {}
   );
 
+  if (!ingredientsCache || Object.keys(ingredientsCache).length === 0) {
+    return <p>Проверка кэша...</p>;
+  }
+
   const orderSum = ingredients.reduce((acc, item) => {
     const ingredient = ingredientsCache[item];
 
