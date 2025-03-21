@@ -37,7 +37,14 @@ const OrderItem: FC<Order> = ({
   );
 
   const orderSum = ingredients.reduce((acc, item) => {
-    return acc + (ingredientsCache[item]?.price ?? 0);
+    const ingredient = ingredientsCache[item];
+
+    if (!ingredient) {
+      console.warn(`Нет данных в кэше для ингредиента: ${item}`);
+      return acc;
+    }
+
+    return acc + (ingredient.price ?? 0);
   }, 0);
 
   return (
