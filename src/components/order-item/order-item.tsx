@@ -37,7 +37,7 @@ const OrderItem: FC<Order> = ({
   );
 
   const orderSum = ingredients.reduce((acc, item) => {
-    return acc + ingredientsCache[item].price;
+    return acc + (ingredientsCache[item]?.price ?? 0);
   }, 0);
 
   return (
