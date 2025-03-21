@@ -102,7 +102,7 @@ describe('constructor slice and state', () => {
   });
 
   it('should add bun', () => {
-    const mockBun: IngredientType = {
+    const mockBun: ExtendedIngredientType = {
       _id: 'bun_1',
       name: 'Sesame Bun',
       type: 'bun',
@@ -115,6 +115,7 @@ describe('constructor slice and state', () => {
       image_mobile: 'https://example.com/images/sesame_bun_mobile.png',
       image_large: 'https://example.com/images/sesame_bun_large.png',
       __v: 0,
+      uniqueId: '123',
     };
 
     expect(

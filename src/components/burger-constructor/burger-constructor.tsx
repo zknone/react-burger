@@ -150,7 +150,10 @@ const BurgerConstructor = () => {
           <Button
             data-test-id="burger-send-button"
             htmlType="button"
-            onClick={() => handleSendOrder(order)}
+            onClick={() => {
+              if (order !== undefined)
+                handleSendOrder(order.filter(Boolean) as string[]);
+            }}
             disabled={isLoading}
           >
             {isLoading ? 'Оформляем заказ' : 'Оформить заказ'}

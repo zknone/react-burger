@@ -9,7 +9,8 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "test": "jest",
-    "cypress:open": "./node_modules/.bin/cypress open"
+    "cypress:open": "./node_modules/.bin/cypress open",
+    "deploy-script": "npm run build && scp -r ./build/* zakon-ivan@158.160.180.122:/home/praktikum/stellar-frontend"
   },
   "dependencies": {
     "@babel/runtime": "^7.25.4",
