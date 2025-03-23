@@ -126,6 +126,7 @@ const BurgerIngredients: FC<BurgerIngredientsProps> = ({ extraClass }) => {
         </Tab>
       </div>
       <div
+        data-test-id="burger-ingredients"
         className={`${styles.ingredients_container} pt-6 pb-6 pr-10 custom-scroll`}
         ref={scrollRef}
       >
