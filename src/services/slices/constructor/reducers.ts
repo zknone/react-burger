@@ -1,8 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ExtendedIngredientType, IngredientType } from '../../../types/types';
-import { v4 as uuid4 } from 'uuid';
 
-const initialState: {
+export const initialState: {
   bun: IngredientType | null;
   selectedIngredients: ExtendedIngredientType[];
 } = {
@@ -14,13 +13,8 @@ const burgerConstructorSlice = createSlice({
   name: 'burgerConstructor',
   initialState,
   reducers: {
-    addIngredient: {
-      reducer: (state, action: PayloadAction<ExtendedIngredientType>) => {
-        state.selectedIngredients.push(action.payload);
-      },
-      prepare: (ingredient: IngredientType) => {
-        return { payload: { ...ingredient, uniqueId: uuid4() } };
-      },
+    addIngredient: (state, action: PayloadAction<ExtendedIngredientType>) => {
+      state.selectedIngredients.push(action.payload);
     },
     removeIngredient: (state, action: PayloadAction<number>) => {
       const index = action.payload;
@@ -31,7 +25,7 @@ const burgerConstructorSlice = createSlice({
         selectedIngredients: newIngredients,
       };
     },
-    addBun: (state, action: PayloadAction<IngredientType>) => {
+    addBun: (state, action: PayloadAction<ExtendedIngredientType>) => {
       state.bun = action.payload;
     },
     moveIngredient: (
@@ -54,6 +48,12 @@ const burgerConstructorSlice = createSlice({
   },
 });
 
-export const { addIngredient, removeIngredient } =
-  burgerConstructorSlice.actions;
+export const {
+  addIngredient,
+  removeIngredient,
+  addBun,
+  moveIngredient,
+  emptyIngredients,
+} = burgerConstructorSlice.actions;
 export default burgerConstructorSlice.reducer;
+export { burgerConstructorSlice };

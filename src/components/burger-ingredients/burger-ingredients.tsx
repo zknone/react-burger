@@ -13,7 +13,7 @@ type BurgerIngredientsProps = { extraClass?: string };
 
 const BurgerIngredients: FC<BurgerIngredientsProps> = ({ extraClass }) => {
   const { data } = useGetIngredientsQuery(undefined);
-  const ingredients: IngredientType[] = data?.data;
+  const ingredients: IngredientType[] = data?.data ?? [];
 
   const [activeTitle, setTitleActive] = useState<IngredientVariantsType>('bun');
   const [positions, setPositions] = useState({
@@ -126,6 +126,7 @@ const BurgerIngredients: FC<BurgerIngredientsProps> = ({ extraClass }) => {
         </Tab>
       </div>
       <div
+        data-test-id="burger-ingredients"
         className={`${styles.ingredients_container} pt-6 pb-6 pr-10 custom-scroll`}
         ref={scrollRef}
       >

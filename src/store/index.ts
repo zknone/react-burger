@@ -34,6 +34,16 @@ export const store = configureStore({
   devTools: process.env.NODE_ENV !== 'production',
 });
 
+declare global {
+  interface Window {
+    store: typeof store;
+  }
+}
+
+if (window.Cypress) {
+  window.store = store;
+}
+
 export type AppDispatch = typeof store.dispatch;
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 export type RootState = ReturnType<typeof rootReducer>;

@@ -6,9 +6,24 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DndProvider } from 'react-dnd';
 import styles from './app.module.css';
 import Loader from '../components/loader/laoder';
+import { useEffect } from 'react';
+import { store } from '../store';
 
 function App() {
-  const { isLoading, error } = useGetIngredientsQuery(undefined);
+  const { data, isLoading, error } = useGetIngredientsQuery(undefined);
+
+  useEffect(() => {
+    if (window.Cypress) {
+      window.store = store;
+    }
+  }, []);
+
+  useEffect(() => {
+    console.log('[🍔 CYPRESS DEBUG] useGetIngredientsQuery triggered');
+    if (data) {
+      console.log('[🍔 CYPRESS DEBUG] Ingredients:', data);
+    }
+  }, [data]);
 
   if (isLoading) {
     return <Loader />;

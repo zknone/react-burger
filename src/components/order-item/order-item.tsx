@@ -36,8 +36,19 @@ const OrderItem: FC<Order> = ({
     {}
   );
 
+  if (!ingredientsCache || Object.keys(ingredientsCache).length === 0) {
+    return <p>Проверка кэша...</p>;
+  }
+
   const orderSum = ingredients.reduce((acc, item) => {
-    return acc + ingredientsCache[item].price;
+    const ingredient = ingredientsCache[item];
+
+    if (!ingredient) {
+      console.warn(`Нет данных в кэше для ингредиента: ${item}`);
+      return acc;
+    }
+
+    return acc + (ingredient.price ?? 0);
   }, 0);
 
   return (
@@ -65,29 +76,37 @@ const OrderItem: FC<Order> = ({
         )}
         <div className={styles.ingredients_wrapper}>
           <ul className={styles.ingredients_list}>
-            {ingredients.slice(0, 5).map((item, index) => (
-              <li
-                key={index}
-                className={styles.ingredient_list_item}
-                style={{
-                  zIndex: LAST_INDEX_TO_SHOW - index,
-                  marginLeft: index === 0 ? '-5px' : '-24px',
-                }}
-              >
-                <div className={styles.img_background}>
-                  {index < LAST_INDEX_TO_SHOW ? (
-                    <img
-                      className={styles.img}
-                      src={ingredientsCache[item]?.image_mobile}
-                      alt={ingredientsCache[item].name}
-                      loading="lazy"
-                    />
-                  ) : (
-                    <span>{`+${ingredients.length - index}`}</span>
-                  )}
-                </div>
-              </li>
-            ))}
+            {ingredients.slice(0, 5).map((item, index) => {
+              const ingredient = ingredientsCache[item];
+              if (!ingredient) {
+                console.warn(`Нет данных для ингредиента: ${item}`);
+                return null;
+              }
+
+              return (
+                <li
+                  key={index}
+                  className={styles.ingredient_list_item}
+                  style={{
+                    zIndex: LAST_INDEX_TO_SHOW - index,
+                    marginLeft: index === 0 ? '-5px' : '-24px',
+                  }}
+                >
+                  <div className={styles.img_background}>
+                    {index < LAST_INDEX_TO_SHOW ? (
+                      <img
+                        className={styles.img}
+                        src={ingredient.image_mobile}
+                        alt={ingredient.name}
+                        loading="lazy"
+                      />
+                    ) : (
+                      <span>{`+${ingredients.length - index}`}</span>
+                    )}
+                  </div>
+                </li>
+              );
+            })}
           </ul>
           <div className={styles.price_wrapper}>
             <span className="text text_type_digits-default">{orderSum}</span>

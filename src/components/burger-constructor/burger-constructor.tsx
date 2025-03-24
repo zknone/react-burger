@@ -9,7 +9,7 @@ import BurgerOrderDetails from './burger-order-details/burger-order-details';
 import { useModal } from '../../hooks/use-modal';
 import { useDispatch } from 'react-redux';
 import { useDrop } from 'react-dnd';
-import { IngredientType } from '../../types/types';
+import { ExtendedIngredientType, IngredientType } from '../../types/types';
 import {
   addBun,
   emptyIngredients,
@@ -39,17 +39,23 @@ const BurgerConstructor = () => {
     dispatch(moveIngredient({ dragIndex, hoverIndex }));
   };
 
-  const handleSendOrder = (order: string[]) => {
+  const handleSendOrder = async (order: string[]) => {
     if (order.length >= 3) {
-      sendOrder(order);
-      openModal();
-      dispatch(emptyIngredients());
+      try {
+        const result = await sendOrder(order).unwrap();
+        if (result && result.success && result.order) {
+          openModal();
+          dispatch(emptyIngredients());
+        }
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
   const [, dropTarget] = useDrop({
     accept: 'ingredient',
-    drop: (item: IngredientType) => {
+    drop: (item: ExtendedIngredientType) => {
       if (item.type === 'bun') {
         dispatch(addBun(item));
       } else {
@@ -80,7 +86,11 @@ const BurgerConstructor = () => {
   }, [bun, selectedIngredients]);
 
   return (
-    <div ref={dropTarget} className={`${styles.burger_container} pt-15`}>
+    <div
+      ref={dropTarget}
+      data-test-id="burger-drop-target"
+      className={`${styles.burger_container} pt-15`}
+    >
       {isModalOpen && (
         <Modal size="L" onClose={closeModal}>
           {data ? (
@@ -138,8 +148,12 @@ const BurgerConstructor = () => {
             <CurrencyIcon type="primary" />
           </p>
           <Button
+            data-test-id="burger-send-button"
             htmlType="button"
-            onClick={() => handleSendOrder(order)}
+            onClick={() => {
+              if (order !== undefined)
+                handleSendOrder(order.filter(Boolean) as string[]);
+            }}
             disabled={isLoading}
           >
             {isLoading ? 'Оформляем заказ' : 'Оформить заказ'}
