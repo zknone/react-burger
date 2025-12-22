@@ -17,6 +17,7 @@ import {
   removeIngredient,
 } from '../../services/slices/constructor/actions';
 import { addIngredient } from '../../services/slices/constructor/reducers';
+import { addOrder } from '../../services/slices/socket/reducers';
 import { useMemo } from 'react';
 import BurgerConstructorItem from './burger-constructor-item/burger-constructor-item';
 import BurgerEmptyItem from './burger-empty-item/burger-empty-item';
@@ -44,6 +45,7 @@ const BurgerConstructor = () => {
       try {
         const result = await sendOrder(order).unwrap();
         if (result && result.success && result.order) {
+          dispatch(addOrder(result.order));
           openModal();
           dispatch(emptyIngredients());
         }
