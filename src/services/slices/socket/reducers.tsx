@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { SocketResponse } from '../../../types/types';
+import { Order, SocketResponse } from '../../../types/types';
 
 type Socket = {
   data: SocketResponse | null;
@@ -48,6 +48,29 @@ const socketSlice = createSlice({
         state.isLoading = false;
       }
     },
+    addOrder: (state, action: PayloadAction<Order>) => {
+      const currentOrders = state.data ? state.data.orders : [];
+      const newOrders = [action.payload, ...currentOrders];
+
+      const currentData = state.data || {
+        success: true,
+        total: 0,
+        totalToday: 0,
+        orders: [],
+      };
+
+      const newData = {
+        ...currentData,
+        orders: newOrders,
+        total: currentData.total + 1,
+        totalToday: currentData.totalToday + 1,
+      };
+
+      return {
+        ...state,
+        data: newData,
+      };
+    },
   },
 });
 
@@ -57,6 +80,7 @@ export const {
   wsConnectionClosed,
   wsGetAllOrders,
   wsGetAllPrivateOrders,
+  addOrder,
 } = socketSlice.actions;
 export default socketSlice.reducer;
 
