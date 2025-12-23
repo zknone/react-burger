@@ -1,5 +1,5 @@
 import fetchMock from 'fetch-mock';
-import { BASE_API_URL } from './authorization-api';
+import { BASE_API_URL } from '../../services/api/authorization-api/authorization-api';
 
 const user = {
   email: 'test@example.com',
