@@ -15,7 +15,11 @@ export const handlers = [
     return HttpResponse.json({
       success: true,
       name: order.name,
-      order: { number: order.number },
+      order: {
+        number: order.number,
+        estimatedCookingTimeMinutes: order.estimatedCookingTimeMinutes,
+        estimatedReadyAt: order.estimatedReadyAt,
+      },
     });
   }),
   http.post(`${BASE_API_URL}/auth/login`, () => {

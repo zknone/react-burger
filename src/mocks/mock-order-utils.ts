@@ -1,5 +1,7 @@
 import { addMockOrder, getMockOrders } from './mock-orders-store';
 import { Order } from '../types/types';
+import { buildOrderTiming } from '../utils/order-time';
+import { mockIngredients } from './data';
 
 const parseJsonSafe = (payload: unknown): unknown => {
   if (typeof payload !== 'string') return payload;
@@ -18,7 +20,15 @@ export const extractIngredients = (body: unknown): string[] => {
 
 export const createPendingOrder = (body: unknown): Order => {
   const ingredients = extractIngredients(body);
-  return addMockOrder(ingredients, { status: 'pending', autoCompleteDelayMs: 3000 });
+  const { autoCompleteDelayMs, estimatedCookingTimeMinutes, estimatedReadyAt } =
+    buildOrderTiming(ingredients, mockIngredients);
+
+  return addMockOrder(ingredients, {
+    status: 'pending',
+    autoCompleteDelayMs,
+    estimatedCookingTimeMinutes,
+    estimatedReadyAt,
+  });
 };
 
 export const buildOrdersResponse = (orderNumber?: number) => {

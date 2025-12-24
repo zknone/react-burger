@@ -1,4 +1,5 @@
 import { Order } from '../types/types';
+import { mockMinuteInMs } from '../utils/order-time';
 
 type OrdersListener = (orders: Order[]) => void;
 
@@ -15,6 +16,8 @@ const generateOrderNumber = () =>
   mockOrdersState.reduce((max, order) => Math.max(max, order.number), 0) + 1;
 
 const generateId = () => crypto.randomUUID?.() ?? `${Date.now()}`;
+
+const DEFAULT_ESTIMATED_MINUTES = 6;
 
 export const resetMockOrders = () => {
   mockOrdersState = [...initialMockOrders];
@@ -36,6 +39,8 @@ type AddMockOrderOptions = {
   name?: string;
   status?: Order['status'];
   autoCompleteDelayMs?: number | null;
+  estimatedCookingTimeMinutes?: number;
+  estimatedReadyAt?: string;
 };
 
 export const addMockOrder = (
@@ -44,7 +49,25 @@ export const addMockOrder = (
 ): Order => {
   const now = new Date().toISOString();
   const number = generateOrderNumber();
-  const { name, status = 'pending', autoCompleteDelayMs = 3000 } = options;
+  const {
+    name,
+    status = 'pending',
+    autoCompleteDelayMs,
+    estimatedCookingTimeMinutes,
+    estimatedReadyAt,
+  } = options;
+
+  const cookingTimeMinutes = estimatedCookingTimeMinutes ?? DEFAULT_ESTIMATED_MINUTES;
+  const completionDelay =
+    autoCompleteDelayMs === undefined
+      ? cookingTimeMinutes * mockMinuteInMs
+      : autoCompleteDelayMs;
+
+  const readyAt =
+    estimatedReadyAt ??
+    (completionDelay !== null
+      ? new Date(Date.now() + completionDelay).toISOString()
+      : undefined);
 
   const order: Order = {
     _id: generateId(),
@@ -54,18 +77,22 @@ export const addMockOrder = (
     createdAt: now,
     updatedAt: now,
     number,
+    estimatedCookingTimeMinutes: cookingTimeMinutes,
+    estimatedReadyAt: readyAt,
   };
 
   mockOrdersState = [order, ...mockOrdersState];
   notify();
 
-  if (autoCompleteDelayMs !== null) {
+  if (completionDelay !== null) {
     setTimeout(() => {
       mockOrdersState = mockOrdersState.map((item) =>
-        item.number === number ? { ...item, status: 'done' } : item
+        item.number === number
+          ? { ...item, status: 'done', updatedAt: new Date().toISOString() }
+          : item
       );
       notify();
-    }, autoCompleteDelayMs);
+    }, completionDelay);
   }
 
   return order;

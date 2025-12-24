@@ -1,4 +1,5 @@
 import { IngredientType, Order } from '../types/types';
+import { buildOrderTiming } from '../utils/order-time';
 
 export const mockIngredients: IngredientType[] = [
   {
@@ -10,6 +11,7 @@ export const mockIngredients: IngredientType[] = [
     carbohydrates: 53,
     calories: 420,
     price: 1255,
+    preparationTimeMinutes: 3,
     image: 'https://code.s3.yandex.net/react/code/bun-02.png',
     image_mobile: 'https://code.s3.yandex.net/react/code/bun-02-mobile.png',
     image_large: 'https://code.s3.yandex.net/react/code/bun-02-large.png',
@@ -24,6 +26,7 @@ export const mockIngredients: IngredientType[] = [
     carbohydrates: 85,
     calories: 643,
     price: 988,
+    preparationTimeMinutes: 2,
     image: 'https://code.s3.yandex.net/react/code/bun-01.png',
     image_mobile: 'https://code.s3.yandex.net/react/code/bun-01-mobile.png',
     image_large: 'https://code.s3.yandex.net/react/code/bun-01-large.png',
@@ -38,6 +41,7 @@ export const mockIngredients: IngredientType[] = [
     carbohydrates: 85,
     calories: 643,
     price: 988,
+    preparationTimeMinutes: 5,
     image: 'https://code.s3.yandex.net/react/code/meat-03.png',
     image_mobile: 'https://code.s3.yandex.net/react/code/meat-03-mobile.png',
     image_large: 'https://code.s3.yandex.net/react/code/meat-03-large.png',
@@ -52,6 +56,7 @@ export const mockIngredients: IngredientType[] = [
     carbohydrates: 33,
     calories: 420,
     price: 1337,
+    preparationTimeMinutes: 6,
     image: 'https://code.s3.yandex.net/react/code/meat-02.png',
     image_mobile: 'https://code.s3.yandex.net/react/code/meat-02-mobile.png',
     image_large: 'https://code.s3.yandex.net/react/code/meat-02-large.png',
@@ -66,6 +71,7 @@ export const mockIngredients: IngredientType[] = [
     carbohydrates: 300,
     calories: 2544,
     price: 3000,
+    preparationTimeMinutes: 7,
     image: 'https://code.s3.yandex.net/react/code/meat-04.png',
     image_mobile: 'https://code.s3.yandex.net/react/code/meat-04-mobile.png',
     image_large: 'https://code.s3.yandex.net/react/code/meat-04-large.png',
@@ -80,6 +86,7 @@ export const mockIngredients: IngredientType[] = [
     carbohydrates: 30,
     calories: 90,
     price: 90,
+    preparationTimeMinutes: 1,
     image: 'https://code.s3.yandex.net/react/code/sauce-02.png',
     image_mobile: 'https://code.s3.yandex.net/react/code/sauce-02-mobile.png',
     image_large: 'https://code.s3.yandex.net/react/code/sauce-02-large.png',
@@ -94,6 +101,7 @@ export const mockIngredients: IngredientType[] = [
     carbohydrates: 609,
     calories: 986,
     price: 300,
+    preparationTimeMinutes: 4,
     image: 'https://code.s3.yandex.net/react/code/mineral_rings.png',
     image_mobile:
       'https://code.s3.yandex.net/react/code/mineral_rings-mobile.png',
@@ -102,6 +110,16 @@ export const mockIngredients: IngredientType[] = [
     __v: 0,
   },
 ];
+
+const craterBurgerTiming = buildOrderTiming(
+  ['60d3b41abdacab0026a733c6', '60d3b41abdacab0026a733c8', '60d3b41abdacab0026a733c9'],
+  mockIngredients
+);
+
+const fluorescentBurgerTiming = buildOrderTiming(
+  ['60d3b41abdacab0026a733c7', '60d3b41abdacab0026a733c9'],
+  mockIngredients
+);
 
 export const mockOrders: Order[] = [
   {
@@ -116,6 +134,8 @@ export const mockOrders: Order[] = [
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     number: 12345,
+    estimatedCookingTimeMinutes: craterBurgerTiming.estimatedCookingTimeMinutes,
+    estimatedReadyAt: craterBurgerTiming.estimatedReadyAt,
   },
   {
     _id: '7654321098fedcba76543210',
@@ -125,5 +145,7 @@ export const mockOrders: Order[] = [
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     number: 54321,
+    estimatedCookingTimeMinutes: fluorescentBurgerTiming.estimatedCookingTimeMinutes,
+    estimatedReadyAt: fluorescentBurgerTiming.estimatedReadyAt,
   },
 ];

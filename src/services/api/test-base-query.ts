@@ -30,7 +30,11 @@ export const createTestBaseQuery = (
       data = {
         success: true,
         name: newOrder.name,
-        order: { number: newOrder.number },
+        order: {
+          number: newOrder.number,
+          estimatedCookingTimeMinutes: newOrder.estimatedCookingTimeMinutes,
+          estimatedReadyAt: newOrder.estimatedReadyAt,
+        },
       };
     } else {
       const match = url.match(/\/orders\/?(\d+)?/);

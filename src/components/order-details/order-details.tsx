@@ -6,6 +6,11 @@ import {
   IngredientType,
   Order,
 } from '../../types/types';
+import {
+  convertEstimatedMinutesToSeconds,
+  estimateCookingTimeMinutes,
+  mockMinuteInMs,
+} from '../../utils/order-time';
 import styles from './order-details.module.css';
 
 import {
@@ -86,6 +91,33 @@ const OrderDetails: FC<OrderDetailsProps> = ({ isPrivateOrders = false }) => {
     .filter((item) => item.count !== 0)
     .sort((a, b) => b.count - a.count);
 
+  const estimatedCookingTimeMinutes =
+    order.estimatedCookingTimeMinutes ??
+    (ingredientsData
+      ? estimateCookingTimeMinutes(order.ingredients, ingredientsData)
+      : undefined);
+
+  const estimatedReadyAt =
+    order.estimatedReadyAt ??
+    (estimatedCookingTimeMinutes
+      ? new Date(
+          new Date(order.createdAt).getTime() +
+            estimatedCookingTimeMinutes * mockMinuteInMs
+        ).toISOString()
+      : undefined);
+
+  const estimatedReadyAtTime =
+    estimatedReadyAt &&
+    new Date(estimatedReadyAt).toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+
+  const estimatedSeconds =
+    estimatedCookingTimeMinutes !== undefined
+      ? convertEstimatedMinutesToSeconds(estimatedCookingTimeMinutes, mockMinuteInMs)
+      : undefined;
+
   const orderSum = parsedIngredients.reduce((acc, item) => {
     return acc + item.value.price;
   }, 0);
@@ -105,6 +137,12 @@ const OrderDetails: FC<OrderDetailsProps> = ({ isPrivateOrders = false }) => {
       >
         {STATUSES[order.status as keyof typeof STATUSES].title}
       </span>
+      {estimatedSeconds !== undefined && (
+        <p className="text text_type_main-default text_color_inactive mb-6">
+          Примерное время приготовления: ~{estimatedSeconds} сек
+          {estimatedReadyAtTime ? ` (готово около ${estimatedReadyAtTime})` : ''}
+        </p>
+      )}
 
       <h3 className={`text text_type_main-medium mb-6 ${styles.title}`}>
         Состав:{' '}

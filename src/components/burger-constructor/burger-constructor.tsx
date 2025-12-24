@@ -96,7 +96,11 @@ const BurgerConstructor = () => {
       {isModalOpen && (
         <Modal size="L" onClose={closeModal}>
           {data ? (
-            <BurgerOrderDetails orderNumber={data.order.number} />
+            <BurgerOrderDetails
+              orderNumber={data.order.number.toString()}
+              estimatedCookingTimeMinutes={data.order.estimatedCookingTimeMinutes}
+              estimatedReadyAt={data.order.estimatedReadyAt}
+            />
           ) : (
             <Loader />
           )}

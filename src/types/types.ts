@@ -10,6 +10,7 @@ export type IngredientType = {
   image: string;
   image_mobile: string;
   image_large: string;
+  preparationTimeMinutes?: number;
   __v: number;
 };
 
@@ -85,6 +86,8 @@ export type Order = {
   updatedAt: string;
   name: string;
   isOrderHistoryItem?: boolean;
+  estimatedCookingTimeMinutes?: number;
+  estimatedReadyAt?: string;
 };
 
 export type SocketResponse = {
