@@ -10,14 +10,13 @@ import { getMockOrders, subscribeMockOrders } from '../mock-orders-store';
 
 const createMockWebSocketMiddleware =
   (): Middleware<unknown, RootState, AppDispatch> => (store) => {
+    const EMIT_INTERVAL_MS = 5000;
     let interval: NodeJS.Timeout | null = null;
     let unsubscribe: (() => void) | null = null;
 
-    const emitOrders = () => {
+    const dispatchSocketResponse = () => {
       const orders = getMockOrders();
-      const totalDone = orders.filter(
-        (order) => order.status === 'done'
-      ).length;
+      const totalDone = orders.filter((order) => order.status === 'done').length;
       const socketResponse = {
         orders,
         success: true,
@@ -28,14 +27,18 @@ const createMockWebSocketMiddleware =
       store.dispatch(wsGetAllPrivateOrders(socketResponse));
     };
 
+    const emitOrders = () => {
+      dispatchSocketResponse();
+    };
+
     return (next) => (action: { type: string; payload?: unknown }) => {
       if (action.type === 'socket/start') {
         store.dispatch(wsConnectionSuccess());
 
         emitOrders();
-        unsubscribe = subscribeMockOrders(emitOrders);
+        unsubscribe = subscribeMockOrders(dispatchSocketResponse);
 
-        interval = setInterval(emitOrders, 5000);
+        interval = setInterval(emitOrders, EMIT_INTERVAL_MS);
       }
 
       if (action.type === 'socket/stop') {

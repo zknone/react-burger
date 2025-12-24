@@ -1,6 +1,6 @@
 import { http, HttpResponse } from 'msw';
 import { mockIngredients } from './data';
-import { addMockOrder } from './mock-orders-store';
+import { createPendingOrder } from './mock-order-utils';
 
 const BASE_API_URL = '*/api';
 
@@ -10,13 +10,8 @@ export const handlers = [
     return HttpResponse.json({ success: true, data: mockIngredients });
   }),
   http.post(`${BASE_API_URL}/orders`, async ({ request }) => {
-    const body = (await request.json().catch(() => ({}))) as {
-      ingredients?: string[];
-    };
-    const order = addMockOrder(body.ingredients || [], {
-      status: 'pending',
-      autoCompleteDelayMs: 3000,
-    });
+    const body = await request.json().catch(() => ({}));
+    const order = createPendingOrder(body);
     return HttpResponse.json({
       success: true,
       name: order.name,

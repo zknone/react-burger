@@ -1,18 +1,13 @@
-import type {
-  BaseQueryFn,
-  FetchArgs,
-  FetchBaseQueryError,
-} from '@reduxjs/toolkit/query';
+import type { AppBaseQuery } from './base-query';
 import { mockIngredients } from '../../mocks/data';
-import { addMockOrder, getMockOrders } from '../../mocks/mock-orders-store';
+import {
+  buildOrdersResponse,
+  createPendingOrder,
+} from '../../mocks/mock-order-utils';
 
-type BaseQuery = BaseQueryFn<
-  string | FetchArgs,
-  unknown,
-  FetchBaseQueryError
->;
-
-export const createTestBaseQuery = (baseQuery: BaseQuery): BaseQuery => async (
+export const createTestBaseQuery = (
+  baseQuery: AppBaseQuery
+): AppBaseQuery => async (
   args,
   api,
   extraOptions
@@ -30,25 +25,8 @@ export const createTestBaseQuery = (baseQuery: BaseQuery): BaseQuery => async (
     data = { success: true, data: mockIngredients };
   } else if (url?.includes('/orders')) {
     if (method === 'POST') {
-      const parsedBody =
-        typeof args === 'string'
-          ? undefined
-          : typeof args.body === 'string'
-            ? (() => {
-                try {
-                  return JSON.parse(args.body);
-                } catch (error) {
-                  console.warn('Failed to parse mock order body', error);
-                  return undefined;
-                }
-              })()
-            : args.body;
-      const body = typeof args === 'string' ? undefined : parsedBody;
-      const ingredients = (body as { ingredients?: string[] })?.ingredients;
-      const newOrder = addMockOrder(ingredients || [], {
-        status: 'pending',
-        autoCompleteDelayMs: 3000,
-      });
+      const body = typeof args === 'string' ? undefined : args.body;
+      const newOrder = createPendingOrder(body);
       data = {
         success: true,
         name: newOrder.name,
@@ -57,20 +35,14 @@ export const createTestBaseQuery = (baseQuery: BaseQuery): BaseQuery => async (
     } else {
       const match = url.match(/\/orders\/?(\d+)?/);
       const orderNumber = match?.[1] ? Number.parseInt(match[1]) : null;
-      const orders = getMockOrders();
-      const filteredOrders = orderNumber
-        ? orders.filter((item) => item.number === orderNumber)
-        : orders;
-
-      data = {
-        success: true,
-        orders: filteredOrders,
-      };
+      data = buildOrdersResponse(orderNumber === null ? undefined : orderNumber);
     }
   }
 
   if (data) {
-    console.log('🚀 RTK Query Mock:', url, data);
+    if (process.env.NODE_ENV === 'development') {
+      console.log('🚀 RTK Query Mock:', url, data);
+    }
     return { data };
   }
 

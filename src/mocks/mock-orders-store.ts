@@ -5,10 +5,10 @@ type OrdersListener = (orders: Order[]) => void;
 const initialMockOrders: Order[] = [];
 
 let mockOrdersState: Order[] = [...initialMockOrders];
-const listeners = new Set<OrdersListener>();
+const emitter = new EventTarget();
 
 const notify = () => {
-  listeners.forEach((listener) => listener(mockOrdersState));
+  emitter.dispatchEvent(new CustomEvent('orders:update', { detail: mockOrdersState }));
 };
 
 const generateOrderNumber = () =>
@@ -24,8 +24,12 @@ export const resetMockOrders = () => {
 export const getMockOrders = () => mockOrdersState;
 
 export const subscribeMockOrders = (listener: OrdersListener) => {
-  listeners.add(listener);
-  return () => listeners.delete(listener);
+  const handler = ((event: Event) => {
+    const { detail } = event as CustomEvent<Order[]>;
+    listener(detail);
+  }) as EventListener;
+  emitter.addEventListener('orders:update', handler);
+  return () => emitter.removeEventListener('orders:update', handler);
 };
 
 type AddMockOrderOptions = {

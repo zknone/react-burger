@@ -13,7 +13,10 @@ type BurgerIngredientsProps = { extraClass?: string };
 
 const BurgerIngredients: FC<BurgerIngredientsProps> = ({ extraClass }) => {
   const { data } = useGetIngredientsQuery(undefined);
-  const ingredients: IngredientType[] = data?.data ?? [];
+  const ingredients: IngredientType[] = useMemo(
+    () => data?.data ?? [],
+    [data]
+  );
 
   const [activeTitle, setTitleActive] = useState<IngredientVariantsType>('bun');
   const [positions, setPositions] = useState({
@@ -56,10 +59,11 @@ const BurgerIngredients: FC<BurgerIngredientsProps> = ({ extraClass }) => {
   );
 
   useEffect(() => {
-    if (scrollRef.current) {
+    const scrollElement = scrollRef.current;
+    if (scrollElement) {
       setPositions((prevPositions) => ({
         ...prevPositions,
-        startingPosition: scrollRef.current!.getBoundingClientRect().top,
+        startingPosition: scrollElement.getBoundingClientRect().top,
       }));
     }
     const handleScroll = () => {
@@ -71,9 +75,9 @@ const BurgerIngredients: FC<BurgerIngredientsProps> = ({ extraClass }) => {
       }));
     };
 
-    scrollRef.current?.addEventListener('scroll', handleScroll);
+    scrollElement?.addEventListener('scroll', handleScroll);
     return () => {
-      scrollRef.current?.removeEventListener('scroll', handleScroll);
+      scrollElement?.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
