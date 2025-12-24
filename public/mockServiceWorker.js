@@ -198,7 +198,6 @@ async function getResponse(event, client, requestId, requestInterceptedAt) {
   const requestClone = event.request.clone();
 
   function passthrough() {
-
     const headers = new Headers(requestClone.headers);
 
     const acceptHeader = headers.get('accept');
@@ -218,7 +217,6 @@ async function getResponse(event, client, requestId, requestInterceptedAt) {
     return fetch(requestClone, { headers });
   }
 
-  // Bypass mocking when the client is not active.
   if (!client) {
     return passthrough();
   }

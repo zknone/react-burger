@@ -12,3 +12,5 @@ export const STATUSES = {
     title: 'Отменен',
   },
 };
+
+export const BASE_API_URL = 'https://norma.nomoreparties.space/api';

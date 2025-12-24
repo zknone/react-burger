@@ -11,8 +11,8 @@ import {
   RegisterAuthorizationResponse,
   TokenResponse,
 } from '../../../types/types';
-
-export const BASE_API_URL = 'https://norma.nomoreparties.space/api';
+import { BASE_API_URL } from '../../../consts';
+import { getBaseQuery } from '../get-base-query';
 
 export const ingredientsApiConfig = {
   baseUrl: BASE_API_URL,
@@ -22,7 +22,7 @@ export const ingredientsApiConfig = {
 };
 
 const fetchWithRefreshQuery: BaseQueryFn<
-  FetchArgs,
+  string | FetchArgs,
   unknown,
   FetchBaseQueryError
 > = async (args, api, extraOptions) => {
@@ -65,9 +65,11 @@ const fetchWithRefreshQuery: BaseQueryFn<
   return result;
 };
 
+const baseQuery = getBaseQuery(fetchWithRefreshQuery);
+
 export const authorizationApi = createApi({
   reducerPath: 'loginApi',
-  baseQuery: fetchWithRefreshQuery,
+  baseQuery: baseQuery,
   endpoints: (builder) => ({
     login: builder.mutation<LoginResponse, LoginRequest>({
       query: (credentials) => ({
@@ -138,22 +140,13 @@ export const authorizationApi = createApi({
         return {
           url: 'password-reset/reset',
           method: 'POST',
-          body: {
-            password,
-            token,
-          },
+          body: { password, token },
         };
       },
     }),
     restorePassword: builder.mutation({
       query: (email: string) => {
-        return {
-          url: 'password-reset',
-          method: 'POST',
-          body: {
-            email,
-          },
-        };
+        return { url: 'password-reset', method: 'POST', body: { email } };
       },
     }),
   }),

@@ -7,10 +7,14 @@ import { orderApi } from '../services/api/order-api/order-api';
 import { authorizationApi } from '../services/api/authorization-api/authorization-api';
 import { useDispatch } from 'react-redux';
 import createWebSocketMiddleware from '../services/middleware/web-socket-middleware';
+import createMockWebSocketMiddleware from '../mocks/web-socket-middleware/web-socket-mock-middleware';
 
 const WS_URL = 'wss://norma.nomoreparties.space/orders';
 
-const wsMiddleware: Middleware = createWebSocketMiddleware(WS_URL);
+const wsMiddleware: Middleware =
+  process.env.NODE_ENV === 'development'
+    ? createMockWebSocketMiddleware()
+    : createWebSocketMiddleware(WS_URL);
 
 const rootReducer = combineReducers({
   [ingredientsApi.reducerPath]: ingredientsApi.reducer,

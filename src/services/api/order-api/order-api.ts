@@ -1,21 +1,12 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import {
-  BASE_API_URL,
-  ingredientsApiConfig,
-} from '../authorization-api/authorization-api';
+import { BASE_API_URL } from '../../../consts';
+import { getBaseQuery } from '../get-base-query';
+
+const baseQuery = getBaseQuery(fetchBaseQuery({ baseUrl: BASE_API_URL }));
 
 export const orderApi = createApi({
   reducerPath: 'orderApi',
-  baseQuery: fetchBaseQuery({
-    baseUrl: BASE_API_URL,
-    prepareHeaders: (headers) => {
-      for (const [key, value] of Object.entries(ingredientsApiConfig.headers)) {
-        headers.set(key, value);
-      }
-
-      return headers;
-    },
-  }),
+  baseQuery,
   endpoints: (builder) => ({
     sendOrder: builder.mutation({
       query: (order: string[]) => {
@@ -41,13 +32,8 @@ export const orderApi = createApi({
           url: `/orders/${number}`,
           method: 'GET',
           headers: token
-            ? {
-                'Content-Type': 'application/json',
-                Authorization: token,
-              }
-            : {
-                'Content-Type': 'application/json',
-              },
+            ? { 'Content-Type': 'application/json', Authorization: token }
+            : { 'Content-Type': 'application/json' },
         };
       },
     }),
