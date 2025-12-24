@@ -1,5 +1,6 @@
 import { http, HttpResponse } from 'msw';
-import { mockIngredients, mockOrders } from './data';
+import { mockIngredients } from './data';
+import { addMockOrder } from './mock-orders-store';
 
 const BASE_API_URL = '*/api';
 
@@ -8,8 +9,14 @@ export const handlers = [
     console.log('🍔 MSW: INTERCEPTED SUCCESSFULLY!');
     return HttpResponse.json({ success: true, data: mockIngredients });
   }),
-  http.post(`${BASE_API_URL}/orders`, () => {
-    const order = mockOrders[0];
+  http.post(`${BASE_API_URL}/orders`, async ({ request }) => {
+    const body = (await request.json().catch(() => ({}))) as {
+      ingredients?: string[];
+    };
+    const order = addMockOrder(body.ingredients || [], {
+      status: 'pending',
+      autoCompleteDelayMs: 3000,
+    });
     return HttpResponse.json({
       success: true,
       name: order.name,
