@@ -31,8 +31,10 @@ const createMockWebSocketMiddleware =
       dispatchSocketResponse();
     };
 
-    return (next) => (action: { type: string; payload?: unknown }) => {
-      if (action.type === 'socket/start') {
+    return (next) => (action: unknown) => {
+      const { type } = action as { type?: string; payload?: unknown };
+
+      if (type === 'socket/start') {
         store.dispatch(wsConnectionSuccess());
 
         emitOrders();
@@ -41,7 +43,7 @@ const createMockWebSocketMiddleware =
         interval = setInterval(emitOrders, EMIT_INTERVAL_MS);
       }
 
-      if (action.type === 'socket/stop') {
+      if (type === 'socket/stop') {
         if (interval) {
           clearInterval(interval);
           interval = null;
