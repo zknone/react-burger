@@ -1,4 +1,4 @@
-import type { AppBaseQuery } from './base-query';
+import type { AppBaseQuery } from '../../types/types';
 import { createTestBaseQuery } from './test-base-query';
 
 export const getBaseQuery = (
