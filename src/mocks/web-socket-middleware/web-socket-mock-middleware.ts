@@ -6,7 +6,11 @@ import {
   wsGetAllPrivateOrders,
   wsConnectionClosed,
 } from '../../services/slices/socket/reducers';
-import { getMockOrders, subscribeMockOrders } from '../mock-orders-store';
+import {
+  getMockOrders,
+  getMockUserOrders,
+  subscribeMockOrders,
+} from '../mock-orders-store';
 
 const createMockWebSocketMiddleware =
   (): Middleware<unknown, RootState, AppDispatch> => (store) => {
@@ -15,16 +19,21 @@ const createMockWebSocketMiddleware =
     let unsubscribe: (() => void) | null = null;
 
     const dispatchSocketResponse = () => {
-      const orders = getMockOrders();
-      const totalDone = orders.filter((order) => order.status === 'done').length;
-      const socketResponse = {
-        orders,
-        success: true,
-        total: orders.length,
-        totalToday: totalDone,
+      const allOrders = getMockOrders();
+      const userOrders = getMockUserOrders();
+
+      const buildSocketResponse = (orders: ReturnType<typeof getMockOrders>) => {
+        const totalDone = orders.filter((order) => order.status === 'done').length;
+        return {
+          orders,
+          success: true,
+          total: orders.length,
+          totalToday: totalDone,
+        };
       };
-      store.dispatch(wsGetAllOrders(socketResponse));
-      store.dispatch(wsGetAllPrivateOrders(socketResponse));
+
+      store.dispatch(wsGetAllOrders(buildSocketResponse(allOrders)));
+      store.dispatch(wsGetAllPrivateOrders(buildSocketResponse(userOrders)));
     };
 
     const emitOrders = () => {

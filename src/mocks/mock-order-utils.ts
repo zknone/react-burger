@@ -28,6 +28,7 @@ export const createPendingOrder = (body: unknown): Order => {
     autoCompleteDelayMs,
     estimatedCookingTimeMinutes,
     estimatedReadyAt,
+    isUserOrder: true,
   });
 };
 
