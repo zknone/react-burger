@@ -46,7 +46,7 @@ const BurgerConstructorItem: FC<BurgerConstructorItemProps> = ({
     >
       <DragIcon type="primary" />
       <ConstructorElement
-        extraClass="mr-4"
+        extraClass={`${styles.burger_text_truncate} mr-4`}
         text={ingredient?.name as string}
         thumbnail={ingredient?.image_mobile as string}
         price={ingredient?.price as number}

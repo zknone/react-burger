@@ -1,9 +1,20 @@
 .burger_constructor_item {
     width: 100%;
     flex: 1;
+    justify-content: end;
     display: inline-flex;
     align-items: center;
     gap: 12px;
     list-style-type: none;
     padding: 0;
+}
+
+
+.burger_text_truncate {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

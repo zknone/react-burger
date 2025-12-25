@@ -17,7 +17,11 @@
     margin: 0;
     padding: 0 20px 0 0;
     max-height: calc(100vh - 250px);
+
     overflow: scroll;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -ms-overflow-style: none;
 }
 
 .data_wrapper {
@@ -45,6 +49,10 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
-    overflow: scroll;
     max-height: 220px;
+
+    overflow: scroll;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -ms-overflow-style: none;
 }
