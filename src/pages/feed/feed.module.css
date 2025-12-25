@@ -44,6 +44,7 @@
 }
 
 .order_titles_list {
+    min-height: 200px;
     padding: 0;
     list-style-type: none;
     display: flex;
