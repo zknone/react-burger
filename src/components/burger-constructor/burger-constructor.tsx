@@ -98,7 +98,9 @@ const BurgerConstructor = () => {
           {data ? (
             <BurgerOrderDetails
               orderNumber={data.order.number.toString()}
-              estimatedCookingTimeMinutes={data.order.estimatedCookingTimeMinutes}
+              estimatedCookingTimeMinutes={
+                data.order.estimatedCookingTimeMinutes
+              }
               estimatedReadyAt={data.order.estimatedReadyAt}
             />
           ) : (
@@ -112,7 +114,7 @@ const BurgerConstructor = () => {
         ) : (
           <ConstructorElement
             type="top"
-            extraClass={`${styles.burger_constructor_element} mr-4`}
+            extraClass={'mr-4'}
             isLocked={true}
             text={bun?.name ? `${bun?.name} (верх)` : ''}
             thumbnail={bun?.image_mobile || ''}
@@ -139,7 +141,7 @@ const BurgerConstructor = () => {
         ) : (
           <ConstructorElement
             type="bottom"
-            extraClass={`${styles.burger_constructor_element} mr-4`}
+            extraClass={'mr-4'}
             isLocked={true}
             text={bun?.name ? `${bun?.name} (низ)` : ''}
             thumbnail={bun?.image_mobile || ''}
