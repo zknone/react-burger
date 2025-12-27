@@ -1,18 +1,22 @@
-export type IngredientType = {
-  _id: string;
-  name: string;
-  type: 'bun' | 'main' | 'sauce';
-  proteins: number;
-  fat: number;
-  carbohydrates: number;
-  calories: number;
-  price: number;
-  image: string;
-  image_mobile: string;
-  image_large: string;
-  preparationTimeMinutes?: number;
-  __v: number;
-};
+import { z } from 'zod';
+
+export const ingredientModel = z.object({
+  _id: z.string(),
+  name: z.string(),
+  type: z.enum(['bun', 'main', 'sauce']),
+  proteins: z.number(),
+  fat: z.number(),
+  carbohydrates: z.number(),
+  calories: z.number(),
+  price: z.number(),
+  image: z.string(),
+  image_mobile: z.string(),
+  image_large: z.string(),
+  preparationTimeMinutes: z.number().optional(),
+  __v: z.number(),
+});
+
+export type IngredientType = z.infer<typeof ingredientModel>;
 
 import type {
   BaseQueryFn,
@@ -20,95 +24,118 @@ import type {
   FetchBaseQueryError,
 } from '@reduxjs/toolkit/query';
 
-export type FetchedIngredients = {
-  success: boolean;
-  data: IngredientType[];
-};
+export const fetchedIngredientsModel = z.object({
+  success: z.boolean(),
+  data: z.array(ingredientModel),
+});
 
-export type ForgotResetPasswordLogoutResponse = {
-  success: boolean;
-  message: string;
-};
+export type FetchedIngredients = z.infer<typeof fetchedIngredientsModel>;
 
-export type RegisterAuthorizationResponse = {
-  success: boolean;
-  user: {
-    email: string;
-    name: string;
-  };
-  accessToken: string;
-  refreshToken: string;
-};
+export const forgotResetPasswordLogoutResponseModel = z.object({
+  success: z.boolean(),
+  message: z.string(),
+});
 
-export type TokenResponse = {
-  success: boolean;
-  accessToken: string;
-  refreshToken: string;
-};
+export type ForgotResetPasswordLogoutResponseType = z.infer<
+  typeof forgotResetPasswordLogoutResponseModel
+>;
 
-export type ProfileResponse = {
-  success: boolean;
-  user: {
-    email: string;
-    name: string;
-  };
-};
-export type ErrorType = {
-  status: number;
-  data: {
-    success: boolean;
-    message: string;
-  };
-};
+export const registerAuthorizationResponseModel = z.object({
+  success: z.boolean(),
+  user: z.object({
+    email: z.string(),
+    name: z.string(),
+  }),
+  accessToken: z.string(),
+  refreshToken: z.string(),
+});
+export type RegisterAuthorizationResponse = z.infer<
+  typeof registerAuthorizationResponseModel
+>;
 
-export type LoginRequest = {
-  email: string;
-  password: string;
-};
+export const tokenResponseModel = z.object({
+  success: z.boolean(),
+  accessToken: z.string(),
+  refreshToken: z.string(),
+});
+export type TokenResponse = z.infer<typeof tokenResponseModel>;
 
-export type LoginResponse = {
-  success: boolean;
-  accessToken: string;
-  refreshToken: string;
-  message?: string;
-  user: {
-    email: string;
-    name: string;
-  };
-};
+export const profileResponseModel = z.object({
+  success: z.boolean(),
+  user: z.object({
+    email: z.string(),
+    name: z.string(),
+  }),
+});
+export type ProfileResponse = z.infer<typeof profileResponseModel>;
 
-export type Order = {
-  ingredients: string[];
-  _id: string;
-  status: 'done' | 'pending' | 'canceled';
-  number: number;
-  createdAt: string;
-  updatedAt: string;
-  name: string;
-  isOrderHistoryItem?: boolean;
-  estimatedCookingTimeMinutes?: number;
-  estimatedReadyAt?: string;
-};
+export const errorModel = z.object({
+  status: z.number(),
+  data: z.object({
+    success: z.boolean(),
+    message: z.string(),
+  }),
+});
+export type ErrorType = z.infer<typeof errorModel>;
 
-export type SocketResponse = {
-  orders: Order[];
-  success: boolean;
-  total: number;
-  totalToday: number;
-};
+export const loginRequestModel = z.object({
+  email: z.string(),
+  password: z.string(),
+});
+export type LoginRequest = z.infer<typeof loginRequestModel>;
 
-export type IngredientCacheType = {
-  [key: string]: IngredientType;
-};
+export const loginResponseModel = z.object({
+  success: z.boolean(),
+  accessToken: z.string(),
+  refreshToken: z.string(),
+  message: z.string().optional(),
+  user: z.object({
+    email: z.string(),
+    name: z.string(),
+  }),
+});
+export type LoginResponse = z.infer<typeof loginResponseModel>;
 
-export type CountedIngredientCacheType = {
-  [key: string]: {
-    value: IngredientType;
-    count: number;
-  };
-};
+export const orderModel = z.object({
+  ingredients: z.array(z.string()),
+  _id: z.string(),
+  status: z.enum(['done', 'pending', 'canceled']),
+  number: z.number(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
+  name: z.string(),
+  isOrderHistoryItem: z.boolean().optional(),
+  estimatedCookingTimeMinutes: z.number().optional(),
+  estimatedReadyAt: z.string().optional(),
+});
 
-export type ExtendedIngredientType = IngredientType & { uniqueId: string };
+export type Order = z.infer<typeof orderModel>;
+
+export const socketResponseModel = z.object({
+  orders: z.array(orderModel),
+  success: z.boolean(),
+  total: z.number(),
+  totalToday: z.number(),
+});
+export type SocketResponse = z.infer<typeof socketResponseModel>;
+
+export const ingredientCacheModel = z.record(z.string(), ingredientModel);
+
+export type IngredientCacheType = z.infer<typeof ingredientCacheModel>;
+
+export const countedIngredientCacheModel = z.record(
+  z.string(),
+  z.object({
+    value: ingredientModel,
+    count: z.number(),
+  })
+);
+export type CountedIngredientCacheType = z.infer<typeof countedIngredientCacheModel>;
+
+export const extendedIngredientModel = ingredientModel.extend({
+  uniqueId: z.string(),
+});
+export type ExtendedIngredientType = z.infer<typeof extendedIngredientModel>;
 
 export type AppBaseQuery = BaseQueryFn<
   string | FetchArgs,
