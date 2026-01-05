@@ -1,6 +1,6 @@
 import { AppDispatch } from '../../store';
 import { authorizationApi } from '../api/authorization-api/authorization-api';
-import { setProfile, setIsAuthChecked } from '../slices/profile/reducers';
+import { setProfile, setHasAuthStatus } from '../slices/profile/reducers';
 import { profileResponseModel, tokenResponseModel } from '../../types/types';
 import { toast } from 'react-toastify';
 
@@ -8,7 +8,7 @@ export const checkUserAuth = () => async (dispatch: AppDispatch) => {
   const refreshToken = localStorage.getItem('refreshToken');
 
   if (!refreshToken) {
-    dispatch(setIsAuthChecked(true));
+    dispatch(setHasAuthStatus(true));
     dispatch(
       setProfile({
         user: { name: '', email: '' },
@@ -45,10 +45,11 @@ export const checkUserAuth = () => async (dispatch: AppDispatch) => {
 
     dispatch(setProfile(userParseResult.data));
   } catch (error) {
+    setHasAuthStatus(false);
     toast.error('Ошибка авторизации, пожалуйста войдите снова');
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
   } finally {
-    dispatch(setIsAuthChecked(true));
+    dispatch(setHasAuthStatus(true));
   }
 };

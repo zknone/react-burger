@@ -22,7 +22,7 @@ import { useMemo } from 'react';
 import BurgerConstructorItem from './burger-constructor-item/burger-constructor-item';
 import BurgerEmptyItem from './burger-empty-item/burger-empty-item';
 import { useSendOrderMutation } from '../../services/api/order-api/order-api';
-import Loader from '../loader/laoder';
+import Loader from '../loader/loader';
 import { useTypedSelector } from '../../utils/typed-hooks';
 
 const BurgerConstructor = () => {
@@ -31,6 +31,9 @@ const BurgerConstructor = () => {
   const { isModalOpen, openModal, closeModal } = useModal();
   const { bun, selectedIngredients } = useTypedSelector(
     (state) => state.burgerConstructor
+  );
+  const isAuthenticated = Boolean(
+    useTypedSelector((state) => state.profile.user.email)
   );
   const handleRemove = (index: number) => {
     dispatch(removeIngredient(index));
@@ -162,9 +165,18 @@ const BurgerConstructor = () => {
               if (order !== undefined)
                 handleSendOrder(order.filter(Boolean) as string[]);
             }}
-            disabled={isLoading}
+            disabled={
+              isLoading ||
+              !isAuthenticated ||
+              !bun ||
+              selectedIngredients.length === 0
+            }
           >
-            {isLoading ? 'Оформляем заказ' : 'Оформить заказ'}
+            {!isAuthenticated
+              ? 'Необходимо авторизоваться'
+              : isLoading
+                ? 'Оформляем заказ'
+                : 'Оформить заказ'}
           </Button>
         </div>
       </div>

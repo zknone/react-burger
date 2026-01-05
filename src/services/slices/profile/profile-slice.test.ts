@@ -41,7 +41,7 @@ describe('profile slice store and actions', () => {
         })
       );
 
-      const expectedState = { ...initialState, isAuthChecked: true };
+    const expectedState = { ...initialState, hasAuthStatus: true };
 
       expect(profileSlice.reducer(newState, resetProfile())).toEqual(
         expectedState

@@ -9,7 +9,7 @@ import {
 import { useDispatch } from 'react-redux';
 import {
   resetProfile,
-  setCanReset,
+  setCanResetPassword,
   setProfile,
 } from '../services/slices/profile/reducers';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
@@ -137,7 +137,7 @@ const useResetPassword = () => {
       }).unwrap();
 
       if (response.success) {
-        dispatch(setCanReset(false));
+        dispatch(setCanResetPassword(false));
       }
       return { status: 200, data: { success: true } };
     } catch (err) {
@@ -165,7 +165,7 @@ const useRestorePassword = () => {
     try {
       const response = await restorePassword(email).unwrap();
       if (response.success) {
-        dispatch(setCanReset(true));
+        dispatch(setCanResetPassword(true));
       }
       return { status: 200, data: { success: true } };
     } catch (err) {
