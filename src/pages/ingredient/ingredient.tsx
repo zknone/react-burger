@@ -3,7 +3,7 @@ import { IngredientPopupDetails } from '../../components/burger-ingredients/ingr
 import styles from './ingredient.module.css';
 import { useGetIngredientsQuery } from '../../services/api/ingredients-api/ingredients-api';
 import { IngredientType } from '../../types/types';
-import Loader from '../../components/loader/laoder';
+import Loader from '../../components/loader/loader';
 
 export default function IngredientPage() {
   const { id } = useParams();

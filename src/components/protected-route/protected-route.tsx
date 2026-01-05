@@ -1,6 +1,6 @@
 import { Navigate, useLocation } from 'react-router-dom';
 import React, { FC } from 'react';
-import Loader from '../loader/laoder';
+import Loader from '../loader/loader';
 import { useTypedSelector } from '../../utils/typed-hooks';
 
 type ProtectedRouteProps = {

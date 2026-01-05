@@ -1,5 +1,4 @@
 import { IngredientType, Order } from '../types/types';
-import { buildOrderTiming } from '../utils/order-time';
 
 export const mockIngredients: IngredientType[] = [
   {
@@ -111,41 +110,4 @@ export const mockIngredients: IngredientType[] = [
   },
 ];
 
-const craterBurgerTiming = buildOrderTiming(
-  ['60d3b41abdacab0026a733c6', '60d3b41abdacab0026a733c8', '60d3b41abdacab0026a733c9'],
-  mockIngredients
-);
-
-const fluorescentBurgerTiming = buildOrderTiming(
-  ['60d3b41abdacab0026a733c7', '60d3b41abdacab0026a733c9'],
-  mockIngredients
-);
-
-export const mockOrders: Order[] = [
-  {
-    _id: '6123456789abcdef01234567',
-    ingredients: [
-      '60d3b41abdacab0026a733c6',
-      '60d3b41abdacab0026a733c8',
-      '60d3b41abdacab0026a733c9',
-    ],
-    status: 'done',
-    name: 'Краторный бургер',
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    number: 12345,
-    estimatedCookingTimeMinutes: craterBurgerTiming.estimatedCookingTimeMinutes,
-    estimatedReadyAt: craterBurgerTiming.estimatedReadyAt,
-  },
-  {
-    _id: '7654321098fedcba76543210',
-    ingredients: ['60d3b41abdacab0026a733c7', '60d3b41abdacab0026a733c9'],
-    status: 'pending',
-    name: 'Флюоресцентный бургер',
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    number: 54321,
-    estimatedCookingTimeMinutes: fluorescentBurgerTiming.estimatedCookingTimeMinutes,
-    estimatedReadyAt: fluorescentBurgerTiming.estimatedReadyAt,
-  },
-];
+export const mockOrders: Order[] = [];

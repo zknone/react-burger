@@ -3,7 +3,7 @@ import OrderItem from '../../components/order-item/order-item';
 import styles from './feed.module.css';
 import { useEffect } from 'react';
 import { startSocket, stopSocket } from '../../services/slices/socket/actions';
-import Loader from '../../components/loader/laoder';
+import Loader from '../../components/loader/loader';
 import { STATUSES } from '../../consts';
 import { useTypedSelector } from '../../utils/typed-hooks';
 

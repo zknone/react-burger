@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import styles from './ingredient-popup-details.module.css';
 import { useGetIngredientsQuery } from '../../../services/api/ingredients-api/ingredients-api';
 import { IngredientType } from '../../../types/types';
-import Loader from '../../loader/laoder';
+import Loader from '../../loader/loader';
 
 const IngredientPopupDetails = () => {
   const { id } = useParams();

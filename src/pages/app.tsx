@@ -5,7 +5,7 @@ import { useGetIngredientsQuery } from '../services/api/ingredients-api/ingredie
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DndProvider } from 'react-dnd';
 import styles from './app.module.css';
-import Loader from '../components/loader/laoder';
+import Loader from '../components/loader/loader';
 import { useEffect } from 'react';
 import { store } from '../store';
 

@@ -19,7 +19,7 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useDispatch } from 'react-redux';
 import { FC, useEffect } from 'react';
-import Loader from '../loader/laoder';
+import Loader from '../loader/loader';
 import { startSocket, stopSocket } from '../../services/slices/socket/actions';
 import { useGetOrderQuery } from '../../services/api/order-api/order-api';
 import { useTypedSelector } from '../../utils/typed-hooks';
@@ -115,7 +115,10 @@ const OrderDetails: FC<OrderDetailsProps> = ({ isPrivateOrders = false }) => {
 
   const estimatedSeconds =
     estimatedCookingTimeMinutes !== undefined
-      ? convertEstimatedMinutesToSeconds(estimatedCookingTimeMinutes, mockMinuteInMs)
+      ? convertEstimatedMinutesToSeconds(
+          estimatedCookingTimeMinutes,
+          mockMinuteInMs
+        )
       : undefined;
 
   const orderSum = parsedIngredients.reduce((acc, item) => {
@@ -140,7 +143,9 @@ const OrderDetails: FC<OrderDetailsProps> = ({ isPrivateOrders = false }) => {
       {estimatedSeconds !== undefined && (
         <p className="text text_type_main-default text_color_inactive mb-6">
           Примерное время приготовления: ~{estimatedSeconds} сек
-          {estimatedReadyAtTime ? ` (готово около ${estimatedReadyAtTime})` : ''}
+          {estimatedReadyAtTime
+            ? ` (готово около ${estimatedReadyAtTime})`
+            : ''}
         </p>
       )}
 
