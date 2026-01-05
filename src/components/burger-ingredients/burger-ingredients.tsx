@@ -1,7 +1,6 @@
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingredients.module.css';
 import { IngredientsGroup } from './ingredients-group/ingredients-group';
-import { IngredientType } from '../../types/types';
 
 import { FC, useEffect, useMemo, useRef, useState } from 'react';
 import { useGetIngredientsQuery } from '../../services/api/ingredients-api/ingredients-api';
@@ -12,11 +11,8 @@ type IngredientVariantsType = 'bun' | 'sauce' | 'stuffing';
 type BurgerIngredientsProps = { extraClass?: string };
 
 const BurgerIngredients: FC<BurgerIngredientsProps> = ({ extraClass }) => {
-  const { data } = useGetIngredientsQuery(undefined);
-  const ingredients: IngredientType[] = useMemo(
-    () => data?.data ?? [],
-    [data]
-  );
+  const { data: { data: ingredients } = { data: [] } } =
+    useGetIngredientsQuery(undefined);
 
   const [activeTitle, setTitleActive] = useState<IngredientVariantsType>('bun');
   const [positions, setPositions] = useState({

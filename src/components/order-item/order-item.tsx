@@ -19,9 +19,8 @@ const OrderItem: FC<Order> = ({
   isOrderHistoryItem = false,
   name,
 }) => {
-  const { data } = useGetIngredientsQuery(undefined);
-
-  const ingredientsData = data?.data;
+  const { data: { data: ingredientsData } = { data: [] } } =
+    useGetIngredientsQuery(undefined);
   const location = useLocation();
 
   if (!ingredientsData) {

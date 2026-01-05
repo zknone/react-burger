@@ -7,9 +7,11 @@ import Loader from '../../loader/loader';
 const IngredientPopupDetails = () => {
   const { id } = useParams();
 
-  const { data, isLoading, error } = useGetIngredientsQuery(undefined);
-
-  const ingredients: IngredientType[] = data?.data;
+  const {
+    data: { data: ingredients } = { data: [] },
+    isLoading,
+    error,
+  } = useGetIngredientsQuery(undefined);
 
   if (isLoading) return <Loader />;
   if (error) return <div>Error loading ingredients</div>;
