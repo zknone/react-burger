@@ -28,25 +28,25 @@ const BurgerOrderDetails: FC<BurgerOrderDetailsProps> = ({
   return (
     <>
       <h2 className="text text_type_digits-large mb-8">{orderNumber}</h2>
-      <p className="text text_type_main-medium mb-15">идентификатор заказа</p>
+      <p className="text text_type_main-medium mb-15">order identifier</p>
       <img
         className="mb-15"
         width={120}
         height={120}
         src={done}
-        alt="Заказ исполнен"
+        alt="Order is completed"
       />
       <p className="text text_type_main-default mb-2">
-        Ваш заказ начали готовить
+        Your order is being prepared
       </p>
       {estimatedSeconds !== undefined && (
         <p className="text text_type_main-default text_color_inactive mb-2">
-          Примерное время: ~{estimatedSeconds} сек
-          {readyTime ? ` (около ${readyTime})` : ''}
+          Estimated time: ~{estimatedSeconds} sec
+          {readyTime ? ` (around ${readyTime})` : ''}
         </p>
       )}
       <p className="text text_type_main-default text_color_inactive">
-        Дождитесь готовности на орбитальной станции
+        Please wait for readiness at the orbital station
       </p>
     </>
   );

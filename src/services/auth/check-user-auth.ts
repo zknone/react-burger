@@ -16,7 +16,7 @@ export const checkUserAuth = () => async (dispatch: AppDispatch) => {
         success: false,
       })
     );
-    toast.error('Токен не найден, пожалуйста войдите заново');
+    toast.error('Token not found, please log in again');
     return;
   }
 
@@ -28,7 +28,7 @@ export const checkUserAuth = () => async (dispatch: AppDispatch) => {
     validateDataWithZod(
       tokenResponseModel,
       tokenResponse,
-      'Невалидный ответ при обновлении токена'
+      'Invalid token refresh response'
     );
     const tokenParseResult = tokenResponseModel.parse(tokenResponse);
 
@@ -42,14 +42,14 @@ export const checkUserAuth = () => async (dispatch: AppDispatch) => {
     validateDataWithZod(
       profileResponseModel,
       userResponse,
-      'Невалидный ответ профиля пользователя'
+      'Invalid user profile response'
     );
     const userParseResult = profileResponseModel.parse(userResponse);
 
     dispatch(setProfile(userParseResult));
   } catch (error) {
     dispatch(setHasAuthStatus(false));
-    toast.error('Ошибка авторизации, пожалуйста войдите снова');
+    toast.error('Authorization error, please sign in again');
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
   } finally {

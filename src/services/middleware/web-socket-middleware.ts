@@ -47,7 +47,7 @@ const createWebSocketMiddleware = (
             const data: SocketResponse = JSON.parse(event.data);
             storeTyped.dispatch(wsGetAllOrders(data));
           } catch (error) {
-            console.error('Ошибка парсинга allOrdersSocket:', error);
+            console.error('Failed to parse allOrdersSocket payload:', error);
           }
         };
 
@@ -80,13 +80,13 @@ const createWebSocketMiddleware = (
           };
 
           privateSocket.onmessage = (event: MessageEvent) => {
-            try {
-              const data: SocketResponse = JSON.parse(event.data);
-              storeTyped.dispatch(wsGetAllPrivateOrders(data));
-            } catch (error) {
-              console.error('Ошибка парсинга privateSocket:', error);
-            }
-          };
+          try {
+            const data: SocketResponse = JSON.parse(event.data);
+            storeTyped.dispatch(wsGetAllPrivateOrders(data));
+          } catch (error) {
+            console.error('Failed to parse privateSocket payload:', error);
+          }
+        };
 
           privateSocket.onclose = () => {
             storeTyped.dispatch(wsConnectionClosed());
@@ -102,7 +102,7 @@ const createWebSocketMiddleware = (
               initializePrivateSocket(accessToken);
             })
             .catch((error) => {
-              console.error('Ошибка обновления токена:', error);
+              console.error('Error refreshing token for private socket:', error);
             });
         } else {
           initializePrivateSocket(accessToken);

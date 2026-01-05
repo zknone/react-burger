@@ -47,7 +47,7 @@ const useRegister = () => {
         status: typedError.status || 500,
         data: {
           success: false,
-          message: typedError.data?.message || 'Ошибка регистрации',
+          message: typedError.data?.message || 'Registration failed',
         },
       };
     }
@@ -75,7 +75,7 @@ const useLogin = () => {
 
       return { status: 200, data: response };
     } catch (err) {
-      console.error('Ошибка входа:', err);
+      console.error('Login error:', err);
 
       const typedError = err as FetchBaseQueryError & {
         data?: ErrorType['data'];
@@ -85,7 +85,7 @@ const useLogin = () => {
         status: typedError.status || 500,
         data: {
           success: false,
-          message: typedError.data?.message || 'Ошибка входа',
+          message: typedError.data?.message || 'Login failed',
         },
       };
     }
@@ -116,7 +116,7 @@ const useLogout = () => {
         status: typedError.status || 500,
         data: {
           success: false,
-          message: typedError.data?.message || 'Ошибка разлогирования',
+          message: typedError.data?.message || 'Logout failed',
         },
       };
     }
@@ -148,7 +148,7 @@ const useResetPassword = () => {
         status: typedError.status || 500,
         data: {
           success: false,
-          message: typedError.data?.message || 'Не смог обновить пароль',
+          message: typedError.data?.message || 'Could not update password',
         },
       };
     }
@@ -178,7 +178,7 @@ const useRestorePassword = () => {
           success: false,
           message:
             typedError.data?.message ||
-            'Ошибка восстановления пароля по этому email',
+            'Password reset failed for this email',
         },
       };
     }
@@ -211,7 +211,7 @@ const useProfile = () => {
         status: typedError.status || 500,
         data: {
           success: false,
-          message: typedError.data?.message || 'Ошибка регистрации',
+          message: typedError.data?.message || 'Profile update failed',
         },
       };
     }

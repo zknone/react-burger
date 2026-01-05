@@ -3,7 +3,7 @@ import { IngredientType, Order } from '../types/types';
 export const mockIngredients: IngredientType[] = [
   {
     _id: '60d3b41abdacab0026a733c6',
-    name: 'Краторная булка N-200i',
+    name: 'Crater Bun N-200i',
     type: 'bun',
     proteins: 80,
     fat: 24,
@@ -18,7 +18,7 @@ export const mockIngredients: IngredientType[] = [
   },
   {
     _id: '60d3b41abdacab0026a733c7',
-    name: 'Флюоресцентная булка R2-D3',
+    name: 'Fluorescent Bun R2-D3',
     type: 'bun',
     proteins: 44,
     fat: 26,
@@ -33,7 +33,7 @@ export const mockIngredients: IngredientType[] = [
   },
   {
     _id: '60d3b41abdacab0026a733c8',
-    name: 'Филе Люминесцентного тетраодонтимформа',
+    name: 'Luminescent Tetraodontiforme Fillet',
     type: 'main',
     proteins: 44,
     fat: 26,
@@ -48,7 +48,7 @@ export const mockIngredients: IngredientType[] = [
   },
   {
     _id: '60d3b41abdacab0026a733c9',
-    name: 'Мясо бессмертных моллюсков Protostomia',
+    name: 'Immortal Protostomia Mollusk Meat',
     type: 'main',
     proteins: 433,
     fat: 244,
@@ -63,7 +63,7 @@ export const mockIngredients: IngredientType[] = [
   },
   {
     _id: '60d3b41abdacab0026a733ca',
-    name: 'Говяжий метеорит (класса M)',
+    name: 'Beef Meteorite (Class M)',
     type: 'main',
     proteins: 800,
     fat: 800,
@@ -78,7 +78,7 @@ export const mockIngredients: IngredientType[] = [
   },
   {
     _id: '60d3b41abdacab0026a733cb',
-    name: 'Соус Spicy-X',
+    name: 'Spicy-X Sauce',
     type: 'sauce',
     proteins: 10,
     fat: 20,
@@ -93,7 +93,7 @@ export const mockIngredients: IngredientType[] = [
   },
   {
     _id: '60d3b41abdacab0026a733cc',
-    name: 'Хрустящие минеральные кольца',
+    name: 'Crunchy Mineral Rings',
     type: 'main',
     proteins: 808,
     fat: 689,

@@ -39,7 +39,7 @@ const IngredientPopupDetails = () => {
       <dl className={styles.burger_popup_details}>
         <div className={styles.burger_popup_detail_item}>
           <dt className="text text_type_main-default text_color_inactive mb-2">
-            Калории,ккал
+            Calories, kcal
           </dt>
           <dd className="text text_type_main-default text_color_inactive">
             {selectedIngredient.calories}
@@ -47,7 +47,7 @@ const IngredientPopupDetails = () => {
         </div>
         <div className={styles.burger_popup_detail_item}>
           <dt className="text text_type_main-default text_color_inactive mb-2">
-            Белки, г
+            Proteins, g
           </dt>
           <dd className="text text_type_main-default text_color_inactive">
             {selectedIngredient.proteins}
@@ -55,7 +55,7 @@ const IngredientPopupDetails = () => {
         </div>
         <div className={styles.burger_popup_detail_item}>
           <dt className="text text_type_main-default text_color_inactive mb-2">
-            Жиры, г
+            Fat, g
           </dt>
           <dd className="text text_type_main-default text_color_inactive">
             {selectedIngredient.fat}
@@ -63,7 +63,7 @@ const IngredientPopupDetails = () => {
         </div>
         <div className={styles.burger_popup_detail_item}>
           <dt className="text text_type_main-default text_color_inactive mb-2">
-            Углеводы, г
+            Carbohydrates, g
           </dt>
           <dd className="text text_type_main-default text_color_inactive">
             {selectedIngredient.carbohydrates}

@@ -113,19 +113,19 @@ const BurgerConstructor = () => {
       )}
       <div className={styles.burger_constructor_wrapper}>
         {!bun ? (
-          <BurgerEmptyItem type="top" title="Добавьте булочку" />
+          <BurgerEmptyItem type="top" title="Add a bun" />
         ) : (
           <ConstructorElement
             type="top"
             extraClass={'mr-4'}
             isLocked={true}
-            text={bun?.name ? `${bun?.name} (верх)` : ''}
+            text={bun?.name ? `${bun?.name} (top)` : ''}
             thumbnail={bun?.image_mobile || ''}
             price={bun?.price || 0}
           />
         )}
         {selectedIngredients.length === 0 ? (
-          <BurgerEmptyItem title="Добавьте ингредиенты" />
+          <BurgerEmptyItem title="Add ingredients" />
         ) : (
           <ul className={`${styles.burger_constructor_list} custom-scroll`}>
             {selectedIngredients.map((item, index) => (
@@ -140,13 +140,13 @@ const BurgerConstructor = () => {
           </ul>
         )}
         {!bun ? (
-          <BurgerEmptyItem type="bottom" title="Добавьте булочку" />
+          <BurgerEmptyItem type="bottom" title="Add a bun" />
         ) : (
           <ConstructorElement
             type="bottom"
             extraClass={'mr-4'}
             isLocked={true}
-            text={bun?.name ? `${bun?.name} (низ)` : ''}
+            text={bun?.name ? `${bun?.name} (bottom)` : ''}
             thumbnail={bun?.image_mobile || ''}
             price={bun?.price || 0}
           />
@@ -173,10 +173,10 @@ const BurgerConstructor = () => {
             }
           >
             {!isAuthenticated
-              ? 'Необходимо авторизоваться'
+              ? 'Please sign in'
               : isLoading
-                ? 'Оформляем заказ'
-                : 'Оформить заказ'}
+                ? 'Placing order'
+                : 'Place order'}
           </Button>
         </div>
       </div>

@@ -142,15 +142,15 @@ const OrderDetails: FC<OrderDetailsProps> = ({ isPrivateOrders = false }) => {
       </span>
       {estimatedSeconds !== undefined && (
         <p className="text text_type_main-default text_color_inactive mb-6">
-          Примерное время приготовления: ~{estimatedSeconds} сек
+          Estimated cooking time: ~{estimatedSeconds} sec
           {estimatedReadyAtTime
-            ? ` (готово около ${estimatedReadyAtTime})`
+            ? ` (ready around ${estimatedReadyAtTime})`
             : ''}
         </p>
       )}
 
       <h3 className={`text text_type_main-medium mb-6 ${styles.title}`}>
-        Состав:{' '}
+        Ingredients:{' '}
       </h3>
 
       <ul className={styles.ingredients_list}>

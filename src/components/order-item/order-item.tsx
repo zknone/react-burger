@@ -24,7 +24,7 @@ const OrderItem: FC<Order> = ({
   const location = useLocation();
 
   if (!ingredientsData) {
-    return <p>Загрузка ингредиентов...</p>;
+    return <p>Loading ingredients...</p>;
   }
 
   const ingredientsCache: IngredientCacheType = ingredientsData?.reduce(
@@ -36,14 +36,14 @@ const OrderItem: FC<Order> = ({
   );
 
   if (!ingredientsCache || Object.keys(ingredientsCache).length === 0) {
-    return <p>Проверка кэша...</p>;
+    return <p>Checking cache...</p>;
   }
 
   const orderSum = ingredients.reduce((acc, item) => {
     const ingredient = ingredientsCache[item];
 
     if (!ingredient) {
-      console.warn(`Нет данных в кэше для ингредиента: ${item}`);
+      console.warn(`Missing cached data for ingredient: ${item}`);
       return acc;
     }
 
@@ -78,7 +78,7 @@ const OrderItem: FC<Order> = ({
             {ingredients.slice(0, 5).map((item, index) => {
               const ingredient = ingredientsCache[item];
               if (!ingredient) {
-                console.warn(`Нет данных для ингредиента: ${item}`);
+                console.warn(`No data for ingredient: ${item}`);
                 return null;
               }
 
