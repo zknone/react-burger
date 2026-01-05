@@ -4,6 +4,8 @@ import './index.css';
 import { Provider } from 'react-redux';
 import { store } from './store';
 import Root from './components/root/root';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 async function prepareApp() {
   if (process.env.NODE_ENV === 'development') {
@@ -24,6 +26,7 @@ prepareApp().then(() => {
     <React.StrictMode>
       <Provider store={store}>
         <Root />
+        <ToastContainer position="top-right" autoClose={5000} />
       </Provider>
     </React.StrictMode>
   );

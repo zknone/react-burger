@@ -3,6 +3,7 @@ import { authorizationApi } from '../api/authorization-api/authorization-api';
 import { setProfile, setHasAuthStatus } from '../slices/profile/reducers';
 import { profileResponseModel, tokenResponseModel } from '../../types/types';
 import { toast } from 'react-toastify';
+import validateDataWithZod from '../../utils/validation';
 
 export const checkUserAuth = () => async (dispatch: AppDispatch) => {
   const refreshToken = localStorage.getItem('refreshToken');
@@ -24,28 +25,30 @@ export const checkUserAuth = () => async (dispatch: AppDispatch) => {
       authorizationApi.endpoints.token.initiate(refreshToken)
     ).unwrap();
 
-    const tokenParseResult = tokenResponseModel.safeParse(tokenResponse);
-    if (!tokenParseResult.success) {
-      toast.error('Невалидный ответ при обновлении токена');
-      throw new Error('Invalid token response');
-    }
+    validateDataWithZod(
+      tokenResponseModel,
+      tokenResponse,
+      'Невалидный ответ при обновлении токена'
+    );
+    const tokenParseResult = tokenResponseModel.parse(tokenResponse);
 
-    localStorage.setItem('accessToken', tokenParseResult.data.accessToken);
-    localStorage.setItem('refreshToken', tokenParseResult.data.refreshToken);
+    localStorage.setItem('accessToken', tokenParseResult.accessToken);
+    localStorage.setItem('refreshToken', tokenParseResult.refreshToken);
 
     const userResponse = await dispatch(
       authorizationApi.endpoints.getUser.initiate(undefined)
     ).unwrap();
 
-    const userParseResult = profileResponseModel.safeParse(userResponse);
-    if (!userParseResult.success) {
-      toast.error('Невалидный ответ профиля пользователя');
-      throw new Error('Invalid user profile response');
-    }
+    validateDataWithZod(
+      profileResponseModel,
+      userResponse,
+      'Невалидный ответ профиля пользователя'
+    );
+    const userParseResult = profileResponseModel.parse(userResponse);
 
-    dispatch(setProfile(userParseResult.data));
+    dispatch(setProfile(userParseResult));
   } catch (error) {
-    setHasAuthStatus(false);
+    dispatch(setHasAuthStatus(false));
     toast.error('Ошибка авторизации, пожалуйста войдите снова');
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
