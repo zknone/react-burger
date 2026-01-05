@@ -28,7 +28,7 @@ const OrderHistory = () => {
     );
   }
 
-  if (!privateData?.orders) {
+  if (!privateData?.orders || privateData?.orders.length === 0) {
     return <div>No orders found.</div>;
   }
 
