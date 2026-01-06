@@ -23,6 +23,66 @@ const createWebSocketMiddleware = (
 ): Middleware<unknown, RootState, AppDispatch> => {
   let privateSocket: WebSocket | null = null;
   let allOrdersSocket: WebSocket | null = null;
+  let reconnectAttempts = 0;
+  let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
+  let pingTimer: ReturnType<typeof setTimeout> | null = null;
+  const PING_INTERVAL_MS = 25000;
+  const PONG_TIMEOUT_MS = 10000;
+
+  const clearTimers = () => {
+    if (reconnectTimer) {
+      clearTimeout(reconnectTimer);
+      reconnectTimer = null;
+    }
+    if (pingTimer) {
+      clearTimeout(pingTimer);
+      pingTimer = null;
+    }
+  };
+
+  const scheduleReconnect = (storeDispatch: AppDispatch, startAction: Action) => {
+    clearTimers();
+    reconnectAttempts += 1;
+    const delay = Math.min(30000, 1000 * 2 ** Math.min(reconnectAttempts, 5));
+    reconnectTimer = setTimeout(() => {
+      storeDispatch(startAction as never);
+    }, delay);
+  };
+
+  const startPing = (socket: WebSocket, storeDispatch: AppDispatch) => {
+    let pongReceived = true;
+
+    const sendPing = () => {
+      if (socket.readyState !== WebSocket.OPEN) return;
+      pongReceived = false;
+      socket.send(JSON.stringify({ type: 'ping' }));
+      pingTimer = setTimeout(() => {
+        if (!pongReceived) {
+          socket.close();
+          storeDispatch(wsConnectionError(ERROR_MESSAGES.websocketConnection));
+        } else {
+          sendPing();
+        }
+      }, PONG_TIMEOUT_MS);
+    };
+
+    socket.addEventListener('message', (event: MessageEvent) => {
+      try {
+        const parsed = JSON.parse(event.data);
+        if (parsed?.type === 'pong') {
+          pongReceived = true;
+          if (pingTimer) {
+            clearTimeout(pingTimer);
+          }
+          pingTimer = setTimeout(sendPing, PING_INTERVAL_MS);
+        }
+      } catch (error) {
+        logError('socket/ping-parse', error);
+      }
+    });
+
+    pingTimer = setTimeout(sendPing, PING_INTERVAL_MS);
+  };
 
   return (store) => (next) => (action: unknown) => {
     const { type, payload } = action as Action<string, unknown>;
@@ -39,6 +99,9 @@ const createWebSocketMiddleware = (
 
         allOrdersSocket.onopen = () => {
           storeTyped.dispatch(wsConnectionSuccess());
+          reconnectAttempts = 0;
+          clearTimers();
+          startPing(currentSocket, storeTyped.dispatch);
         };
 
         allOrdersSocket.onerror = (event: Event) => {
@@ -69,6 +132,7 @@ const createWebSocketMiddleware = (
           if (allOrdersSocket === currentSocket) {
             storeTyped.dispatch(wsConnectionClosed());
             allOrdersSocket = null;
+            scheduleReconnect(storeTyped.dispatch, { type: 'socket/start' });
           }
         };
       }
@@ -87,6 +151,9 @@ const createWebSocketMiddleware = (
 
           privateSocket.onopen = () => {
             storeTyped.dispatch(wsConnectionSuccess());
+            reconnectAttempts = 0;
+            clearTimers();
+            startPing(privateSocket as WebSocket, storeTyped.dispatch);
           };
 
           privateSocket.onerror = (event: Event) => {
@@ -116,6 +183,7 @@ const createWebSocketMiddleware = (
           privateSocket.onclose = () => {
             storeTyped.dispatch(wsConnectionClosed());
             privateSocket = null;
+            scheduleReconnect(storeTyped.dispatch, { type: 'socket/start' });
           };
         };
 
@@ -144,6 +212,8 @@ const createWebSocketMiddleware = (
         privateSocket.close();
         privateSocket = null;
       }
+      reconnectAttempts = 0;
+      clearTimers();
     }
 
     if (type === 'WS_SEND_MESSAGE') {
