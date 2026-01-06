@@ -26,7 +26,14 @@ export const createTestBaseQuery =
     await new Promise((resolve) => setTimeout(resolve, 500));
 
     if (url?.includes('/ingredients')) {
-      data = { success: true, data: mockIngredients };
+      // I mocked failing ingredients fetctching
+      const shouldSendBroken = Math.random() < 1 / 3;
+      data = shouldSendBroken
+        ? {
+            success: true,
+            data: [{ bad: 'payload' }],
+          }
+        : { success: true, data: mockIngredients };
     } else if (url?.includes('/orders')) {
       if (method === 'POST') {
         const body = typeof args === 'string' ? undefined : args.body;

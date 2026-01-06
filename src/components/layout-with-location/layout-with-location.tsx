@@ -71,7 +71,7 @@ const LayoutWithLocation = () => {
           element={<OnlyUnAuth component={<LoginPage />} />}
         />
 
-        <Route path="/feed" element={<FeedPage />} />
+        <Route path="/feed" element={<OnlyAuth component={<FeedPage />} />} />
         <Route
           path="/profile"
           element={<OnlyAuth component={<ProfilePage />} />}

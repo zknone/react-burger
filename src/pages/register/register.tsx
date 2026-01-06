@@ -31,11 +31,11 @@ export default function RegisterPage() {
     <div className={styles.container}>
       <form onSubmit={handleSubmit} className={styles.form}>
         <h2 className={`${styles.modal_title} text text_type_main-medium`}>
-          Регистрация
+          Sign up
         </h2>
         <Input
           type="text"
-          placeholder="Имя"
+          placeholder="Name"
           name="name"
           value={form.name}
           onChange={handleChange}
@@ -47,7 +47,7 @@ export default function RegisterPage() {
           onChange={handleChange}
         />
         <PasswordInput
-          placeholder="Пароль"
+          placeholder="Password"
           name="password"
           value={form.password}
           onChange={handleChange}
@@ -56,7 +56,7 @@ export default function RegisterPage() {
           disabled={isRegisterLoading || isLoginLoading}
           htmlType="submit"
         >
-          Войти
+          Sign up
         </Button>
         {registerError && 'data' in registerError && (
           <p>
@@ -64,7 +64,7 @@ export default function RegisterPage() {
               registerError as FetchBaseQueryError & {
                 data?: ErrorType['data'];
               }
-            ).data?.message || 'Ошибка регистрации'}
+            ).data?.message || 'Registration failed'}
           </p>
         )}
 
@@ -74,19 +74,19 @@ export default function RegisterPage() {
               loginError as FetchBaseQueryError & {
                 data?: ErrorType['data'];
               }
-            ).data?.message || 'Ошибка логирования после регистрации'}
+            ).data?.message || 'Login after registration failed'}
           </p>
         )}
       </form>
       <div className={styles.line}>
         <p className="text text_type_main-default text_color_inactive">
-          Уже зарегистрированы?
+          Already registered?
         </p>
         <Link
           className={`${styles.link} text text_type_main-default text`}
           to="/login"
         >
-          Войти
+          Sign in
         </Link>
       </div>
     </div>

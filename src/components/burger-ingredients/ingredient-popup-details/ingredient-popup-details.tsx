@@ -2,14 +2,16 @@ import { useParams } from 'react-router-dom';
 import styles from './ingredient-popup-details.module.css';
 import { useGetIngredientsQuery } from '../../../services/api/ingredients-api/ingredients-api';
 import { IngredientType } from '../../../types/types';
-import Loader from '../../loader/laoder';
+import Loader from '../../loader/loader';
 
 const IngredientPopupDetails = () => {
   const { id } = useParams();
 
-  const { data, isLoading, error } = useGetIngredientsQuery(undefined);
-
-  const ingredients: IngredientType[] = data?.data;
+  const {
+    data: { data: ingredients } = { data: [] },
+    isLoading,
+    error,
+  } = useGetIngredientsQuery(undefined);
 
   if (isLoading) return <Loader />;
   if (error) return <div>Error loading ingredients</div>;
@@ -37,7 +39,7 @@ const IngredientPopupDetails = () => {
       <dl className={styles.burger_popup_details}>
         <div className={styles.burger_popup_detail_item}>
           <dt className="text text_type_main-default text_color_inactive mb-2">
-            Калории,ккал
+            Calories, kcal
           </dt>
           <dd className="text text_type_main-default text_color_inactive">
             {selectedIngredient.calories}
@@ -45,7 +47,7 @@ const IngredientPopupDetails = () => {
         </div>
         <div className={styles.burger_popup_detail_item}>
           <dt className="text text_type_main-default text_color_inactive mb-2">
-            Белки, г
+            Proteins, g
           </dt>
           <dd className="text text_type_main-default text_color_inactive">
             {selectedIngredient.proteins}
@@ -53,7 +55,7 @@ const IngredientPopupDetails = () => {
         </div>
         <div className={styles.burger_popup_detail_item}>
           <dt className="text text_type_main-default text_color_inactive mb-2">
-            Жиры, г
+            Fat, g
           </dt>
           <dd className="text text_type_main-default text_color_inactive">
             {selectedIngredient.fat}
@@ -61,7 +63,7 @@ const IngredientPopupDetails = () => {
         </div>
         <div className={styles.burger_popup_detail_item}>
           <dt className="text text_type_main-default text_color_inactive mb-2">
-            Углеводы, г
+            Carbohydrates, g
           </dt>
           <dd className="text text_type_main-default text_color_inactive">
             {selectedIngredient.carbohydrates}

@@ -1,7 +1,6 @@
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingredients.module.css';
 import { IngredientsGroup } from './ingredients-group/ingredients-group';
-import { IngredientType } from '../../types/types';
 
 import { FC, useEffect, useMemo, useRef, useState } from 'react';
 import { useGetIngredientsQuery } from '../../services/api/ingredients-api/ingredients-api';
@@ -12,11 +11,8 @@ type IngredientVariantsType = 'bun' | 'sauce' | 'stuffing';
 type BurgerIngredientsProps = { extraClass?: string };
 
 const BurgerIngredients: FC<BurgerIngredientsProps> = ({ extraClass }) => {
-  const { data } = useGetIngredientsQuery(undefined);
-  const ingredients: IngredientType[] = useMemo(
-    () => data?.data ?? [],
-    [data]
-  );
+  const { data: { data: ingredients } = { data: [] } } =
+    useGetIngredientsQuery(undefined);
 
   const [activeTitle, setTitleActive] = useState<IngredientVariantsType>('bun');
   const [positions, setPositions] = useState({
@@ -94,12 +90,12 @@ const BurgerIngredients: FC<BurgerIngredientsProps> = ({ extraClass }) => {
   }, [positions]);
 
   if (!ingredients || ingredients.length === 0) {
-    return <div>Загружаю ингредиенты...</div>;
+    return <div>Loading ingredients...</div>;
   }
 
   return (
     <div className={`${styles.ingredients_content_container} ${extraClass}`}>
-      <h2 className="text text_type_main-large mb-5">Соберите бургер</h2>
+      <h2 className="text text_type_main-large mb-5">Build your burger</h2>
       <div className={styles.ingredients_tabs}>
         <Tab
           value="buns>"
@@ -108,7 +104,7 @@ const BurgerIngredients: FC<BurgerIngredientsProps> = ({ extraClass }) => {
             handleTabClick('bun');
           }}
         >
-          Булки
+          Buns
         </Tab>
         <Tab
           value="sauce"
@@ -117,7 +113,7 @@ const BurgerIngredients: FC<BurgerIngredientsProps> = ({ extraClass }) => {
             handleTabClick('sauce');
           }}
         >
-          Соусы
+          Sauces
         </Tab>
         <Tab
           value="topping"
@@ -126,7 +122,7 @@ const BurgerIngredients: FC<BurgerIngredientsProps> = ({ extraClass }) => {
             handleTabClick('stuffing');
           }}
         >
-          Начинки
+          Fillings
         </Tab>
       </div>
       <div
@@ -134,15 +130,15 @@ const BurgerIngredients: FC<BurgerIngredientsProps> = ({ extraClass }) => {
         className={`${styles.ingredients_container} pt-6 pb-6 pr-10 custom-scroll`}
         ref={scrollRef}
       >
-        <IngredientsGroup ref={bunRef} title="Булки" ingredients={bunsData} />
+        <IngredientsGroup ref={bunRef} title="Buns" ingredients={bunsData} />
         <IngredientsGroup
           ref={sauceRef}
-          title="Соусы"
+          title="Sauces"
           ingredients={sauceData}
         />
         <IngredientsGroup
           ref={stuffingRef}
-          title="Начинки"
+          title="Fillings"
           ingredients={mainCourseData}
         />
       </div>

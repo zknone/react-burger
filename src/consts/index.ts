@@ -1,15 +1,15 @@
 export const STATUSES = {
   done: {
     color: '#00CCCC',
-    title: 'Выполнен',
+    title: 'Completed',
   },
   pending: {
     color: '#F2F2F3',
-    title: 'В работе',
+    title: 'In progress',
   },
   canceled: {
     color: '#E52B1A',
-    title: 'Отменен',
+    title: 'Canceled',
   },
 };
 

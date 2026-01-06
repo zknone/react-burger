@@ -1,6 +1,6 @@
 import { Navigate, useLocation } from 'react-router-dom';
 import React, { FC } from 'react';
-import Loader from '../loader/laoder';
+import Loader from '../loader/loader';
 import { useTypedSelector } from '../../utils/typed-hooks';
 
 type ProtectedRouteProps = {
@@ -12,14 +12,14 @@ const ProtectedRoute: FC<ProtectedRouteProps> = ({
   onlyUnAuth = false,
   component,
 }) => {
-  const isAuthChecked = useTypedSelector(
-    (state) => state.profile.isAuthChecked
+  const hasAuthStatus = useTypedSelector(
+    (state) => state.profile.hasAuthStatus
   );
   const user = useTypedSelector((state) => state.profile.user);
 
   const location = useLocation();
 
-  if (!isAuthChecked) {
+  if (!hasAuthStatus) {
     return <Loader />;
   }
 

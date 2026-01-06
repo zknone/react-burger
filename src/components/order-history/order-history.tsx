@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux';
 import OrderItem from '../order-item/order-item';
-import Loader from '../loader/laoder';
+import Loader from '../loader/loader';
 import { useEffect } from 'react';
 import { startSocket, stopSocket } from '../../services/slices/socket/actions';
 import styles from './order-history.module.css';
@@ -28,7 +28,7 @@ const OrderHistory = () => {
     );
   }
 
-  if (!privateData?.orders) {
+  if (!privateData?.orders || privateData?.orders.length === 0) {
     return <div>No orders found.</div>;
   }
 

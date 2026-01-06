@@ -38,14 +38,14 @@ const socketSlice = createSlice({
       state.isLoading = false;
       if (JSON.stringify(state.data) !== JSON.stringify(action.payload)) {
         state.data = action.payload;
-        state.isLoading = false;
       }
     },
     wsGetAllPrivateOrders: (state, action: PayloadAction<SocketResponse>) => {
       state.isLoading = false;
-      if (JSON.stringify(state.data) !== JSON.stringify(action.payload)) {
+      if (
+        JSON.stringify(state.privateData) !== JSON.stringify(action.payload)
+      ) {
         state.privateData = action.payload;
-        state.isLoading = false;
       }
     },
     addOrder: (state, action: PayloadAction<Order>) => {

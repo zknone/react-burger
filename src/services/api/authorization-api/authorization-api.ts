@@ -6,13 +6,21 @@ import {
   FetchBaseQueryError,
 } from '@reduxjs/toolkit/query/react';
 import {
+  forgotResetPasswordLogoutResponseModel,
+  ForgotResetPasswordLogoutResponseType,
   LoginRequest,
   LoginResponse,
+  loginResponseModel,
+  ProfileResponse,
+  profileResponseModel,
   RegisterAuthorizationResponse,
+  registerAuthorizationResponseModel,
   TokenResponse,
+  tokenResponseModel,
 } from '../../../types/types';
 import { BASE_API_URL } from '../../../consts';
 import { getBaseQuery } from '../get-base-query';
+import validateDataWithZod from '../../../utils/validation';
 
 export const ingredientsApiConfig = {
   baseUrl: BASE_API_URL,
@@ -77,6 +85,21 @@ export const authorizationApi = createApi({
         method: 'POST',
         body: credentials,
       }),
+      transformResponse: (res: LoginResponse) => {
+        const parsed = validateDataWithZod<LoginResponse>(
+          loginResponseModel,
+          res,
+          'Invalid login data received from server'
+        );
+        return (
+          parsed ?? {
+            success: false,
+            accessToken: '',
+            refreshToken: '',
+            user: { email: '', name: '' },
+          }
+        );
+      },
     }),
     register: builder.mutation<
       RegisterAuthorizationResponse,
@@ -87,9 +110,24 @@ export const authorizationApi = createApi({
         method: 'POST',
         body: { email, password, name },
       }),
+      transformResponse: (res: RegisterAuthorizationResponse) => {
+        const parsed = validateDataWithZod<RegisterAuthorizationResponse>(
+          registerAuthorizationResponseModel,
+          res,
+          'Invalid registration data received from server'
+        );
+        return (
+          parsed ?? {
+            success: false,
+            accessToken: '',
+            refreshToken: '',
+            user: { email: '', name: '' },
+          }
+        );
+      },
     }),
     changeProfile: builder.mutation<
-      RegisterAuthorizationResponse,
+      ProfileResponse,
       { email: string; password: string; name: string }
     >({
       query: ({ email, password, name }) => {
@@ -105,6 +143,19 @@ export const authorizationApi = createApi({
           body: { email, password, name },
         };
       },
+      transformResponse: (res: ProfileResponse) => {
+        const parsed = validateDataWithZod<ProfileResponse>(
+          profileResponseModel,
+          res,
+          'Invalid change profile data received from server'
+        );
+        return (
+          parsed ?? {
+            success: false,
+            user: { email: '', name: '' },
+          }
+        );
+      },
     }),
     logout: builder.mutation({
       query: (refreshToken: string) => {
@@ -114,6 +165,15 @@ export const authorizationApi = createApi({
           body: { token: refreshToken },
         };
       },
+      transformResponse: (res: ForgotResetPasswordLogoutResponseType) => {
+        const parsed =
+          validateDataWithZod<ForgotResetPasswordLogoutResponseType>(
+            forgotResetPasswordLogoutResponseModel,
+            res,
+            'Invalid logout data received from server'
+          );
+        return parsed ?? { success: false, message: '' };
+      },
     }),
     token: builder.mutation<TokenResponse, string>({
       query: (refreshToken) => ({
@@ -121,6 +181,14 @@ export const authorizationApi = createApi({
         method: 'POST',
         body: { token: refreshToken },
       }),
+      transformResponse: (res: TokenResponse) => {
+        const parsed = validateDataWithZod<TokenResponse>(
+          tokenResponseModel,
+          res,
+          'Invalid token data received from server'
+        );
+        return parsed ?? { success: false, accessToken: '', refreshToken: '' };
+      },
     }),
     getUser: builder.query({
       query: () => {
@@ -134,6 +202,19 @@ export const authorizationApi = createApi({
           },
         };
       },
+      transformResponse: (res: ProfileResponse) => {
+        const parsed = validateDataWithZod<ProfileResponse>(
+          profileResponseModel,
+          res,
+          'Invalid profile data received from server'
+        );
+        return (
+          parsed ?? {
+            success: false,
+            user: { email: '', name: '' },
+          }
+        );
+      },
     }),
     resetPassword: builder.mutation({
       query: ({ password, token }: { password: string; token: string }) => {
@@ -143,10 +224,28 @@ export const authorizationApi = createApi({
           body: { password, token },
         };
       },
+      transformResponse: (res: unknown) => {
+        const parsed =
+          validateDataWithZod<ForgotResetPasswordLogoutResponseType>(
+            forgotResetPasswordLogoutResponseModel,
+            res,
+            'Invalid reset password data received from server'
+          );
+        return parsed ?? { success: false, message: '' };
+      },
     }),
     restorePassword: builder.mutation({
       query: (email: string) => {
         return { url: 'password-reset', method: 'POST', body: { email } };
+      },
+      transformResponse: (res: ForgotResetPasswordLogoutResponseType) => {
+        const parsed =
+          validateDataWithZod<ForgotResetPasswordLogoutResponseType>(
+            forgotResetPasswordLogoutResponseModel,
+            res,
+            'Invalid restore password data received from server'
+          );
+        return parsed ?? { success: false, message: '' };
       },
     }),
   }),

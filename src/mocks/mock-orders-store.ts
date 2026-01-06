@@ -1,11 +1,16 @@
 import { Order } from '../types/types';
 import { mockMinuteInMs } from '../utils/order-time';
+import { mockOrders } from './data';
 
 type OrdersListener = (orders: Order[]) => void;
 
-const initialMockOrders: Order[] = [];
+const initialMockOrders: Order[] = [...mockOrders];
+const initialUserOrderNumbers = new Set<number>(
+  initialMockOrders.slice(0, 1).map((order) => order.number)
+);
 
 let mockOrdersState: Order[] = [...initialMockOrders];
+let mockUserOrderNumbers = new Set<number>(initialUserOrderNumbers);
 const emitter = new EventTarget();
 
 const notify = () => {
@@ -21,10 +26,13 @@ const DEFAULT_ESTIMATED_MINUTES = 6;
 
 export const resetMockOrders = () => {
   mockOrdersState = [...initialMockOrders];
+  mockUserOrderNumbers = new Set<number>(initialUserOrderNumbers);
   notify();
 };
 
 export const getMockOrders = () => mockOrdersState;
+export const getMockUserOrders = () =>
+  mockOrdersState.filter((order) => mockUserOrderNumbers.has(order.number));
 
 export const subscribeMockOrders = (listener: OrdersListener) => {
   const handler = ((event: Event) => {
@@ -41,6 +49,7 @@ type AddMockOrderOptions = {
   autoCompleteDelayMs?: number | null;
   estimatedCookingTimeMinutes?: number;
   estimatedReadyAt?: string;
+  isUserOrder?: boolean;
 };
 
 export const addMockOrder = (
@@ -55,6 +64,7 @@ export const addMockOrder = (
     autoCompleteDelayMs,
     estimatedCookingTimeMinutes,
     estimatedReadyAt,
+    isUserOrder = false,
   } = options;
 
   const cookingTimeMinutes = estimatedCookingTimeMinutes ?? DEFAULT_ESTIMATED_MINUTES;
@@ -82,6 +92,9 @@ export const addMockOrder = (
   };
 
   mockOrdersState = [order, ...mockOrdersState];
+  if (isUserOrder) {
+    mockUserOrderNumbers.add(order.number);
+  }
   notify();
 
   if (completionDelay !== null) {

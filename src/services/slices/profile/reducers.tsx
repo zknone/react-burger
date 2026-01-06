@@ -3,7 +3,7 @@ import { ProfileResponse } from '../../../types/types';
 
 type Profile = {
   user: { name: string; email: string };
-  isAuthChecked: boolean;
+  hasAuthStatus: boolean;
   canResetPassword: boolean;
 };
 
@@ -12,32 +12,36 @@ export const initialState: Profile = {
     name: '',
     email: '',
   },
-  isAuthChecked: false,
+  hasAuthStatus: false,
   canResetPassword: false,
 };
 
 const profileSlice = createSlice({
-  name: 'chosenIngredient',
+  name: 'userProfile',
   initialState,
   reducers: {
     setProfile: (state, action: PayloadAction<ProfileResponse>) => {
       state.user.email = action.payload.user.email;
       state.user.name = action.payload.user.name;
     },
-    setIsAuthChecked: (state, action: PayloadAction<boolean>) => {
-      state.isAuthChecked = action.payload;
+    setHasAuthStatus: (state, action: PayloadAction<boolean>) => {
+      state.hasAuthStatus = action.payload;
     },
-    setCanReset: (state, action: PayloadAction<boolean>) => {
+    setCanResetPassword: (state, action: PayloadAction<boolean>) => {
       state.canResetPassword = action.payload;
     },
     resetProfile: (state) => {
       state.user = { name: '', email: '' };
-      state.isAuthChecked = true;
+      state.hasAuthStatus = true;
     },
   },
 });
 
-export const { setProfile, setIsAuthChecked, resetProfile, setCanReset } =
-  profileSlice.actions;
+export const {
+  setProfile,
+  setHasAuthStatus,
+  resetProfile,
+  setCanResetPassword,
+} = profileSlice.actions;
 export { profileSlice };
 export default profileSlice.reducer;

@@ -1,12 +1,13 @@
 import { AppDispatch } from '../../store';
 import { authorizationApi } from '../api/authorization-api/authorization-api';
-import { setProfile, setIsAuthChecked } from '../slices/profile/reducers';
+import { setProfile, setHasAuthStatus } from '../slices/profile/reducers';
+import { toast } from 'react-toastify';
 
 export const checkUserAuth = () => async (dispatch: AppDispatch) => {
   const refreshToken = localStorage.getItem('refreshToken');
 
   if (!refreshToken) {
-    dispatch(setIsAuthChecked(true));
+    dispatch(setHasAuthStatus(true));
     dispatch(
       setProfile({
         user: { name: '', email: '' },
@@ -21,6 +22,10 @@ export const checkUserAuth = () => async (dispatch: AppDispatch) => {
       authorizationApi.endpoints.token.initiate(refreshToken)
     ).unwrap();
 
+    if (!tokenResponse?.success) {
+      throw new Error('Invalid token refresh response');
+    }
+
     localStorage.setItem('accessToken', tokenResponse.accessToken);
     localStorage.setItem('refreshToken', tokenResponse.refreshToken);
 
@@ -28,11 +33,17 @@ export const checkUserAuth = () => async (dispatch: AppDispatch) => {
       authorizationApi.endpoints.getUser.initiate(undefined)
     ).unwrap();
 
+    if (!userResponse?.success) {
+      throw new Error('Invalid user profile response');
+    }
+
     dispatch(setProfile(userResponse));
   } catch (error) {
+    dispatch(setHasAuthStatus(false));
+    toast.error('Authorization error, please sign in again');
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
   } finally {
-    dispatch(setIsAuthChecked(true));
+    dispatch(setHasAuthStatus(true));
   }
 };

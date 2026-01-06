@@ -9,7 +9,11 @@ import BurgerOrderDetails from './burger-order-details/burger-order-details';
 import { useModal } from '../../hooks/use-modal';
 import { useDispatch } from 'react-redux';
 import { useDrop } from 'react-dnd';
-import { ExtendedIngredientType, IngredientType } from '../../types/types';
+import {
+  ExtendedIngredientType,
+  IngredientType,
+  Order,
+} from '../../types/types';
 import {
   addBun,
   emptyIngredients,
@@ -22,7 +26,7 @@ import { useMemo } from 'react';
 import BurgerConstructorItem from './burger-constructor-item/burger-constructor-item';
 import BurgerEmptyItem from './burger-empty-item/burger-empty-item';
 import { useSendOrderMutation } from '../../services/api/order-api/order-api';
-import Loader from '../loader/laoder';
+import Loader from '../loader/loader';
 import { useTypedSelector } from '../../utils/typed-hooks';
 
 const BurgerConstructor = () => {
@@ -31,6 +35,9 @@ const BurgerConstructor = () => {
   const { isModalOpen, openModal, closeModal } = useModal();
   const { bun, selectedIngredients } = useTypedSelector(
     (state) => state.burgerConstructor
+  );
+  const isAuthenticated = Boolean(
+    useTypedSelector((state) => state.profile.user.email)
   );
   const handleRemove = (index: number) => {
     dispatch(removeIngredient(index));
@@ -45,7 +52,21 @@ const BurgerConstructor = () => {
       try {
         const result = await sendOrder(order).unwrap();
         if (result && result.success && result.order) {
-          dispatch(addOrder(result.order));
+          const orderPayload: Order = {
+            ingredients: order,
+            _id: result.order._id || `order-${result.order.number}`,
+            status: result.order.status || 'pending',
+            number: result.order.number,
+            createdAt:
+              result.order.createdAt || new Date().toISOString(),
+            updatedAt:
+              result.order.updatedAt || new Date().toISOString(),
+            name: result.name || 'Order',
+            estimatedCookingTimeMinutes:
+              result.order.estimatedCookingTimeMinutes,
+            estimatedReadyAt: result.order.estimatedReadyAt,
+          };
+          dispatch(addOrder(orderPayload));
           openModal();
           dispatch(emptyIngredients());
         }
@@ -98,7 +119,9 @@ const BurgerConstructor = () => {
           {data ? (
             <BurgerOrderDetails
               orderNumber={data.order.number.toString()}
-              estimatedCookingTimeMinutes={data.order.estimatedCookingTimeMinutes}
+              estimatedCookingTimeMinutes={
+                data.order.estimatedCookingTimeMinutes
+              }
               estimatedReadyAt={data.order.estimatedReadyAt}
             />
           ) : (
@@ -108,19 +131,19 @@ const BurgerConstructor = () => {
       )}
       <div className={styles.burger_constructor_wrapper}>
         {!bun ? (
-          <BurgerEmptyItem type="top" title="Добавьте булочку" />
+          <BurgerEmptyItem type="top" title="Add a bun" />
         ) : (
           <ConstructorElement
             type="top"
-            extraClass={`${styles.burger_constructor_element} mr-4`}
+            extraClass={'mr-4'}
             isLocked={true}
-            text={bun?.name ? `${bun?.name} (верх)` : ''}
+            text={bun?.name ? `${bun?.name} (top)` : ''}
             thumbnail={bun?.image_mobile || ''}
             price={bun?.price || 0}
           />
         )}
         {selectedIngredients.length === 0 ? (
-          <BurgerEmptyItem title="Добавьте ингредиенты" />
+          <BurgerEmptyItem title="Add ingredients" />
         ) : (
           <ul className={`${styles.burger_constructor_list} custom-scroll`}>
             {selectedIngredients.map((item, index) => (
@@ -135,13 +158,13 @@ const BurgerConstructor = () => {
           </ul>
         )}
         {!bun ? (
-          <BurgerEmptyItem type="bottom" title="Добавьте булочку" />
+          <BurgerEmptyItem type="bottom" title="Add a bun" />
         ) : (
           <ConstructorElement
             type="bottom"
-            extraClass={`${styles.burger_constructor_element} mr-4`}
+            extraClass={'mr-4'}
             isLocked={true}
-            text={bun?.name ? `${bun?.name} (низ)` : ''}
+            text={bun?.name ? `${bun?.name} (bottom)` : ''}
             thumbnail={bun?.image_mobile || ''}
             price={bun?.price || 0}
           />
@@ -160,9 +183,18 @@ const BurgerConstructor = () => {
               if (order !== undefined)
                 handleSendOrder(order.filter(Boolean) as string[]);
             }}
-            disabled={isLoading}
+            disabled={
+              isLoading ||
+              !isAuthenticated ||
+              !bun ||
+              selectedIngredients.length === 0
+            }
           >
-            {isLoading ? 'Оформляем заказ' : 'Оформить заказ'}
+            {!isAuthenticated
+              ? 'Please sign in'
+              : isLoading
+                ? 'Placing order'
+                : 'Place order'}
           </Button>
         </div>
       </div>

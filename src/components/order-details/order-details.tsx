@@ -19,7 +19,7 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useDispatch } from 'react-redux';
 import { FC, useEffect } from 'react';
-import Loader from '../loader/laoder';
+import Loader from '../loader/loader';
 import { startSocket, stopSocket } from '../../services/slices/socket/actions';
 import { useGetOrderQuery } from '../../services/api/order-api/order-api';
 import { useTypedSelector } from '../../utils/typed-hooks';
@@ -71,6 +71,10 @@ const OrderDetails: FC<OrderDetailsProps> = ({ isPrivateOrders = false }) => {
     return <div>Error loading order details</div>;
   }
 
+  if (!ingredientsData) {
+    return <div>No ingredients data found</div>;
+  }
+
   if (!order) {
     return <div>No order data found. May be this data is private</div>;
   }
@@ -115,7 +119,10 @@ const OrderDetails: FC<OrderDetailsProps> = ({ isPrivateOrders = false }) => {
 
   const estimatedSeconds =
     estimatedCookingTimeMinutes !== undefined
-      ? convertEstimatedMinutesToSeconds(estimatedCookingTimeMinutes, mockMinuteInMs)
+      ? convertEstimatedMinutesToSeconds(
+          estimatedCookingTimeMinutes,
+          mockMinuteInMs
+        )
       : undefined;
 
   const orderSum = parsedIngredients.reduce((acc, item) => {
@@ -139,13 +146,15 @@ const OrderDetails: FC<OrderDetailsProps> = ({ isPrivateOrders = false }) => {
       </span>
       {estimatedSeconds !== undefined && (
         <p className="text text_type_main-default text_color_inactive mb-6">
-          Примерное время приготовления: ~{estimatedSeconds} сек
-          {estimatedReadyAtTime ? ` (готово около ${estimatedReadyAtTime})` : ''}
+          Estimated cooking time: ~{estimatedSeconds} sec
+          {estimatedReadyAtTime
+            ? ` (ready around ${estimatedReadyAtTime})`
+            : ''}
         </p>
       )}
 
       <h3 className={`text text_type_main-medium mb-6 ${styles.title}`}>
-        Состав:{' '}
+        Ingredients:{' '}
       </h3>
 
       <ul className={styles.ingredients_list}>
