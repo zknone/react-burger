@@ -157,7 +157,10 @@ export const authorizationApi = createApi({
         );
       },
     }),
-    logout: builder.mutation({
+    logout: builder.mutation<
+      ForgotResetPasswordLogoutResponseType,
+      string
+    >({
       query: (refreshToken: string) => {
         return {
           url: '/auth/logout',
@@ -190,7 +193,7 @@ export const authorizationApi = createApi({
         return parsed ?? { success: false, accessToken: '', refreshToken: '' };
       },
     }),
-    getUser: builder.query({
+    getUser: builder.query<ProfileResponse, void>({
       query: () => {
         const token = localStorage.getItem('accessToken');
         return {
@@ -216,7 +219,10 @@ export const authorizationApi = createApi({
         );
       },
     }),
-    resetPassword: builder.mutation({
+    resetPassword: builder.mutation<
+      ForgotResetPasswordLogoutResponseType,
+      { password: string; token: string }
+    >({
       query: ({ password, token }: { password: string; token: string }) => {
         return {
           url: 'password-reset/reset',
@@ -234,7 +240,10 @@ export const authorizationApi = createApi({
         return parsed ?? { success: false, message: '' };
       },
     }),
-    restorePassword: builder.mutation({
+    restorePassword: builder.mutation<
+      ForgotResetPasswordLogoutResponseType,
+      string
+    >({
       query: (email: string) => {
         return { url: 'password-reset', method: 'POST', body: { email } };
       },
