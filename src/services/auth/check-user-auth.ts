@@ -2,6 +2,8 @@ import { AppDispatch } from '../../store';
 import { authorizationApi } from '../api/authorization-api/authorization-api';
 import { setProfile, setHasAuthStatus } from '../slices/profile/reducers';
 import { toast } from 'react-toastify';
+import { ERROR_MESSAGES } from '../../utils/error-messages';
+import { logError } from '../../utils/logger';
 
 export const checkUserAuth = () => async (dispatch: AppDispatch) => {
   const refreshToken = localStorage.getItem('refreshToken');
@@ -40,7 +42,8 @@ export const checkUserAuth = () => async (dispatch: AppDispatch) => {
     dispatch(setProfile(userResponse));
   } catch (error) {
     dispatch(setHasAuthStatus(false));
-    toast.error('Authorization error, please sign in again');
+    toast.error(ERROR_MESSAGES.authError);
+    logError('auth/check-user-auth', error);
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
   } finally {

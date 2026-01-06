@@ -10,6 +10,8 @@ import {
 import { SocketResponse, socketResponseModel } from '../../types/types';
 import { checkUserAuth } from '../auth/check-user-auth';
 import validateDataWithZod from '../../utils/validation';
+import { ERROR_MESSAGES } from '../../utils/error-messages';
+import { logError } from '../../utils/logger';
 
 type Action<T = string, P = unknown> = {
   type: T;
@@ -40,7 +42,8 @@ const createWebSocketMiddleware = (
         };
 
         allOrdersSocket.onerror = (event: Event) => {
-          storeTyped.dispatch(wsConnectionError(JSON.stringify(event)));
+          storeTyped.dispatch(wsConnectionError(ERROR_MESSAGES.websocketConnection));
+          logError('socket/allOrders:error', event);
         };
 
         allOrdersSocket.onmessage = (event: MessageEvent) => {
@@ -53,9 +56,12 @@ const createWebSocketMiddleware = (
             );
             if (parsed) {
               storeTyped.dispatch(wsGetAllOrders(parsed));
+            } else {
+              storeTyped.dispatch(wsConnectionError(ERROR_MESSAGES.websocketParse));
             }
           } catch (error) {
-            console.error('Failed to parse allOrdersSocket payload:', error);
+            logError('socket/allOrders:parse', error);
+            storeTyped.dispatch(wsConnectionError(ERROR_MESSAGES.websocketParse));
           }
         };
 
@@ -84,7 +90,8 @@ const createWebSocketMiddleware = (
           };
 
           privateSocket.onerror = (event: Event) => {
-            storeTyped.dispatch(wsConnectionError(JSON.stringify(event)));
+            storeTyped.dispatch(wsConnectionError(ERROR_MESSAGES.websocketConnection));
+            logError('socket/private:error', event);
           };
 
           privateSocket.onmessage = (event: MessageEvent) => {
@@ -97,9 +104,12 @@ const createWebSocketMiddleware = (
               );
               if (parsed) {
                 storeTyped.dispatch(wsGetAllPrivateOrders(parsed));
+              } else {
+                storeTyped.dispatch(wsConnectionError(ERROR_MESSAGES.websocketParse));
               }
             } catch (error) {
-              console.error('Failed to parse privateSocket payload:', error);
+              logError('socket/private:parse', error);
+              storeTyped.dispatch(wsConnectionError(ERROR_MESSAGES.websocketParse));
             }
           };
 
@@ -117,7 +127,7 @@ const createWebSocketMiddleware = (
               initializePrivateSocket(accessToken);
             })
             .catch((error) => {
-              console.error('Error refreshing token for private socket:', error);
+              logError('socket/private:token-refresh', error);
             });
         } else {
           initializePrivateSocket(accessToken);
