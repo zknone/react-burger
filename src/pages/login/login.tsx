@@ -33,7 +33,7 @@ export default function LoginPage() {
     <div className={styles.container}>
       <form onSubmit={handleSubmit} className={styles.form}>
         <h2 className={`${styles.modal_title} text text_type_main-medium`}>
-          Вход
+          Sign in
         </h2>
         <EmailInput
           placeholder="E-mail"
@@ -42,41 +42,41 @@ export default function LoginPage() {
           onChange={handleChange}
         />
         <PasswordInput
-          placeholder="Пароль"
+          placeholder="Password"
           name="password"
           value={form.password}
           onChange={handleChange}
         />
         <Button disabled={isLoading} htmlType="submit">
-          Войти
+          Sign in
         </Button>
         {error && 'data' in error && (
           <p>
             {(error as FetchBaseQueryError & { data?: ErrorType['data'] }).data
-              ?.message || 'Ошибка входа'}
+              ?.message || 'Login failed'}
           </p>
         )}
       </form>
       <div className={styles.line}>
         <p className="text text_type_main-default text_color_inactive">
-          Вы — новый пользователь?
+          New user?
         </p>
         <Link
           className={`${styles.link} text text_type_main-default text`}
           to="/register"
         >
-          Зарегистрироваться
+          Sign up
         </Link>
       </div>
       <div className={styles.line}>
         <p className="text text_type_main-default text_color_inactive">
-          Забыли пароль?
+          Forgot password?
         </p>
         <Link
           className={`${styles.link} text text_type_main-default text`}
           to="/forgot-password"
         >
-          Восстановить пароль
+          Restore password
         </Link>
       </div>
     </div>
