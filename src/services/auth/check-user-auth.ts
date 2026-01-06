@@ -4,9 +4,14 @@ import { setProfile, setHasAuthStatus } from '../slices/profile/reducers';
 import { toast } from 'react-toastify';
 import { ERROR_MESSAGES } from '../../utils/error-messages';
 import { logError } from '../../utils/logger';
+import {
+  clearTokens,
+  getRefreshToken,
+  setTokens,
+} from '../../utils/tokens';
 
 export const checkUserAuth = () => async (dispatch: AppDispatch) => {
-  const refreshToken = localStorage.getItem('refreshToken');
+  const refreshToken = getRefreshToken();
 
   if (!refreshToken) {
     dispatch(setHasAuthStatus(true));
@@ -28,8 +33,7 @@ export const checkUserAuth = () => async (dispatch: AppDispatch) => {
       throw new Error('Invalid token refresh response');
     }
 
-    localStorage.setItem('accessToken', tokenResponse.accessToken);
-    localStorage.setItem('refreshToken', tokenResponse.refreshToken);
+    setTokens(tokenResponse.accessToken, tokenResponse.refreshToken);
 
     const userResponse = await dispatch(
       authorizationApi.endpoints.getUser.initiate(undefined)
@@ -44,8 +48,7 @@ export const checkUserAuth = () => async (dispatch: AppDispatch) => {
     dispatch(setHasAuthStatus(false));
     toast.error(ERROR_MESSAGES.authError);
     logError('auth/check-user-auth', error);
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
+    clearTokens();
   } finally {
     dispatch(setHasAuthStatus(true));
   }

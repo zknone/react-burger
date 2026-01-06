@@ -12,6 +12,7 @@ import { checkUserAuth } from '../auth/check-user-auth';
 import validateDataWithZod from '../../utils/validation';
 import { ERROR_MESSAGES } from '../../utils/error-messages';
 import { logError } from '../../utils/logger';
+import { parseBearerToken } from '../../utils/tokens';
 
 type Action<T = string, P = unknown> = {
   type: T;
@@ -138,16 +139,14 @@ const createWebSocketMiddleware = (
       }
 
       if (!privateSocket) {
-        const parseToken = () => {
-          return localStorage.getItem('accessToken')?.slice(6).trim() || null;
-        };
-
         let accessToken = localStorage.getItem('accessToken');
 
         const initializePrivateSocket = (token: string | null) => {
           if (!token) return;
 
-          privateSocket = new WebSocket(`${wsUrl}?token=${parseToken()}`);
+          privateSocket = new WebSocket(
+            `${wsUrl}?token=${parseBearerToken(accessToken)}`
+          );
 
           privateSocket.onopen = () => {
             storeTyped.dispatch(wsConnectionSuccess());

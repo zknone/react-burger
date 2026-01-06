@@ -14,6 +14,7 @@ import {
 } from '../services/slices/profile/reducers';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { ErrorType } from '../types/types';
+import { clearTokens, setTokens, getRefreshToken } from './tokens';
 
 const useRegister = () => {
   const [register, { isLoading: isRegisterLoading, error: registerError }] =
@@ -34,8 +35,7 @@ const useRegister = () => {
           email: form.email,
           password: form.password,
         }).unwrap();
-        localStorage.setItem('accessToken', loginResponse.accessToken);
-        localStorage.setItem('refreshToken', loginResponse.refreshToken);
+        setTokens(loginResponse.accessToken, loginResponse.refreshToken);
       }
 
       return { status: 200, data: response };
@@ -69,8 +69,7 @@ const useLogin = () => {
   const loginUser = async (form: { email: string; password: string }) => {
     try {
       const response = await login(form).unwrap();
-      localStorage.setItem('accessToken', response.accessToken);
-      localStorage.setItem('refreshToken', response.refreshToken);
+      setTokens(response.accessToken, response.refreshToken);
       if (response.success) dispatch(setProfile(response));
 
       return { status: 200, data: response };
@@ -99,12 +98,11 @@ const useLogout = () => {
   const dispatch = useDispatch();
 
   const logoutUser = async () => {
-    const refreshToken = localStorage.getItem('refreshToken');
+    const refreshToken = getRefreshToken();
     if (!refreshToken) return;
     try {
       await logout(refreshToken);
-      localStorage.removeItem('refreshToken');
-      localStorage.removeItem('accessToken');
+      clearTokens();
       dispatch(resetProfile());
 
       return { status: 200, data: { success: true } };
@@ -167,7 +165,7 @@ const useRestorePassword = () => {
       if (response.success) {
         dispatch(setCanResetPassword(true));
       }
-      return { status: 200, data: { success: true } };
+      return { status: 200, data: response };
     } catch (err) {
       const typedError = err as FetchBaseQueryError & {
         data?: ErrorType['data'];

@@ -21,6 +21,7 @@ import {
 import { BASE_API_URL } from '../../../consts';
 import { getBaseQuery } from '../get-base-query';
 import validateDataWithZod from '../../../utils/validation';
+import { setTokens, clearTokens, getAccessToken, getRefreshToken } from '../../../utils/tokens';
 
 export const ingredientsApiConfig = {
   baseUrl: BASE_API_URL,
@@ -34,7 +35,7 @@ const fetchWithRefreshQuery: BaseQueryFn<
   unknown,
   FetchBaseQueryError
 > = async (args, api, extraOptions) => {
-  const token = localStorage.getItem('accessToken');
+  const token = getAccessToken();
   const baseQuery = fetchBaseQuery({
     baseUrl: BASE_API_URL,
     prepareHeaders: (headers) => {
@@ -48,7 +49,7 @@ const fetchWithRefreshQuery: BaseQueryFn<
   let result = await baseQuery(args, api, extraOptions);
 
   if (result.error && result.error.status === 401) {
-    const refreshToken = localStorage.getItem('refreshToken');
+    const refreshToken = getRefreshToken();
 
     if (!refreshToken) {
       return result;
@@ -61,12 +62,11 @@ const fetchWithRefreshQuery: BaseQueryFn<
     if ('data' in refreshResult) {
       const newAccessToken = refreshResult.data?.accessToken;
       if (newAccessToken) {
-        localStorage.setItem('accessToken', newAccessToken);
+        setTokens(newAccessToken, refreshToken);
         result = await baseQuery(args, api, extraOptions);
       }
     } else {
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
+      clearTokens();
     }
   }
 
@@ -85,7 +85,7 @@ export const authorizationApi = createApi({
         method: 'POST',
         body: credentials,
       }),
-      transformResponse: (res: LoginResponse) => {
+      transformResponse: (res: unknown) => {
         const parsed = validateDataWithZod<LoginResponse>(
           loginResponseModel,
           res,
@@ -110,7 +110,7 @@ export const authorizationApi = createApi({
         method: 'POST',
         body: { email, password, name },
       }),
-      transformResponse: (res: RegisterAuthorizationResponse) => {
+      transformResponse: (res: unknown) => {
         const parsed = validateDataWithZod<RegisterAuthorizationResponse>(
           registerAuthorizationResponseModel,
           res,
@@ -143,7 +143,7 @@ export const authorizationApi = createApi({
           body: { email, password, name },
         };
       },
-      transformResponse: (res: ProfileResponse) => {
+      transformResponse: (res: unknown) => {
         const parsed = validateDataWithZod<ProfileResponse>(
           profileResponseModel,
           res,
@@ -168,7 +168,7 @@ export const authorizationApi = createApi({
           body: { token: refreshToken },
         };
       },
-      transformResponse: (res: ForgotResetPasswordLogoutResponseType) => {
+      transformResponse: (res: unknown) => {
         const parsed =
           validateDataWithZod<ForgotResetPasswordLogoutResponseType>(
             forgotResetPasswordLogoutResponseModel,
@@ -184,7 +184,7 @@ export const authorizationApi = createApi({
         method: 'POST',
         body: { token: refreshToken },
       }),
-      transformResponse: (res: TokenResponse) => {
+      transformResponse: (res: unknown) => {
         const parsed = validateDataWithZod<TokenResponse>(
           tokenResponseModel,
           res,
@@ -205,7 +205,7 @@ export const authorizationApi = createApi({
           },
         };
       },
-      transformResponse: (res: ProfileResponse) => {
+      transformResponse: (res: unknown) => {
         const parsed = validateDataWithZod<ProfileResponse>(
           profileResponseModel,
           res,
@@ -247,7 +247,7 @@ export const authorizationApi = createApi({
       query: (email: string) => {
         return { url: 'password-reset', method: 'POST', body: { email } };
       },
-      transformResponse: (res: ForgotResetPasswordLogoutResponseType) => {
+      transformResponse: (res: unknown) => {
         const parsed =
           validateDataWithZod<ForgotResetPasswordLogoutResponseType>(
             forgotResetPasswordLogoutResponseModel,

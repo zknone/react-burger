@@ -60,7 +60,7 @@ const OrderDetails: FC<OrderDetailsProps> = ({ isPrivateOrders = false }) => {
 
   if (
     socketData.isLoading ||
-    !socketData.isSocketOpen ||
+    (!socketData.isSocketOpen && !orderData) ||
     !ingredientsResponse ||
     isLoading
   ) {
@@ -71,7 +71,7 @@ const OrderDetails: FC<OrderDetailsProps> = ({ isPrivateOrders = false }) => {
     return <div>Error loading order details</div>;
   }
 
-  if (!ingredientsData) {
+  if (!ingredientsData || ingredientsData.length === 0) {
     return <div>No ingredients data found</div>;
   }
 
