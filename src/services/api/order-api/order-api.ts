@@ -1,6 +1,13 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { BASE_API_URL } from '../../../consts';
 import { getBaseQuery } from '../get-base-query';
+import validateDataWithZod from '../../../utils/validation';
+import {
+  OrderResponse,
+  orderResponseModel,
+  CreateOrderResponse,
+  createOrderResponseModel,
+} from '../../../types/types';
 
 const baseQuery = getBaseQuery(fetchBaseQuery({ baseUrl: BASE_API_URL }));
 
@@ -8,7 +15,7 @@ export const orderApi = createApi({
   reducerPath: 'orderApi',
   baseQuery,
   endpoints: (builder) => ({
-    sendOrder: builder.mutation({
+    sendOrder: builder.mutation<CreateOrderResponse, string[]>({
       query: (order: string[]) => {
         const token = localStorage.getItem('accessToken');
         return {
@@ -21,8 +28,22 @@ export const orderApi = createApi({
           body: JSON.stringify({ ingredients: order }),
         };
       },
+      transformResponse: (res: unknown) => {
+        const parsed = validateDataWithZod<CreateOrderResponse>(
+          createOrderResponseModel,
+          res,
+          'Invalid order creation response received from server'
+        );
+        return (
+          parsed ?? {
+            success: false,
+            name: '',
+            order: { number: 0 },
+          }
+        );
+      },
     }),
-    getOrder: builder.query({
+    getOrder: builder.query<OrderResponse, number | undefined>({
       query: (number?: number) => {
         const token = localStorage.getItem('accessToken') || '';
         if (number === undefined) {
@@ -35,6 +56,14 @@ export const orderApi = createApi({
             ? { 'Content-Type': 'application/json', Authorization: token }
             : { 'Content-Type': 'application/json' },
         };
+      },
+      transformResponse: (res: unknown) => {
+        const parsed = validateDataWithZod<OrderResponse>(
+          orderResponseModel,
+          res,
+          'Invalid order response received from server'
+        );
+        return parsed ?? { success: false, orders: [] };
       },
     }),
   }),

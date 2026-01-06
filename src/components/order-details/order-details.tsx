@@ -71,6 +71,10 @@ const OrderDetails: FC<OrderDetailsProps> = ({ isPrivateOrders = false }) => {
     return <div>Error loading order details</div>;
   }
 
+  if (!ingredientsData) {
+    return <div>No ingredients data found</div>;
+  }
+
   if (!order) {
     return <div>No order data found. May be this data is private</div>;
   }

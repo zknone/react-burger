@@ -7,8 +7,9 @@ import {
   wsGetAllOrders,
   wsGetAllPrivateOrders,
 } from '../slices/socket/reducers';
-import { SocketResponse } from '../../types/types';
+import { SocketResponse, socketResponseModel } from '../../types/types';
 import { checkUserAuth } from '../auth/check-user-auth';
+import validateDataWithZod from '../../utils/validation';
 
 type Action<T = string, P = unknown> = {
   type: T;
@@ -44,8 +45,15 @@ const createWebSocketMiddleware = (
 
         allOrdersSocket.onmessage = (event: MessageEvent) => {
           try {
-            const data: SocketResponse = JSON.parse(event.data);
-            storeTyped.dispatch(wsGetAllOrders(data));
+            const parsed = validateDataWithZod<SocketResponse>(
+              socketResponseModel,
+              JSON.parse(event.data),
+              'Invalid socket data',
+              { throwOnError: false }
+            );
+            if (parsed) {
+              storeTyped.dispatch(wsGetAllOrders(parsed));
+            }
           } catch (error) {
             console.error('Failed to parse allOrdersSocket payload:', error);
           }
@@ -80,13 +88,20 @@ const createWebSocketMiddleware = (
           };
 
           privateSocket.onmessage = (event: MessageEvent) => {
-          try {
-            const data: SocketResponse = JSON.parse(event.data);
-            storeTyped.dispatch(wsGetAllPrivateOrders(data));
-          } catch (error) {
-            console.error('Failed to parse privateSocket payload:', error);
-          }
-        };
+            try {
+              const parsed = validateDataWithZod<SocketResponse>(
+                socketResponseModel,
+                JSON.parse(event.data),
+                'Invalid private socket data',
+                { throwOnError: false }
+              );
+              if (parsed) {
+                storeTyped.dispatch(wsGetAllPrivateOrders(parsed));
+              }
+            } catch (error) {
+              console.error('Failed to parse privateSocket payload:', error);
+            }
+          };
 
           privateSocket.onclose = () => {
             storeTyped.dispatch(wsConnectionClosed());

@@ -8,7 +8,7 @@ import '@4tw/cypress-drag-drop';
 import { BurgerIngredients } from '../burger-ingredients/burger-ingredients';
 import { MemoryRouter } from 'react-router-dom';
 import { IngredientType } from '../../types/types';
-import { BASE_API_URL } from '../../services/api/authorization-api/authorization-api';
+import { BASE_API_URL } from '../../consts';
 
 describe('renders correctly', () => {
   beforeEach(() => {

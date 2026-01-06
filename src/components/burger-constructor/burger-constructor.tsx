@@ -9,7 +9,11 @@ import BurgerOrderDetails from './burger-order-details/burger-order-details';
 import { useModal } from '../../hooks/use-modal';
 import { useDispatch } from 'react-redux';
 import { useDrop } from 'react-dnd';
-import { ExtendedIngredientType, IngredientType } from '../../types/types';
+import {
+  ExtendedIngredientType,
+  IngredientType,
+  Order,
+} from '../../types/types';
 import {
   addBun,
   emptyIngredients,
@@ -48,7 +52,21 @@ const BurgerConstructor = () => {
       try {
         const result = await sendOrder(order).unwrap();
         if (result && result.success && result.order) {
-          dispatch(addOrder(result.order));
+          const orderPayload: Order = {
+            ingredients: order,
+            _id: result.order._id || `order-${result.order.number}`,
+            status: result.order.status || 'pending',
+            number: result.order.number,
+            createdAt:
+              result.order.createdAt || new Date().toISOString(),
+            updatedAt:
+              result.order.updatedAt || new Date().toISOString(),
+            name: result.name || 'Order',
+            estimatedCookingTimeMinutes:
+              result.order.estimatedCookingTimeMinutes,
+            estimatedReadyAt: result.order.estimatedReadyAt,
+          };
+          dispatch(addOrder(orderPayload));
           openModal();
           dispatch(emptyIngredients());
         }

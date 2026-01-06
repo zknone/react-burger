@@ -111,6 +111,30 @@ export const orderModel = z.object({
 
 export type Order = z.infer<typeof orderModel>;
 
+export const orderResponseModel = z.object({
+  success: z.boolean(),
+  orders: z.array(orderModel),
+});
+
+export type OrderResponse = z.infer<typeof orderResponseModel>;
+
+export const createOrderResponseModel = z.object({
+  success: z.boolean(),
+  name: z.string(),
+  order: z.object({
+    number: z.number(),
+    estimatedCookingTimeMinutes: z.number().optional(),
+    estimatedReadyAt: z.string().optional(),
+    _id: z.string().optional(),
+    status: z.enum(['done', 'pending', 'canceled']).optional(),
+    createdAt: z.string().optional(),
+    updatedAt: z.string().optional(),
+    ingredients: z.array(z.string()).optional(),
+  }),
+});
+
+export type CreateOrderResponse = z.infer<typeof createOrderResponseModel>;
+
 export const socketResponseModel = z.object({
   orders: z.array(orderModel),
   success: z.boolean(),

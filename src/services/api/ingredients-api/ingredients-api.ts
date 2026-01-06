@@ -19,7 +19,7 @@ export const ingredientsApi = createApi({
         const parsed = validateDataWithZod<FetchedIngredients>(
           fetchedIngredientsModel,
           res,
-          'Nonvalid ingredients data received from server'
+          'Invalid ingredients data received from server'
         );
         return parsed ?? { success: false, data: [] };
       },

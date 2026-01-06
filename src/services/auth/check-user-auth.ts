@@ -1,9 +1,7 @@
 import { AppDispatch } from '../../store';
 import { authorizationApi } from '../api/authorization-api/authorization-api';
 import { setProfile, setHasAuthStatus } from '../slices/profile/reducers';
-import { profileResponseModel, tokenResponseModel } from '../../types/types';
 import { toast } from 'react-toastify';
-import validateDataWithZod from '../../utils/validation';
 
 export const checkUserAuth = () => async (dispatch: AppDispatch) => {
   const refreshToken = localStorage.getItem('refreshToken');
@@ -16,7 +14,6 @@ export const checkUserAuth = () => async (dispatch: AppDispatch) => {
         success: false,
       })
     );
-    toast.error('Token not found, please log in again');
     return;
   }
 
@@ -25,28 +22,22 @@ export const checkUserAuth = () => async (dispatch: AppDispatch) => {
       authorizationApi.endpoints.token.initiate(refreshToken)
     ).unwrap();
 
-    validateDataWithZod(
-      tokenResponseModel,
-      tokenResponse,
-      'Invalid token refresh response'
-    );
-    const tokenParseResult = tokenResponseModel.parse(tokenResponse);
+    if (!tokenResponse?.success) {
+      throw new Error('Invalid token refresh response');
+    }
 
-    localStorage.setItem('accessToken', tokenParseResult.accessToken);
-    localStorage.setItem('refreshToken', tokenParseResult.refreshToken);
+    localStorage.setItem('accessToken', tokenResponse.accessToken);
+    localStorage.setItem('refreshToken', tokenResponse.refreshToken);
 
     const userResponse = await dispatch(
       authorizationApi.endpoints.getUser.initiate(undefined)
     ).unwrap();
 
-    validateDataWithZod(
-      profileResponseModel,
-      userResponse,
-      'Invalid user profile response'
-    );
-    const userParseResult = profileResponseModel.parse(userResponse);
+    if (!userResponse?.success) {
+      throw new Error('Invalid user profile response');
+    }
 
-    dispatch(setProfile(userParseResult));
+    dispatch(setProfile(userResponse));
   } catch (error) {
     dispatch(setHasAuthStatus(false));
     toast.error('Authorization error, please sign in again');
