@@ -9,7 +9,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useResetPassword } from '../../utils/api';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { ErrorType } from '../../types/types';
-import { useForm } from '../../utils/use-form';
+import { useForm } from '../../hooks/use-form';
 import { useTypedSelector } from '../../utils/typed-hooks';
 
 export default function ResetPasswordPage() {

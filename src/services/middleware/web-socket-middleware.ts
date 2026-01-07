@@ -10,7 +10,7 @@ import {
 import { SocketResponse, socketResponseModel } from '../../types/types';
 import { checkUserAuth } from '../auth/check-user-auth';
 import validateDataWithZod from '../../utils/validation';
-import { ERROR_MESSAGES } from '../../utils/error-messages';
+import { ERROR_MESSAGES } from '../../consts/error-messages';
 import { logError } from '../../utils/logger';
 import { parseBearerToken } from '../../utils/tokens';
 
@@ -41,7 +41,10 @@ const createWebSocketMiddleware = (
     }
   };
 
-  const scheduleReconnect = (storeDispatch: AppDispatch, startAction: Action) => {
+  const scheduleReconnect = (
+    storeDispatch: AppDispatch,
+    startAction: Action
+  ) => {
     clearTimers();
     reconnectAttempts += 1;
     const delay = Math.min(30000, 1000 * 2 ** Math.min(reconnectAttempts, 5));
@@ -106,7 +109,9 @@ const createWebSocketMiddleware = (
         };
 
         allOrdersSocket.onerror = (event: Event) => {
-          storeTyped.dispatch(wsConnectionError(ERROR_MESSAGES.websocketConnection));
+          storeTyped.dispatch(
+            wsConnectionError(ERROR_MESSAGES.websocketConnection)
+          );
           logError('socket/allOrders:error', event);
         };
 
@@ -121,11 +126,15 @@ const createWebSocketMiddleware = (
             if (parsed) {
               storeTyped.dispatch(wsGetAllOrders(parsed));
             } else {
-              storeTyped.dispatch(wsConnectionError(ERROR_MESSAGES.websocketParse));
+              storeTyped.dispatch(
+                wsConnectionError(ERROR_MESSAGES.websocketParse)
+              );
             }
           } catch (error) {
             logError('socket/allOrders:parse', error);
-            storeTyped.dispatch(wsConnectionError(ERROR_MESSAGES.websocketParse));
+            storeTyped.dispatch(
+              wsConnectionError(ERROR_MESSAGES.websocketParse)
+            );
           }
         };
 
@@ -156,7 +165,9 @@ const createWebSocketMiddleware = (
           };
 
           privateSocket.onerror = (event: Event) => {
-            storeTyped.dispatch(wsConnectionError(ERROR_MESSAGES.websocketConnection));
+            storeTyped.dispatch(
+              wsConnectionError(ERROR_MESSAGES.websocketConnection)
+            );
             logError('socket/private:error', event);
           };
 
@@ -171,11 +182,15 @@ const createWebSocketMiddleware = (
               if (parsed) {
                 storeTyped.dispatch(wsGetAllPrivateOrders(parsed));
               } else {
-                storeTyped.dispatch(wsConnectionError(ERROR_MESSAGES.websocketParse));
+                storeTyped.dispatch(
+                  wsConnectionError(ERROR_MESSAGES.websocketParse)
+                );
               }
             } catch (error) {
               logError('socket/private:parse', error);
-              storeTyped.dispatch(wsConnectionError(ERROR_MESSAGES.websocketParse));
+              storeTyped.dispatch(
+                wsConnectionError(ERROR_MESSAGES.websocketParse)
+              );
             }
           };
 

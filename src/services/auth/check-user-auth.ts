@@ -2,13 +2,9 @@ import { AppDispatch } from '../../store';
 import { authorizationApi } from '../api/authorization-api/authorization-api';
 import { setProfile, setHasAuthStatus } from '../slices/profile/reducers';
 import { toast } from 'react-toastify';
-import { ERROR_MESSAGES } from '../../utils/error-messages';
+import { ERROR_MESSAGES } from '../../consts/error-messages';
 import { logError } from '../../utils/logger';
-import {
-  clearTokens,
-  getRefreshToken,
-  setTokens,
-} from '../../utils/tokens';
+import { clearTokens, getRefreshToken, setTokens } from '../../utils/tokens';
 
 export const checkUserAuth = () => async (dispatch: AppDispatch) => {
   const refreshToken = getRefreshToken();

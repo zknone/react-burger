@@ -5,7 +5,7 @@ import {
   PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useProfile } from '../../utils/api';
-import { useForm } from '../../utils/use-form';
+import { useForm } from '../../hooks/use-form';
 import { FormEvent, useState } from 'react';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { ErrorType } from '../../types/types';
