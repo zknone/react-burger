@@ -15,7 +15,7 @@ export const ingredientsApi = createApi({
   endpoints: (builder) => ({
     getIngredients: builder.query<FetchedIngredients, void>({
       query: () => '/ingredients',
-      transformResponse: (res: unknown) => {
+      transformResponse: (res: FetchedIngredients) => {
         const parsed = validateDataWithZod<FetchedIngredients>(
           fetchedIngredientsModel,
           res,
