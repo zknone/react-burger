@@ -27,7 +27,7 @@ export default function ProfilePage() {
               : `${styles.link} text text_type_main-default`
           }
         >
-          Профиль
+          Profile
         </NavLink>
         <NavLink
           to="/profile/orders"
@@ -37,16 +37,16 @@ export default function ProfilePage() {
               : `${styles.link} text text_type_main-default`
           }
         >
-          История заказов
+          Order History
         </NavLink>
         <button
           className={`${styles.exit_button} text text_type_main-default`}
           onClick={handleLogout}
         >
-          Выход
+          Logout
         </button>
         <p className={`${styles.disclaimer} text text_type_main-default`}>
-          В этом разделе вы можете изменить свои персональные данные
+          Here you can update your personal details
         </p>
       </div>
 

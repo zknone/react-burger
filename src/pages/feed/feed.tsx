@@ -33,7 +33,7 @@ function FeedPage() {
   return (
     <div className={styles.container}>
       <div className={styles.orders_wrapper}>
-        <h2 className="text text_type_main-large">Лента заказов</h2>
+        <h2 className="text text_type_main-large">Order Feed</h2>
         <ul className={styles.order_list}>
           {data.orders.map((item) => (
             <OrderItem key={item._id} {...item} />
@@ -44,7 +44,7 @@ function FeedPage() {
       <div className={styles.data_wrapper}>
         <div className={styles.orders_titles_wrapper}>
           <div>
-            <h3 className="text text_type_main-medium">Готовы</h3>
+            <h3 className="text text_type_main-medium">Ready</h3>
             <ul className={styles.order_titles_list}>
               {finishedOrders.map((item) => (
                 <li
@@ -56,7 +56,7 @@ function FeedPage() {
             </ul>
           </div>
           <div>
-            <h3 className="text text_type_main-medium">В работе</h3>
+            <h3 className="text text_type_main-medium">In Progress</h3>
             <ul className={styles.order_titles_list}>
               {pendingOrders.map((item) => (
                 <li
@@ -68,15 +68,11 @@ function FeedPage() {
           </div>
         </div>
         <div className={styles.info_wrapper}>
-          <span className="text text_type_main-medium">
-            Выполнено за все время:
-          </span>
+          <span className="text text_type_main-medium">Completed all time:</span>
           <h3 className="text text_type_digits-large">{data.total}</h3>
         </div>
         <div className={styles.info_wrapper}>
-          <span className="text text_type_main-medium">
-            Выполнено за сегодня:
-          </span>
+          <span className="text text_type_main-medium">Completed today:</span>
           <h2 className="text text_type_digits-large">{data.totalToday}</h2>
         </div>
       </div>
