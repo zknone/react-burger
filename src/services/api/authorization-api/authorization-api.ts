@@ -21,7 +21,12 @@ import {
 import { BASE_API_URL } from '../../../consts';
 import { getBaseQuery } from '../get-base-query';
 import validateDataWithZod from '../../../utils/validation';
-import { setTokens, clearTokens, getAccessToken, getRefreshToken } from '../../../utils/tokens';
+import {
+  setTokens,
+  clearTokens,
+  getAccessToken,
+  getRefreshToken,
+} from '../../../utils/tokens';
 
 export const ingredientsApiConfig = {
   baseUrl: BASE_API_URL,
@@ -85,7 +90,7 @@ export const authorizationApi = createApi({
         method: 'POST',
         body: credentials,
       }),
-      transformResponse: (res: unknown) => {
+      transformResponse: (res: LoginResponse) => {
         const parsed = validateDataWithZod<LoginResponse>(
           loginResponseModel,
           res,
@@ -110,7 +115,7 @@ export const authorizationApi = createApi({
         method: 'POST',
         body: { email, password, name },
       }),
-      transformResponse: (res: unknown) => {
+      transformResponse: (res: RegisterAuthorizationResponse) => {
         const parsed = validateDataWithZod<RegisterAuthorizationResponse>(
           registerAuthorizationResponseModel,
           res,
@@ -143,7 +148,7 @@ export const authorizationApi = createApi({
           body: { email, password, name },
         };
       },
-      transformResponse: (res: unknown) => {
+      transformResponse: (res: ProfileResponse) => {
         const parsed = validateDataWithZod<ProfileResponse>(
           profileResponseModel,
           res,
@@ -157,10 +162,7 @@ export const authorizationApi = createApi({
         );
       },
     }),
-    logout: builder.mutation<
-      ForgotResetPasswordLogoutResponseType,
-      string
-    >({
+    logout: builder.mutation<ForgotResetPasswordLogoutResponseType, string>({
       query: (refreshToken: string) => {
         return {
           url: '/auth/logout',
@@ -168,7 +170,7 @@ export const authorizationApi = createApi({
           body: { token: refreshToken },
         };
       },
-      transformResponse: (res: unknown) => {
+      transformResponse: (res: ForgotResetPasswordLogoutResponseType) => {
         const parsed =
           validateDataWithZod<ForgotResetPasswordLogoutResponseType>(
             forgotResetPasswordLogoutResponseModel,
@@ -184,7 +186,7 @@ export const authorizationApi = createApi({
         method: 'POST',
         body: { token: refreshToken },
       }),
-      transformResponse: (res: unknown) => {
+      transformResponse: (res: TokenResponse) => {
         const parsed = validateDataWithZod<TokenResponse>(
           tokenResponseModel,
           res,
@@ -205,7 +207,7 @@ export const authorizationApi = createApi({
           },
         };
       },
-      transformResponse: (res: unknown) => {
+      transformResponse: (res: ProfileResponse) => {
         const parsed = validateDataWithZod<ProfileResponse>(
           profileResponseModel,
           res,
@@ -230,7 +232,7 @@ export const authorizationApi = createApi({
           body: { password, token },
         };
       },
-      transformResponse: (res: unknown) => {
+      transformResponse: (res: ForgotResetPasswordLogoutResponseType) => {
         const parsed =
           validateDataWithZod<ForgotResetPasswordLogoutResponseType>(
             forgotResetPasswordLogoutResponseModel,
@@ -247,7 +249,7 @@ export const authorizationApi = createApi({
       query: (email: string) => {
         return { url: 'password-reset', method: 'POST', body: { email } };
       },
-      transformResponse: (res: unknown) => {
+      transformResponse: (res: ForgotResetPasswordLogoutResponseType) => {
         const parsed =
           validateDataWithZod<ForgotResetPasswordLogoutResponseType>(
             forgotResetPasswordLogoutResponseModel,
