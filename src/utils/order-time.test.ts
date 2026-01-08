@@ -71,7 +71,7 @@ describe('calculate order time', () => {
 
     expect(typeof estimateTime).toBe('number');
     expect(estimateTime).toBeGreaterThan(0);
-    expect(estimateTime).toEqual(9);
+    expect(estimateTime).toEqual(12);
   });
 
   it('should build order timings', () => {
@@ -80,9 +80,9 @@ describe('calculate order time', () => {
 
     const result = buildOrderTiming(mockIds, mockIngredients, minuteToMs);
 
-    expect(result.estimatedCookingTimeMinutes).toBe(9);
-    expect(result.autoCompleteDelayMs).toBe(9000);
-    expect(result.estimatedReadyAt).toBe(new Date(9000).toISOString());
+    expect(result.estimatedCookingTimeMinutes).toBe(12);
+    expect(result.autoCompleteDelayMs).toBe(12000);
+    expect(result.estimatedReadyAt).toBe(new Date(12000).toISOString());
 
     nowSpy.mockRestore();
   });

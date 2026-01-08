@@ -1,4 +1,8 @@
 import { expect } from '@jest/globals';
+import React from 'react';
+import { renderHook, act } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
 
 import {
   useRegister,
@@ -18,6 +22,20 @@ import {
 } from '../services/api/authorization-api/authorisation-api';
 import { clearTokens, setTokens } from './tokens';
 
+type ApiResponse = {
+  status: number | string;
+  data: unknown;
+};
+
+jest.mock('../services/api/authorization-api/authorisation-api', () => ({
+  useChangeProfileMutation: jest.fn(),
+  useLoginMutation: jest.fn(),
+  useLogoutMutation: jest.fn(),
+  useRegisterMutation: jest.fn(),
+  useResetPasswordMutation: jest.fn(),
+  useRestorePasswordMutation: jest.fn(),
+}));
+
 jest.mock('./tokens', () => {
   const actual = jest.requireActual('./tokens');
   return {
@@ -27,6 +45,15 @@ jest.mock('./tokens', () => {
     clearTokens: jest.fn(actual.clearTokens),
   };
 });
+
+const createWrapper = () => {
+  const store = configureStore({
+    reducer: (state = {}) => state,
+  });
+
+  return ({ children }: { children: React.ReactNode }) =>
+    React.createElement(Provider, { store, children });
+};
 
 describe('api utilities', () => {
   const mockUserCredentials = {
@@ -42,7 +69,6 @@ describe('api utilities', () => {
   describe('register user', () => {
     it('should register new user with setting tokens', async () => {
       clearTokens();
-      const { registerUser } = useRegister();
 
       const registerTrigger = jest.fn().mockReturnValue({
         unwrap: jest.fn().mockResolvedValue({
@@ -68,8 +94,20 @@ describe('api utilities', () => {
         { isLoading: false, error: null },
       ]);
 
-      const result = await registerUser(mockData);
-      expect(result.status).toBe(200);
+      const { result } = renderHook(() => useRegister(), {
+        wrapper: createWrapper(),
+      });
+
+      let response: ApiResponse | undefined;
+      await act(async () => {
+        response = await result.current.registerUser(mockData);
+      });
+
+      if (!response) {
+        throw new Error('Expected registerUser response');
+      }
+
+      expect(response.status).toBe(200);
       expect(registerTrigger).toHaveBeenCalled();
       expect(loginTrigger).toHaveBeenCalled();
       expect(setTokens).toHaveBeenCalledWith('access', 'refresh');
@@ -92,11 +130,20 @@ describe('api utilities', () => {
         { isLoading: false, error: null },
       ]);
 
-      const { loginUser } = useLogin();
+      const { result } = renderHook(() => useLogin(), {
+        wrapper: createWrapper(),
+      });
 
-      const result = await loginUser(mockData);
+      let response: ApiResponse | undefined;
+      await act(async () => {
+        response = await result.current.loginUser(mockData);
+      });
 
-      expect(result.status).toBe(200);
+      if (!response) {
+        throw new Error('Expected loginUser response');
+      }
+
+      expect(response.status).toBe(200);
       expect(loginTrigger).toHaveBeenCalled();
       expect(setTokens).toHaveBeenCalledWith('access', 'refresh');
     });
@@ -116,10 +163,16 @@ describe('api utilities', () => {
         },
       ]);
 
-      const { logoutUser } = useLogout();
+      const { result } = renderHook(() => useLogout(), {
+        wrapper: createWrapper(),
+      });
 
-      const result = await logoutUser();
-      expect(result?.status).toBe(200);
+      let response: ApiResponse | undefined;
+      await act(async () => {
+        response = await result.current.logoutUser();
+      });
+
+      expect(response?.status).toBe(200);
       expect(logoutTrigger).toHaveBeenCalled();
       expect(clearTokens).toHaveBeenCalled();
     });
@@ -130,10 +183,7 @@ describe('api utilities', () => {
       const changeProfileDataTrigger = jest.fn().mockReturnValue({
         unwrap: jest.fn().mockResolvedValue({
           success: true,
-          user: {
-            name: 'Ivan',
-            email: 'ivanivanovich@gmail.com',
-          },
+          user: mockUserCredentials,
         }),
       });
 
@@ -142,12 +192,24 @@ describe('api utilities', () => {
         { isLoading: false, error: null },
       ]);
 
-      const { changeProfileCredentials } = useProfile();
+      const { result } = renderHook(() => useProfile(), {
+        wrapper: createWrapper(),
+      });
 
-      const result = await changeProfileCredentials(mockData);
+      let response: ApiResponse | undefined;
+      await act(async () => {
+        response = await result.current.changeProfileCredentials(mockData);
+      });
 
-      expect(result.status).toBe(200);
-      expect(result.data).toEqual({ success: true, user: mockUserCredentials });
+      if (!response) {
+        throw new Error('Expected changeProfileCredentials response');
+      }
+
+      expect(response.status).toBe(200);
+      expect(response.data).toEqual({
+        success: true,
+        user: mockUserCredentials,
+      });
       expect(changeProfileDataTrigger).toHaveBeenCalled();
     });
   });
@@ -166,12 +228,21 @@ describe('api utilities', () => {
         { isLoading: false, error: null },
       ]);
 
-      const { resetPass } = useResetPassword();
+      const { result } = renderHook(() => useResetPassword(), {
+        wrapper: createWrapper(),
+      });
 
-      const result = await resetPass('refresh', 'new_pass');
+      let response: ApiResponse | undefined;
+      await act(async () => {
+        response = await result.current.resetPass('refresh', 'new_pass');
+      });
 
-      expect(result.status).toBe(200);
-      expect(result.data).toEqual({
+      if (!response) {
+        throw new Error('Expected resetPass response');
+      }
+
+      expect(response.status).toBe(200);
+      expect(response.data).toEqual({
         success: true,
       });
       expect(changePasswordTrigger).toHaveBeenCalledWith({
@@ -196,12 +267,21 @@ describe('api utilities', () => {
         { isLoading: false, error: null },
       ]);
 
-      const { restorePass } = useRestorePassword();
+      const { result } = renderHook(() => useRestorePassword(), {
+        wrapper: createWrapper(),
+      });
 
-      const result = await restorePass('ivanov@gmail.com');
+      let response: ApiResponse | undefined;
+      await act(async () => {
+        response = await result.current.restorePass('ivanov@gmail.com');
+      });
 
-      expect(result.status).toBe(200);
-      expect(result.data).toEqual({
+      if (!response) {
+        throw new Error('Expected restorePass response');
+      }
+
+      expect(response.status).toBe(200);
+      expect(response.data).toEqual({
         success: true,
         message: 'email sent',
       });
