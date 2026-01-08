@@ -36,7 +36,7 @@ const ProfileForm = () => {
     <form className={styles.form} onSubmit={handleSubmit}>
       <Input
         type="text"
-        placeholder="Имя"
+        placeholder="Name"
         name="name"
         value={form.name}
         onChange={handleChange}
@@ -50,7 +50,7 @@ const ProfileForm = () => {
         isIcon
       />
       <PasswordInput
-        placeholder="Пароль"
+        placeholder="Password"
         name="password"
         value={form.password}
         onChange={handleChange}
@@ -62,16 +62,16 @@ const ProfileForm = () => {
         type="secondary"
         onClick={handleReset}
       >
-        Отменить
+        Cancel
       </Button>
       <Button disabled={isLoading} htmlType="submit">
-        Сохранить
+        Save
       </Button>
-      {isSuccess && <p>Данные успешно изменены</p>}
+      {isSuccess && <p>Profile updated successfully</p>}
       {error && 'data' in error && (
         <p>
           {(error as FetchBaseQueryError & { data?: ErrorType['data'] }).data
-            ?.message || 'Ошибка изменения пароля, имени или почтового адреса'}
+            ?.message || 'Failed to update password, name, or email address'}
         </p>
       )}
     </form>

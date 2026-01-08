@@ -26,9 +26,13 @@ import { useTypedSelector } from '../../utils/typed-hooks';
 
 type OrderDetailsProps = {
   isPrivateOrders?: boolean;
+  manageSocket?: boolean;
 };
 
-const OrderDetails: FC<OrderDetailsProps> = ({ isPrivateOrders = false }) => {
+const OrderDetails: FC<OrderDetailsProps> = ({
+  isPrivateOrders = false,
+  manageSocket = true,
+}) => {
   const dispatch = useDispatch();
   const params = useParams();
   const { number } = params;
@@ -51,12 +55,16 @@ const OrderDetails: FC<OrderDetailsProps> = ({ isPrivateOrders = false }) => {
     ordersData?.orders?.find((item: Order) => item.number === parsedNumber) ||
     exactBurgerOrder;
   useEffect(() => {
+    if (!manageSocket) {
+      return;
+    }
+
     dispatch(startSocket());
 
     return () => {
       dispatch(stopSocket());
     };
-  }, [dispatch]);
+  }, [dispatch, manageSocket]);
 
   if (
     socketData.isLoading ||

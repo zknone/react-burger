@@ -45,7 +45,7 @@ const LayoutWithLocation = () => {
                   navigate(state.backgroundLocation?.pathname || '/');
                 }}
               >
-                <OrderDetails />
+                <OrderDetails manageSocket={false} />
               </Modal>
             }
           />
@@ -57,7 +57,7 @@ const LayoutWithLocation = () => {
                   navigate(state.backgroundLocation?.pathname || '/');
                 }}
               >
-                <OrderDetails isPrivateOrders />
+                <OrderDetails isPrivateOrders manageSocket={false} />
               </Modal>
             }
           />
@@ -83,7 +83,10 @@ const LayoutWithLocation = () => {
           element={<OnlyUnAuth component={<RegisterPage />} />}
         />
         <Route path="/ingredients/:id" element={<IngredientPage />} />
-        <Route path="profile/orders/:number" element={<OrderPage />} />
+        <Route
+          path="profile/orders/:number"
+          element={<OrderPage isPrivateOrders />}
+        />
         <Route path="/feed/:number" element={<OrderPage />} />
         <Route
           path="/forgot-password"
