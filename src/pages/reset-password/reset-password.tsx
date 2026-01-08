@@ -6,7 +6,7 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './reset-password.module.css';
 import { Link, useNavigate } from 'react-router-dom';
-import { useResetPassword } from '../../utils/api';
+import { useResetPassword } from '../../utils/api-hooks';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { ErrorType } from '../../types/types';
 import { useForm } from '../../hooks/use-form';

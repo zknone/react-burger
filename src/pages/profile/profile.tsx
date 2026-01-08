@@ -1,5 +1,5 @@
 import styles from './profile.module.css';
-import { useLogout } from '../../utils/api';
+import { useLogout } from '../../utils/api-hooks';
 import { NavLink, Route, Routes, useNavigate } from 'react-router-dom';
 import ProfileForm from '../../components/profile-form/profile-form';
 import OrderHistory from '../../components/order-history/order-history';

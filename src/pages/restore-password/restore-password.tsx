@@ -5,7 +5,7 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './restore-password.module.css';
 import { Link, useNavigate } from 'react-router-dom';
-import { useRestorePassword } from '../../utils/api';
+import { useRestorePassword } from '../../utils/api-hooks';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { ErrorType } from '../../types/types';
 

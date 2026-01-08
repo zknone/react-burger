@@ -1,5 +1,5 @@
 import { AppDispatch } from '../../store';
-import { authorizationApi } from '../api/authorization-api/authorization-api';
+import { authorizationApi } from '../api/authorization-api/authorisation-api';
 import { setProfile, setHasAuthStatus } from '../slices/profile/reducers';
 import { toast } from 'react-toastify';
 import { ERROR_MESSAGES } from '../../consts/error-messages';

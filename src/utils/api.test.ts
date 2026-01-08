@@ -7,7 +7,7 @@ import {
   useResetPassword,
   useRestorePassword,
   useProfile,
-} from './api';
+} from './api-hooks';
 import {
   useChangeProfileMutation,
   useLoginMutation,
@@ -15,7 +15,7 @@ import {
   useRegisterMutation,
   useResetPasswordMutation,
   useRestorePasswordMutation,
-} from '../services/api/authorization-api/authorization-api';
+} from '../services/api/authorization-api/authorisation-api';
 import { clearTokens, setTokens } from './tokens';
 
 jest.mock('./tokens', () => {
