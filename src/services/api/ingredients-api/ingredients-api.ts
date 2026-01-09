@@ -19,7 +19,8 @@ export const transformIngredientsResponse = (res: FetchedIngredients) =>
     res,
     fetchedIngredientsModel,
     'Invalid ingredients data received from server',
-    emptyFetchedIngredients
+    emptyFetchedIngredients,
+    { throwOnError: true }
   );
 
 export const ingredientsApi = createApi({
