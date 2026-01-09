@@ -4,6 +4,6 @@ import { createTestBaseQuery } from '../../mocks/mock-test-base-query';
 export const getBaseQuery = (
   productionBaseQuery: AppBaseQuery
 ): AppBaseQuery =>
-  process.env.NODE_ENV === 'development'
+  import.meta.env.VITE_USE_MOCKS === 'true'
     ? createTestBaseQuery(productionBaseQuery)
     : productionBaseQuery;

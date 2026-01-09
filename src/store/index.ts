@@ -10,9 +10,10 @@ import createWebSocketMiddleware from '../services/middleware/web-socket-middlew
 import createMockWebSocketMiddleware from '../mocks/web-socket-middleware/web-socket-mock-middleware';
 
 const WS_URL = 'wss://norma.nomoreparties.space/orders';
+const useMocks = import.meta.env.VITE_USE_MOCKS === 'true';
 
 const wsMiddleware: Middleware =
-  process.env.NODE_ENV === 'development'
+  useMocks
     ? createMockWebSocketMiddleware()
     : createWebSocketMiddleware(WS_URL);
 
