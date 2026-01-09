@@ -11,7 +11,7 @@ export const sendMessage = createAction<{ type: string; payload: unknown }>(
   'socket/sendMessage'
 );
 
-export const socketSucces = createAction('socket/wsConnectionSuccess');
+export const socketSuccess = createAction('socket/wsConnectionSuccess');
 export const socketClosed = createAction('socket/wsConnectionClosed');
 
 export const startSocket = createAction('socket/start');

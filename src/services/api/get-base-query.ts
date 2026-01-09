@@ -1,5 +1,5 @@
 import type { AppBaseQuery } from '../../types/types';
-import { createTestBaseQuery } from './test-base-query';
+import { createTestBaseQuery } from '../../mocks/mock-test-base-query';
 
 export const getBaseQuery = (
   productionBaseQuery: AppBaseQuery

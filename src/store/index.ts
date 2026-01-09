@@ -4,7 +4,7 @@ import burgerConstructorReducer from '../services/slices/constructor/reducers';
 import socketReducer from '../services/slices/socket/reducers';
 import profileReducer from '../services/slices/profile/reducers';
 import { orderApi } from '../services/api/order-api/order-api';
-import { authorizationApi } from '../services/api/authorization-api/authorization-api';
+import { authorizationApi } from '../services/api/authorization-api/authorisation-api';
 import { useDispatch } from 'react-redux';
 import createWebSocketMiddleware from '../services/middleware/web-socket-middleware';
 import createMockWebSocketMiddleware from '../mocks/web-socket-middleware/web-socket-mock-middleware';

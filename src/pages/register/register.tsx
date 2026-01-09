@@ -7,10 +7,10 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './register.module.css';
 import { Link } from 'react-router-dom';
-import { useRegister } from '../../utils/api';
+import { useRegister } from '../../utils/api-hooks';
 import { ErrorType } from '../../types/types';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
-import { useForm } from '../../utils/use-form';
+import { useForm } from '../../hooks/use-form';
 
 export default function RegisterPage() {
   const { form, handleChange } = useForm({ name: '', email: '', password: '' });

@@ -5,10 +5,10 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './login.module.css';
 import { Link, useNavigate } from 'react-router-dom';
-import { useLogin } from '../../utils/api';
+import { useLogin } from '../../utils/api-hooks';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { ErrorType } from '../../types/types';
-import { useForm } from '../../utils/use-form';
+import { useForm } from '../../hooks/use-form';
 
 export default function LoginPage() {
   const navigate = useNavigate();

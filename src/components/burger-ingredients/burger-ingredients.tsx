@@ -2,8 +2,10 @@ import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingredients.module.css';
 import { IngredientsGroup } from './ingredients-group/ingredients-group';
 
-import { FC, useEffect, useMemo, useRef, useState } from 'react';
+import { FC, useMemo, useRef } from 'react';
 import { useGetIngredientsQuery } from '../../services/api/ingredients-api/ingredients-api';
+import useIngredientsScrollPositions from '../../hooks/use-ingredients-scroll-positions';
+import useIngredientsActiveTitle from '../../hooks/use-ingredients-active-title';
 
 const GAP = 50;
 type IngredientVariantsType = 'bun' | 'sauce' | 'stuffing';
@@ -14,18 +16,20 @@ const BurgerIngredients: FC<BurgerIngredientsProps> = ({ extraClass }) => {
   const { data: { data: ingredients } = { data: [] } } =
     useGetIngredientsQuery(undefined);
 
-  const [activeTitle, setTitleActive] = useState<IngredientVariantsType>('bun');
-  const [positions, setPositions] = useState({
-    startingPosition: 0,
-    bun: 0,
-    sauce: 0,
-    stuffing: 0,
-  });
-
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const bunRef = useRef<HTMLDivElement | null>(null);
   const sauceRef = useRef<HTMLDivElement | null>(null);
   const stuffingRef = useRef<HTMLDivElement | null>(null);
+  const positions = useIngredientsScrollPositions(
+    scrollRef,
+    bunRef,
+    sauceRef,
+    stuffingRef
+  );
+  const [activeTitle, setTitleActive] = useIngredientsActiveTitle(
+    positions,
+    GAP
+  );
 
   const handleTabClick = (type: IngredientVariantsType) => {
     setTitleActive(type);
@@ -53,41 +57,6 @@ const BurgerIngredients: FC<BurgerIngredientsProps> = ({ extraClass }) => {
     () => ingredients.filter((item) => item.type === 'main'),
     [ingredients]
   );
-
-  useEffect(() => {
-    const scrollElement = scrollRef.current;
-    if (scrollElement) {
-      setPositions((prevPositions) => ({
-        ...prevPositions,
-        startingPosition: scrollElement.getBoundingClientRect().top,
-      }));
-    }
-    const handleScroll = () => {
-      setPositions((prevPositions) => ({
-        ...prevPositions,
-        bun: bunRef.current?.getBoundingClientRect().top || 0,
-        sauce: sauceRef.current?.getBoundingClientRect().top || 0,
-        stuffing: stuffingRef.current?.getBoundingClientRect().top || 0,
-      }));
-    };
-
-    scrollElement?.addEventListener('scroll', handleScroll);
-    return () => {
-      scrollElement?.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (positions.startingPosition && positions.sauce && positions.stuffing) {
-      if (positions.startingPosition + GAP <= positions.sauce) {
-        setTitleActive('bun');
-      } else if (positions.startingPosition + GAP <= positions.stuffing) {
-        setTitleActive('sauce');
-      } else {
-        setTitleActive('stuffing');
-      }
-    }
-  }, [positions]);
 
   if (!ingredients || ingredients.length === 0) {
     return <div>Loading ingredients...</div>;

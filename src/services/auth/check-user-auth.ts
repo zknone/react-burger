@@ -1,10 +1,13 @@
 import { AppDispatch } from '../../store';
-import { authorizationApi } from '../api/authorization-api/authorization-api';
+import { authorizationApi } from '../api/authorization-api/authorisation-api';
 import { setProfile, setHasAuthStatus } from '../slices/profile/reducers';
 import { toast } from 'react-toastify';
+import { ERROR_MESSAGES } from '../../consts/error-messages';
+import { logError } from '../../utils/logger';
+import { clearTokens, getRefreshToken, setTokens } from '../../utils/tokens';
 
 export const checkUserAuth = () => async (dispatch: AppDispatch) => {
-  const refreshToken = localStorage.getItem('refreshToken');
+  const refreshToken = getRefreshToken();
 
   if (!refreshToken) {
     dispatch(setHasAuthStatus(true));
@@ -26,8 +29,7 @@ export const checkUserAuth = () => async (dispatch: AppDispatch) => {
       throw new Error('Invalid token refresh response');
     }
 
-    localStorage.setItem('accessToken', tokenResponse.accessToken);
-    localStorage.setItem('refreshToken', tokenResponse.refreshToken);
+    setTokens(tokenResponse.accessToken, tokenResponse.refreshToken);
 
     const userResponse = await dispatch(
       authorizationApi.endpoints.getUser.initiate(undefined)
@@ -40,9 +42,9 @@ export const checkUserAuth = () => async (dispatch: AppDispatch) => {
     dispatch(setProfile(userResponse));
   } catch (error) {
     dispatch(setHasAuthStatus(false));
-    toast.error('Authorization error, please sign in again');
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
+    toast.error(ERROR_MESSAGES.authError);
+    logError('auth/check-user-auth', error);
+    clearTokens();
   } finally {
     dispatch(setHasAuthStatus(true));
   }

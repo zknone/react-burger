@@ -1,9 +1,6 @@
-import type { AppBaseQuery } from '../../types/types';
-import { mockIngredients } from '../../mocks/data';
-import {
-  buildOrdersResponse,
-  createPendingOrder,
-} from '../../mocks/mock-order-utils';
+import type { AppBaseQuery } from '../types/types';
+import { mockIngredients } from './data';
+import { buildOrdersResponse, createPendingOrder } from './mock-order-utils';
 
 const mockUser = {
   email: 'test@test.com',

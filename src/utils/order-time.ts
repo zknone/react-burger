@@ -5,13 +5,14 @@ const BASE_ASSEMBLY_MINUTES = 2;
 const MIN_ORDER_MINUTES = 5;
 const MOCK_MINUTE_IN_MS = 1000;
 
-const PREPARATION_TIME_BY_TYPE: Record<IngredientType['type'], number> = {
-  bun: 2,
-  main: 4,
-  sauce: 1,
-};
+export const PREPARATION_TIME_BY_TYPE: Record<IngredientType['type'], number> =
+  {
+    bun: 2,
+    main: 4,
+    sauce: 1,
+  };
 
-const createIngredientCache = (ingredients: IngredientType[]) =>
+export const createIngredientCache = (ingredients: IngredientType[]) =>
   ingredients.reduce<Record<string, IngredientType>>((acc, ingredient) => {
     acc[ingredient._id] = ingredient;
     return acc;
@@ -32,7 +33,9 @@ export const estimateCookingTimeMinutes = (
       : FALLBACK_MINUTES_PER_INGREDIENT;
 
     const preparationTime =
-      ingredient?.preparationTimeMinutes ?? byType ?? FALLBACK_MINUTES_PER_INGREDIENT;
+      ingredient?.preparationTimeMinutes ??
+      byType ??
+      FALLBACK_MINUTES_PER_INGREDIENT;
 
     return acc + preparationTime;
   }, BASE_ASSEMBLY_MINUTES);
@@ -45,12 +48,17 @@ export const buildOrderTiming = (
   ingredients: IngredientType[],
   minuteToMs: number = MOCK_MINUTE_IN_MS
 ) => {
-  const estimatedCookingTimeMinutes = estimateCookingTimeMinutes(ingredientIds, ingredients);
+  const estimatedCookingTimeMinutes = estimateCookingTimeMinutes(
+    ingredientIds,
+    ingredients
+  );
   const autoCompleteDelayMs = Math.max(
     estimatedCookingTimeMinutes * minuteToMs,
     minuteToMs
   );
-  const estimatedReadyAt = new Date(Date.now() + autoCompleteDelayMs).toISOString();
+  const estimatedReadyAt = new Date(
+    Date.now() + autoCompleteDelayMs
+  ).toISOString();
 
   return { estimatedCookingTimeMinutes, autoCompleteDelayMs, estimatedReadyAt };
 };

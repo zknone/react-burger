@@ -16,7 +16,7 @@
     padding: 0 24px 0;
     margin: 0 0 40px 0;
     height: 300px;
-    overflow: scroll;
+    overflow:  auto;
 
     gap: 16px;
 }
@@ -56,10 +56,10 @@
 .img_background {
     display: flex;
     border: 3px solid transparent;
-    border-radius: 50%; 
+    border-radius: 50%;
     background-image: linear-gradient(to right, #801AB2, #4C4CFF);
     background-origin: border-box;
-    background-clip: content-box, border-box; 
+    background-clip: content-box, border-box;
     width: 64px;
     height: 64px;
     align-items: center;
@@ -70,13 +70,13 @@
     position: relative;
     width: 90%;
     height: 90%;
-    border-radius: 50%; 
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: #1C1C21;
 }
-  
+
 .img {
   position: absolute;
   width: 110px;

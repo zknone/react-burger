@@ -4,10 +4,11 @@ import {
   CurrencyIcon,
   FormattedDate,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { IngredientCacheType, IngredientType, Order } from '../../types/types';
+import { Order } from '../../types/types';
 import { useGetIngredientsQuery } from '../../services/api/ingredients-api/ingredients-api';
 import { STATUSES } from '../../consts';
 import { Link, useLocation } from 'react-router-dom';
+import { createIngredientCache } from '../../utils/order-time';
 
 const LAST_INDEX_TO_SHOW = 4;
 
@@ -27,13 +28,7 @@ const OrderItem: FC<Order> = ({
     return <p>Loading ingredients...</p>;
   }
 
-  const ingredientsCache: IngredientCacheType = ingredientsData?.reduce(
-    (acc: IngredientCacheType, value: IngredientType) => {
-      acc[value._id] = value;
-      return acc;
-    },
-    {}
-  );
+  const ingredientsCache = createIngredientCache(ingredientsData);
 
   if (!ingredientsCache || Object.keys(ingredientsCache).length === 0) {
     return <p>Checking cache...</p>;
