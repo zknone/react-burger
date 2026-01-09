@@ -54,6 +54,7 @@ const OrderDetails: FC<OrderDetailsProps> = ({
   const order =
     ordersData?.orders?.find((item: Order) => item.number === parsedNumber) ||
     exactBurgerOrder;
+
   useEffect(() => {
     if (!manageSocket) {
       return;

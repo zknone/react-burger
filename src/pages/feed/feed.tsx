@@ -68,7 +68,9 @@ function FeedPage() {
           </div>
         </div>
         <div className={styles.info_wrapper}>
-          <span className="text text_type_main-medium">Completed all time:</span>
+          <span className="text text_type_main-medium">
+            Completed all time:
+          </span>
           <h3 className="text text_type_digits-large">{data.total}</h3>
         </div>
         <div className={styles.info_wrapper}>

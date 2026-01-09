@@ -1,8 +1,9 @@
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './modal.module.css';
-import { FC, ReactNode, useEffect, useRef } from 'react';
+import { FC, ReactNode, useRef } from 'react';
 import ModalOverlay from './modal-overlay/modal-overlay';
 import ReactDOM from 'react-dom';
+import useModalClose from '../../hooks/use-modal-close';
 
 type ModalProps = {
   title?: string;
@@ -16,27 +17,7 @@ const Modal: FC<ModalProps> = ({ title, size = 'M', children, onClose }) => {
   const paddingSize = size === 'M' ? 10 : 30;
   const modalRef = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
-    const handleKeydown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onClose();
-      }
-    };
-
-    const handleClickOutside = (e: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
-        onClose();
-      }
-    };
-
-    document.addEventListener('keydown', handleKeydown);
-    document.addEventListener('mousedown', handleClickOutside);
-
-    return () => {
-      document.removeEventListener('keydown', handleKeydown);
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [onClose]);
+  useModalClose(modalRef, onClose);
 
   const modalContent = (
     <ModalOverlay>
